@@ -12,7 +12,16 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    font-family: 'Roboto-Regular', sans-serif;
 }
+
+@font-face {
+    font-family: 'Roboto-Regular';
+    src: url('./font/Roboto-Regular.ttf') format('ttf');
+    font-weight: 600;
+    font-style: normal;
+}
+
 
 body{
 
@@ -127,6 +136,54 @@ p{
     cursor: pointer;
 }
 
+.containerNewProject{
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    position: relative;
+    background-color: var(--backContainer);
+
+    border-radius: 16px;
+
+    padding: 12px;
+}
+
+.btnClosePopUp{
+
+    position:absolute;
+
+    top: 10px;
+    right: 10px;
+}
+
+.btnCreateProject{
+
+    align-self: center;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: var(--backContainerSecond);
+
+    width: 40px;
+    height: 20px;
+
+    border-radius: 16px;
+
+    cursor: pointer;
+}
+
+.inputText{
+
+    border-radius: 16px;
+    background-color: var(--backContainerSecond);
+
+    height: 30px;
+}
+
 /* ---------------------------------------------------------------------------------- */
 
 /* .containerTodoCenter{
@@ -177,6 +234,7 @@ p{
 
     display: flex;
     gap: 30px;
+    /* justify-content: center; */
 }
 
 
