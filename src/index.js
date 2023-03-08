@@ -18,16 +18,25 @@ const arrElementsHome = [
         attributes: {class:'miniP'},
         appendChild: 'body',
     },
+
+    {
+        elementType: 'div',
+        attributes: {class:'containerCenterRight'},
+        appendChild: 'body',
+    },
+        
     {
         elementType: 'div',
         attributes: {class:'containerTodoCenter'},
-        appendChild: 'body',
+        appendChild: '.containerCenterRight',
     },
-    {
-        elementType: 'div',
-        attributes: {class:'containerTodoRight'},
-        appendChild: 'body',
-    },
+    // {
+    //     elementType: 'div',
+    //     attributes: {class:'containerTodoRight'},
+    //     appendChild: '.containerCenterRight',
+    // },
+
+
 
     //  childs containerTodoLeft
 
@@ -74,18 +83,18 @@ const arrElementsHome = [
 
     //  childs containerTodoRight
 
-    {
-        elementType: 'p',
-        attributes: {class:'titleTodoDay'},
-        innerText: 'To do - Today',
-        appendChild: '.containerTodoRight',
-    },
+    // {
+    //     elementType: 'p',
+    //     attributes: {class:'titleTodoDay'},
+    //     innerText: 'To do - Today',
+    //     appendChild: '.containerTodoRight',
+    // },
 
-    {
-        elementType: 'div',
-        attributes: {class:'containerTodoDay'},
-        appendChild: '.containerTodoRight',
-    },
+    // {
+    //     elementType: 'div',
+    //     attributes: {class:'containerTodoDay'},
+    //     appendChild: '.containerTodoRight',
+    // },
 
     // childs containerProjects
 
@@ -135,7 +144,27 @@ const arrElementsHome = [
         appendChild: '.itemTodo1',
     },
 
+    //  childs containerTodoDay
 
+    // {
+    //     elementType: 'div',
+    //     attributes: {class:'itemTodoDay1'},
+    //     appendChild: '.containerTodoDay',
+    // },
+
+    // {
+    //     elementType: 'div',
+    //     attributes: {class:'svgTodo'},
+    //     innerHTML: '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="#25A7B9" stroke-width="2"/></svg>',
+    //     appendChild: '.itemTodoDay1',
+    // },
+
+    // {
+    //     elementType: 'p',
+    //     attributes: {class:'pTodoDay'},
+    //     innerText: 'eat',
+    //     appendChild: '.itemTodoDay1',
+    // },
 
 
 
@@ -143,9 +172,52 @@ const arrElementsHome = [
     
 ];
 
+const arrNewProject = [
+
+    {
+        elementType: 'div',
+        attributes: {class:'containerNewProject'},
+        appendChild: '.containerTodoLeft',
+
+    },
+
+    //  childs containerNewProject
+
+    {
+        elementType: 'p',
+        attributes: {class:'titleNewProject'},
+        innerText: 'Name',
+        appendChild: '.containerNewProject',
+
+    },
+
+    {
+        elementType: 'div',
+        attributes: {class:'btnClosePopUp'},
+        innerHTML: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12L12 4M4 4L12 12" stroke="#E6E1E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+        appendChild: '.containerNewProject',
+    },
+
+    {
+        elementType: 'div',
+        attributes: {class:'inputText'},
+        appendChild: '.containerNewProject',
+
+    },
+    
+    {
+        elementType: 'div',
+        attributes: {class:'btnCreateProject'},
+        innerHTML: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.00033 2.66666V13.3333M13.3337 7.99999L2.66699 7.99999" stroke="#E6E1E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+        appendChild: '.containerNewProject',
+    },
+
+    
 
 
-function domElementsHome(arr) {
+];
+
+function domElements(arr) {
 
     arr.forEach(elementObject => {
         
@@ -155,5 +227,35 @@ function domElementsHome(arr) {
    
 }  
 
+function createNewProject() {
+    
+    const btnNewProject = document.querySelector('.btnNewProject');
 
-domElementsHome(arrElementsHome)
+    btnNewProject.addEventListener('click', () => {
+
+        domElements(arrNewProject);
+        closeCreatorProject();
+
+    })
+
+}
+
+
+function closeCreatorProject() {
+
+    const containerTodoLeft = document.querySelector('.containerTodoLeft');
+    const btnClosePopUp = document.querySelector('.btnClosePopUp');
+    const containerNewProject = document.querySelector('.containerNewProject');
+
+
+    btnClosePopUp.addEventListener('click', () => {
+
+        containerTodoLeft.removeChild(containerNewProject);
+
+    })
+
+}
+
+
+domElements(arrElementsHome);
+createNewProject();
