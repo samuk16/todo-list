@@ -200,7 +200,8 @@ const arrNewProject = [
 
     {
         elementType: 'div',
-        attributes: {class:'inputText'},
+        attributes: {class:'containerInputText'},
+        innerHTML: '<input class ="inputText" type="text" name="nameProject">',
         appendChild: '.containerNewProject',
 
     },
@@ -212,10 +213,27 @@ const arrNewProject = [
         appendChild: '.containerNewProject',
     },
 
-    
+    // child containerinputText
+
+    {
+        elementType: 'div',
+        attributes: {class:'containerInputColor'},
+        innerHTML: '<input type="color" class="inputColor">',
+        appendChild: '.containerInputText',
+
+    },
 
 
 ];
+
+const itemProject = [
+    {
+        elementType: 'div',
+        attributes: {class:'itemProject'},
+        appendChild: '.containerProjects',
+    },
+]
+
 
 function domElements(arr) {
 
@@ -227,35 +245,101 @@ function domElements(arr) {
    
 }  
 
-function createNewProject() {
+const popUpNewProject = (function(){
+
+    let colorInputColor;
+    let countChilds = 1;
+
+    function createPopUpNewProject() {
     
-    const btnNewProject = document.querySelector('.btnNewProject');
+        const btnNewProject = document.querySelector('.btnNewProject');
+    
+        btnNewProject.addEventListener('click', () => {
+    
+            domElements(arrNewProject);
+            closeCreatorProject();
+            addNewProject();
+            syncInputColor();
+            getColorFromInputColor()
+    
+        });
+    
+    
+    }
+    
+    function addNewProject() {
+    
+        const btnAddProject = document.querySelector('.btnCreateProject'); 
+        const inputText = document.querySelector('.inputText');
+        
+    
+        btnAddProject.addEventListener('click', () => {
+            countChilds++;
+            itemProject[0].attributes.class = `itemProject item${countChilds}`;
+            domElements(itemProject);
+            getColorFromInputColor();
+            console.log(countChilds);
+            changeColorBgItemProject(countChilds);
+            
+            
+    
+        })
+    }
+    
+    function changeColorBgItemProject(count) {
+    
+        let itemProject = document.querySelector(`.item${count}`);
+        
+        // itemProject.style.backgroundColor = 'var(--divColorInput)';
+        itemProject.style.setProperty("background-color", colorInputColor);
+    }
+    
+    function syncInputColor() {
+        
+        const inputColor = document.querySelector('.inputColor');
+        inputColor.addEventListener('input', () => {
+    
+            document.documentElement.style.setProperty("--divColorInput", inputColor.value);
+    
+        })
+    
+    }
+    
+    function getColorFromInputColor() {
+        
+        const inputColor = document.querySelector('.inputColor');
 
-    btnNewProject.addEventListener('click', () => {
+        inputColor.addEventListener('input', () => {
+    
+            colorInputColor = inputColor.value;
+        })
+    
+    
+    }
+    
+    function closeCreatorProject() {
+    
+        const containerTodoLeft = document.querySelector('.containerTodoLeft');
+        const btnClosePopUp = document.querySelector('.btnClosePopUp');
+        const containerNewProject = document.querySelector('.containerNewProject');
+    
+    
+        btnClosePopUp.addEventListener('click', () => {
+    
+            containerTodoLeft.removeChild(containerNewProject);
+    
+        })
+    
+    };
+    
+    return{createPopUpNewProject};
 
-        domElements(arrNewProject);
-        closeCreatorProject();
-
-    })
-
-}
+})();
 
 
-function closeCreatorProject() {
-
-    const containerTodoLeft = document.querySelector('.containerTodoLeft');
-    const btnClosePopUp = document.querySelector('.btnClosePopUp');
-    const containerNewProject = document.querySelector('.containerNewProject');
 
 
-    btnClosePopUp.addEventListener('click', () => {
-
-        containerTodoLeft.removeChild(containerNewProject);
-
-    })
-
-}
 
 
 domElements(arrElementsHome);
-createNewProject();
+popUpNewProject.createPopUpNewProject();
