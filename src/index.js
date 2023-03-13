@@ -81,6 +81,16 @@ const arrElementsHome = [
         appendChild: '.containerTodoCenter',
     },
 
+    
+    // child containerTodo
+
+    {
+        elementType: 'div',
+        attributes: {class:'btnNewTodo'},
+        innerHTML: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 4V20M20 12L4 12" stroke="#E6E1E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+        appendChild: '.containerTodo',
+    },
+
     //  childs containerTodoRight
 
     // {
@@ -201,7 +211,7 @@ const arrNewProject = [
     {
         elementType: 'div',
         attributes: {class:'containerInputText'},
-        innerHTML: '<input class ="inputText" type="text" name="nameProject">',
+        innerHTML: '<input class ="inputText" type="text" name="nameProject" required>',
         appendChild: '.containerNewProject',
 
     },
@@ -245,10 +255,19 @@ function domElements(arr) {
    
 }  
 
-const popUpNewProject = (function(){
+const newProject = (function(){
 
     let colorInputColor;
     let countChilds = 1;
+    const projects = [];
+
+
+    function createObjProject(name,color) {
+        
+        this.name = name;
+        this.color = color;
+
+    };
 
     function createPopUpNewProject() {
     
@@ -272,31 +291,48 @@ const popUpNewProject = (function(){
         const btnAddProject = document.querySelector('.btnCreateProject'); 
         const inputText = document.querySelector('.inputText');
         
-    
         btnAddProject.addEventListener('click', () => {
+
             countChilds++;
             itemProject[0].attributes.class = `itemProject item${countChilds}`;
+            createObjs(inputText.value,colorInputColor)
             domElements(itemProject);
-            getColorFromInputColor();
-            console.log(countChilds);
-            changeColorBgItemProject(countChilds);
-            
-            
+            changeColorBgItemProject(countChilds);            
     
         })
+    }
+
+    function createObjs(text,color) {
+
+        let projectItem;
+        if (text == '') {
+            
+            projectItem = new createObjProject(`Project${countChilds}`,color);
+
+        }else{
+
+            projectItem = new createObjProject(text,color);
+
+        }
+
+        projects.push(projectItem)
+
+        console.log(projects);
+        console.log(projects[0].name);
+
     }
     
     function changeColorBgItemProject(count) {
     
         let itemProject = document.querySelector(`.item${count}`);
-        
-        // itemProject.style.backgroundColor = 'var(--divColorInput)';
+
         itemProject.style.setProperty("background-color", colorInputColor);
     }
     
     function syncInputColor() {
         
         const inputColor = document.querySelector('.inputColor');
+
         inputColor.addEventListener('input', () => {
     
             document.documentElement.style.setProperty("--divColorInput", inputColor.value);
@@ -341,5 +377,6 @@ const popUpNewProject = (function(){
 
 
 
+
 domElements(arrElementsHome);
-popUpNewProject.createPopUpNewProject();
+newProject.createPopUpNewProject();
