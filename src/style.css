@@ -5,7 +5,8 @@
     --backContainerSecond: #332D41;
     --backHoverBtn: #9A82DB ;
     --textDark: #FFFFFF ;
- 
+    
+    --divColorInput: #000000;
 }
 
 *{
@@ -59,8 +60,9 @@ p{
 .containerTodoLeft{
 
     /* border: solid 2px green; */
-
+    position: relative;
     padding: 0 0 0 30px;
+
 }
 
 .containerProjects{
@@ -106,7 +108,7 @@ p{
     display: grid;
     place-content: center;
 
-    background-color: var(--backContainer);
+    /* background-color: var(--backContainer); */
 
     border-radius: 16px;
 
@@ -114,6 +116,11 @@ p{
     height: 30px;
 
     cursor: pointer;
+}
+
+.btnNewProject:hover{
+
+    background-color: var(--backContainer);
 }
 
 .containerTodayAndWeek{
@@ -142,7 +149,13 @@ p{
     flex-direction: column;
     gap: 12px;
 
-    position: relative;
+    width: 250px;
+
+    position: absolute;
+
+    top: 40px;
+    left: 107px;
+
     background-color: var(--backContainer);
 
     border-radius: 16px;
@@ -156,6 +169,8 @@ p{
 
     top: 10px;
     right: 10px;
+
+    cursor: pointer;
 }
 
 .btnCreateProject{
@@ -166,7 +181,7 @@ p{
     justify-content: center;
     align-items: center;
 
-    background-color: var(--backContainerSecond);
+    /* background-color: var(--backContainerSecond); */
 
     width: 40px;
     height: 20px;
@@ -176,13 +191,58 @@ p{
     cursor: pointer;
 }
 
-.inputText{
+.btnCreateProject:hover{
 
-    border-radius: 16px;
     background-color: var(--backContainerSecond);
+}
+
+.containerInputText{
+
+    display: flex;
+    gap: 12px;
+    border-radius: 16px;
+    /* background-color: var(--backContainerSecond); */
 
     height: 30px;
 }
+
+.inputText{
+
+    width: 85%;
+    height: 100%;
+
+    background-color: var(--backContainerSecond);
+
+    border: none;
+
+    border-radius: 16px;
+
+    padding: 0 0 0 12px;
+
+    outline: none;
+}
+
+.containerInputColor{
+
+    width: 30px;
+    height: 30px;
+    border-radius: 50px;
+    background-color: var(--divColorInput);
+}
+
+.inputColor{
+
+    width: 30px;
+    height: 30px;
+    border-radius: 50px;
+    cursor: pointer;
+    border: none;
+    opacity: 0;
+}
+/* 
+.item2{
+    outline: solid 3px #fff;
+} */
 
 /* ---------------------------------------------------------------------------------- */
 
@@ -196,6 +256,10 @@ p{
 }
 
 .containerTodo{
+    position: relative;
+
+    /* display: flex;
+    flex-direction: column; */
 
     background-color: var(--backContainer);
     border-radius: 16px;
@@ -226,6 +290,34 @@ p{
     align-items: center;
     
     cursor: pointer;
+}
+
+.btnNewTodo{
+
+    position: absolute;
+
+    bottom: 30px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    
+    display: grid;
+    place-content: center;
+
+    /* background-color: var(--backContainerSecond); */
+
+    border-radius: 16px;
+
+    width: 50px;
+    height: 30px;
+
+    cursor: pointer;
+
+
+}
+
+.btnNewTodo:hover{
+
+    background-color: var(--backContainerSecond);
 }
 
 /* -------------------------------------------------------------- */
@@ -275,4 +367,99 @@ p{
     background-color: var(--backContainerSecond);
 
     border-radius: 16px;
+}
+
+
+/* ----------------------------------------------------------- */
+
+.containerPopUpNewTodo{
+
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+
+    padding: 30px;
+
+    background-color: var(--backContainer);
+
+    box-shadow: 0px 0px 50px #000000;
+
+    border-radius: 16px;
+    
+    width: 400px;
+
+}
+
+.name{
+
+    width: 100%;
+    height: 30px;
+}
+
+.description{
+    width: 100%;
+    height: 120px;
+    
+    
+    background-color: var(--backContainerSecond);
+
+    padding: 12px;
+
+    border-radius: 16px;
+
+    border: none;
+    outline: none;
+
+    resize: none;
+}
+
+.containerInputDate{
+
+    width: 100%;
+}
+
+.input{
+
+    background-color: var(--backContainerSecond);
+
+    height: 40px;
+
+    padding: 12px;
+
+    border-radius: 16px;
+
+    border: none;
+    outline: none;
+
+}
+
+.containerName, .containerDescription{
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btnCreateTodo{
+
+    align-self: center;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 16px;
+
+    width: 50px;
+    height: 30px;
+
+    cursor: pointer;
+}
+
+.btnCreateTodo:hover{
+    background-color: var(--backContainerSecond);
 }
