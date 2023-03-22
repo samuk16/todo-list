@@ -72,10 +72,17 @@ const arrPopUpTodo = [
 
     },
 
+    // {
+    //     elementType: 'div',
+    //     attributes: {class:'containerPriority'},
+    //     innerHTML: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 9L12 16L5 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    //     appendChild: '.containerTextAndPriority',
+
+    // },
     {
         elementType: 'div',
         attributes: {class:'containerPriority'},
-        innerHTML: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 9L12 16L5 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+        innerHTML: '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="prio" cx="6" cy="6" r="5.5" fill="#3D99DB"/></svg>',
         appendChild: '.containerTextAndPriority',
 
     },
@@ -175,21 +182,21 @@ const arrDropDown = [
 
     {
         elementType: 'div',
-        attributes: {class:'DdOp1 itemDd'},
+        attributes: {class:'ddOp1 itemDd'},
         innerHTML: '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="6" r="5.5" fill="#DB3D3D"/></svg>',
         appendChild: '.dropDown',
 
     },
     {
         elementType: 'div',
-        attributes: {class:'DdOp2 itemDd'},
+        attributes: {class:'ddOp2 itemDd'},
         innerHTML: '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="6" r="5.5" fill="#DB763D"/></svg>',
         appendChild: '.dropDown',
 
     },
     {
         elementType: 'div',
-        attributes: {class:'DdOp3 itemDd'},
+        attributes: {class:'ddOp3 itemDd'},
         innerHTML: '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="6" r="5.5" fill="#3D99DB"/></svg>',
         appendChild: '.dropDown',
 
@@ -222,12 +229,60 @@ function popUpTodo() {
 function popUpPriority() {
     
     const containerPriority = document.querySelector('.containerPriority');
+    let toggle = false;
 
-    containerPriority.addEventListener('click', () => {
+    containerPriority.addEventListener('click', (e) => {
 
-        domElements(arrDropDown);
+        toggle = !toggle;
 
+        if (toggle) {
+           
+            domElements(arrDropDown);
+            choosePriority(e.target)
+            
+        }else{
+
+            delPopUpPriotity();
+            choosePriority(e.target)
+            
+        }
     })
+
+}
+
+function choosePriority(target) {
+    
+    const colorPrio = document.querySelector('.prio');
+    const arrPriorityColors = ['#DB3D3D','#DB763D','#3D99DB'];
+
+    if (target.classList.contains('itemDd')) {
+        
+
+
+        if (target.classList.contains('ddOp1')) {
+
+            colorPrio.style.fill = arrPriorityColors[0];
+
+        }else if(target.classList.contains('ddOp2')){
+
+            colorPrio.style.fill = arrPriorityColors[1];
+
+            
+        }else{
+
+            colorPrio.style.fill = arrPriorityColors[2];
+        }
+    
+    }
+
+}
+
+
+function delPopUpPriotity() {
+    
+    const dropDown = document.querySelector('.dropDown');
+
+    dropDown.remove()
 
 }
 
@@ -236,12 +291,18 @@ function addTodo() {
     const inputNameTodo = document.querySelector('.name')
     const inputDateTodo = document.querySelector('.date')
     const inputDescriptionTodo = document.querySelector('.description')
+    const colorPrio = document.querySelector('.prio');
+
+     
 
     btnCreateTodo.addEventListener('click', () => {
 
         console.log(inputNameTodo.value);
-        console.log(inputDateTodo.value);
+        console.log(colorPrio.style.fill);
         console.log(inputDescriptionTodo.value);
+        console.log(inputDateTodo.value);
+
+        
 
     })
 
