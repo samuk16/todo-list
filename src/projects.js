@@ -97,17 +97,22 @@ function createObjProject(projectName,projectColor,projectId) {
     this.addTodo = function(obj){
 
         this.todo.push(obj);
-        EventManager.emit('todoAdded', this);
+        EventManager.emit('todoCreated', this);
 
     }
 };
 
 function defaultProject() {
     
-    createObjs('default','#25A7B9');
+    createObjs('default','#25A7B9',0);
     // projects[0]
+    itemProject[0].attributes.class = `itemProject item${projects[0].id} selected`;
+
     domElements(itemProject);
-    projects[0].addTodo(defaultTodo());
+
+    
+    // projects[0].addTodo(defaultTodo());
+    
     // console.log(deafult.todo);
     console.log(projects);
 
@@ -118,17 +123,44 @@ function changeProject() {
     let titleTodoProject = document.querySelector('.titleTodoProject');
     const containerProjects = document.querySelector('.containerProjects');
 
+
     containerProjects.addEventListener('click', (e) => {
 
         let projectTarget = e.target;
+        let projectId = projectTarget.dataset.projectId;
 
-        console.log(projectTarget);
+        console.log(projectId);
+        
+
+        // console.log(findNameProjectById(projectId));
+        titleTodoProject.innerText = `To do - ${findNameProjectById(projectId)}`;
+
+
+        // console.log(projectTarget);
         // titleTodoProject.innerText = `${projectItem.name}`;
 
     })
 
 
 }
+
+function findNameProjectById(projectId) {
+
+    let foundProject = null;
+
+    projects.forEach((project) => {
+        // console.log(project.id);
+        if (project.id == projectId) {
+
+            foundProject = project;
+            // console.log(project);
+
+            // console.log('founded');
+        }
+    });
+
+    return foundProject.name;
+  }
 
 function createPopUpNewProject() {
 
