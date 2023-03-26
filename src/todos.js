@@ -204,6 +204,48 @@ const arrDropDown = [
 
 ]
 
+const arrTodoTemplate= [
+
+    {
+        elementType: 'div',
+        attributes: {class:'itemTodo'},
+        appendChild: '.containerTodo',
+    },
+
+    //  childs itemTodo
+
+    {
+        elementType: 'div',
+        attributes: {class:'svgTodo'},
+        innerHTML: '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="#25A7B9" stroke-width="2"/></svg>',
+        appendChild: '.itemTodo1',
+    },
+
+    {
+        elementType: 'p',
+        attributes: {class:'pTodo'},
+        appendChild: '.itemTodo1',
+    },
+
+    {
+        elementType: 'div',
+        attributes: {class:'svgTodoMenu'},
+        innerHTML: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12H5.01M12 12H12.01M19 12H19.01M6 12C6 12.5523 5.55228 13 5 13C4.44772 13 4 12.5523 4 12C4 11.4477 4.44772 11 5 11C5.55228 11 6 11.4477 6 12ZM13 12C13 12.5523 12.5523 13 12 13C11.4477 13 11 12.5523 11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12ZM20 12C20 12.5523 19.5523 13 19 13C18.4477 13 18 12.5523 18 12C18 11.4477 18.4477 11 19 11C19.5523 11 20 11.4477 20 12Z" stroke="#E6E1E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+        appendChild: '.itemTodo1',
+    },
+]
+
+const arrTodos= [];
+
+function todos(name,description,dueDate,priority) {
+
+    this.name = name;
+    this.description = description;
+    this.dueDate = dueDate;
+    this.priority = priority;
+
+}
+
 function domElements(arr) {
 
     arr.forEach(elementObject => {
@@ -214,6 +256,19 @@ function domElements(arr) {
    
 }  
 
+function defaultTodo() {
+    
+    let todoD = new todos('clean','limpiar loco','2023-03-25','rgb(219,118,61)');
+
+    return todoD;
+}
+
+function renderTodo(container,todo) {
+    
+    domElements()    
+
+
+}
 
 function popUpTodo() {
     const btnPopUpTodo = document.querySelector('.btnNewTodo');
@@ -302,8 +357,11 @@ function addTodo() {
         console.log(inputDescriptionTodo.value);
         console.log(inputDateTodo.value);
 
-        
+        let todo = new todos(inputNameTodo.value,inputDescriptionTodo.value,inputDateTodo.value,colorPrio.style.fill);
 
+        // arrTodos.push(todo);
+        // console.log(arrTodos);
+        return todo
     })
 
 
@@ -311,4 +369,4 @@ function addTodo() {
 
 
 
-export {popUpTodo};
+export {popUpTodo,defaultTodo};
