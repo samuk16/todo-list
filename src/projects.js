@@ -1,6 +1,11 @@
 
 import createElementsDom from './domCreation.js';
 
+import {EventManager} from './pubSub.js';
+
+import {defaultTodo} from './todos.js';
+
+
 let colorInputColor;
 let countChilds = 1;
 const projects = [];
@@ -62,7 +67,7 @@ const arrNewProject = [
 const itemProject = [
     {
         elementType: 'div',
-        attributes: {class:'itemProject'},
+        attributes: {class:'itemProject', 'data-project-id': '0',style:"background-color: #25A7B9;"},
         appendChild: '.containerProjects',
     },
 ]
@@ -77,16 +82,59 @@ function domElements(arr) {
    
 }  
 
+// function todos(description, dueDate) {
+//     this.description = description;
+//     this.dueDate = dueDate;
+// }
 
-function createObjProject(name,color) {
+function createObjProject(projectName,projectColor,projectId) {
     
-    this.name = name;
-    this.color = color;
+    this.name = projectName;
+    this.color = projectColor;
+    this.id = projectId;
+    this.todo = [];
+
+    this.addTodo = function(obj){
+
+        this.todo.push(obj);
+        EventManager.emit('todoAdded', this);
+
+    }
 };
+
+function defaultProject() {
+    
+    createObjs('default','#25A7B9');
+    // projects[0]
+    domElements(itemProject);
+    projects[0].addTodo(defaultTodo());
+    // console.log(deafult.todo);
+    console.log(projects);
+
+}
+
+function changeProject() {
+    
+    let titleTodoProject = document.querySelector('.titleTodoProject');
+    const containerProjects = document.querySelector('.containerProjects');
+
+    containerProjects.addEventListener('click', (e) => {
+
+        let projectTarget = e.target;
+
+        console.log(projectTarget);
+        // titleTodoProject.innerText = `${projectItem.name}`;
+
+    })
+
+
+}
 
 function createPopUpNewProject() {
 
     const btnNewProject = document.querySelector('.btnNewProject');
+
+    changeProject()
 
     btnNewProject.addEventListener('click', () => {
 
@@ -107,23 +155,37 @@ function addNewProject() {
     const inputText = document.querySelector('.inputText');
     
     btnAddProject.addEventListener('click', () => {
+
         countChilds++;
-        itemProject[0].attributes.class = `itemProject item${countChilds}`;
-        createObjs(inputText.value,colorInputColor)
-        domElements(itemProject);
-        changeColorBgItemProject(countChilds);            
+        createObjs(inputText.value,colorInputColor,countChilds);
+        // itemProject[0].attributes.class = `itemProject item${countChilds}`;
+        // itemProject[0].attributes['data-project-id'] = `${countChilds}`;
+        
+        // domElements(itemProject);
+        // changeColorBgItemProject(countChilds);            
 
     })
 }
-function createObjs(text,color) {
+function createObjs(projetName,color,projectId) {
     let projectItem;
-    if (text == '') {
-        
-        projectItem = new createObjProject(`Project-${countChilds}`,color);
+
+    if (projetName == '') {
+
+        projectItem = new createObjProject(`Project-${countChilds}`,color,projectId);
+        EventManager.emit('projectCreated',projectItem)
+
     }else{
-        projectItem = new createObjProject(text,color);
+
+        projectItem = new createObjProject(projetName,color,projectId);
+        EventManager.emit('projectCreated',projectItem)
+        // EventManager.on('todoAdded', function(project) {
+        //         console.log('Se agregó un todo al proyecto ' + project.name);
+            
+        // });
     }
-    projects.push(projectItem)
+    projects.push(projectItem);
+    // projects[0].addTodo(new todos('hola', '2023-03-18'))
+    // console.log(projects);
     // console.log(projects);
     // console.log(projects[0].name);
 }
@@ -173,4 +235,4 @@ function closeCreatorProject() {
 
 
 
-export {createPopUpNewProject};
+export {createPopUpNewProject,defaultProject,itemProject,countChilds};
