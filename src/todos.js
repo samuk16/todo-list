@@ -1,4 +1,6 @@
 import createElementsDom from './domCreation.js';
+import {EventManager} from './pubSub.js';
+import {countChilds,projects} from './projects.js';
 
 
 const arrPopUpTodo = [
@@ -208,7 +210,7 @@ const arrTodoTemplate= [
 
     {
         elementType: 'div',
-        attributes: {class:'itemTodo'},
+        attributes: {class:'itemTodo todoStyle'},
         appendChild: '.containerTodo',
     },
 
@@ -218,31 +220,36 @@ const arrTodoTemplate= [
         elementType: 'div',
         attributes: {class:'svgTodo'},
         innerHTML: '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="#25A7B9" stroke-width="2"/></svg>',
-        appendChild: '.itemTodo1',
+        appendChild: '.itemTodo',
     },
 
     {
         elementType: 'p',
         attributes: {class:'pTodo'},
-        appendChild: '.itemTodo1',
+        innerText: '',
+        appendChild: '.itemTodo',
     },
 
     {
         elementType: 'div',
         attributes: {class:'svgTodoMenu'},
         innerHTML: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12H5.01M12 12H12.01M19 12H19.01M6 12C6 12.5523 5.55228 13 5 13C4.44772 13 4 12.5523 4 12C4 11.4477 4.44772 11 5 11C5.55228 11 6 11.4477 6 12ZM13 12C13 12.5523 12.5523 13 12 13C11.4477 13 11 12.5523 11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12ZM20 12C20 12.5523 19.5523 13 19 13C18.4477 13 18 12.5523 18 12C18 11.4477 18.4477 11 19 11C19.5523 11 20 11.4477 20 12Z" stroke="#E6E1E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-        appendChild: '.itemTodo1',
+        appendChild: '.itemTodo',
     },
 ]
 
 const arrTodos= [];
 
-function todos(name,description,dueDate,priority) {
+let countTodo = 0;
+
+function todos(name,description,dueDate,priority,projectId) {
 
     this.name = name;
     this.description = description;
     this.dueDate = dueDate;
     this.priority = priority;
+    this.projectId = projectId;
+
 
 }
 
@@ -258,25 +265,25 @@ function domElements(arr) {
 
 function defaultTodo() {
     
-    let todoD = new todos('clean','limpiar loco','2023-03-25','rgb(219,118,61)');
+    let todoD = new todos('clean','limpiar loco','2023-03-25','rgb(219,118,61)',0);
+    console.log(todoD);
+    // EventManager.emit('todoCreated',todoD)
+    arrTodos.push(todoD)
+
+
 
     return todoD;
-}
-
-function renderTodo(container,todo) {
-    
-    domElements()    
-
-
 }
 
 function popUpTodo() {
     const btnPopUpTodo = document.querySelector('.btnNewTodo');
 
+    // defaultTodo();
+
     btnPopUpTodo.addEventListener('click', () => {
 
         domElements(arrPopUpTodo);
-        addTodo();
+        createTodoObj();
         popUpPriority();
     })
 }
@@ -341,7 +348,7 @@ function delPopUpPriotity() {
 
 }
 
-function addTodo() {
+function createTodoObj() {
     const btnCreateTodo = document.querySelector('.btnCreateTodo')
     const inputNameTodo = document.querySelector('.name')
     const inputDateTodo = document.querySelector('.date')
@@ -351,17 +358,29 @@ function addTodo() {
      
 
     btnCreateTodo.addEventListener('click', () => {
+        
+        countTodo++;
+        // console.log(inputNameTodo.value);
+        // console.log(colorPrio.style.fill);
+        // console.log(inputDescriptionTodo.value);
+        // console.log(inputDateTodo.value);
 
-        console.log(inputNameTodo.value);
-        console.log(colorPrio.style.fill);
-        console.log(inputDescriptionTodo.value);
-        console.log(inputDateTodo.value);
+        let todo = new todos(inputNameTodo.value,inputDescriptionTodo.value,inputDateTodo.value,colorPrio.style.fill,countChilds);
 
-        let todo = new todos(inputNameTodo.value,inputDescriptionTodo.value,inputDateTodo.value,colorPrio.style.fill);
+        // EventManager.emit('todoCreated',todo)
 
-        // arrTodos.push(todo);
+        arrTodos.push(todo);
+
+        const project = projects.find(project => project.id === todo.projectId);
+
+        if (project) {
+
+            project.addTodo(todo);
+        }
+
         // console.log(arrTodos);
-        return todo
+        console.log(projects);
+        // return todo
     })
 
 
@@ -369,4 +388,7 @@ function addTodo() {
 
 
 
-export {popUpTodo,defaultTodo};
+
+
+
+export {popUpTodo,defaultTodo,arrTodoTemplate,countTodo};
