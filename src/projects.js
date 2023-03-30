@@ -7,8 +7,10 @@ import {defaultTodo} from './todos.js';
 
 
 let colorInputColor;
-let countChilds = 1;
+let countChilds = 0;
 const projects = [];
+
+let projectIdSelected = 0;
 
 const arrNewProject = [
 
@@ -82,11 +84,6 @@ function domElements(arr) {
    
 }  
 
-// function todos(description, dueDate) {
-//     this.description = description;
-//     this.dueDate = dueDate;
-// }
-
 function createObjProject(projectName,projectColor,projectId) {
     
     this.name = projectName;
@@ -97,26 +94,27 @@ function createObjProject(projectName,projectColor,projectId) {
     this.addTodo = function(obj){
 
         this.todo.push(obj);
-        EventManager.emit('todoCreated', this);
+        EventManager.emit('todoCreated', obj);
 
     }
 };
 
 function defaultProject() {
     
+    // const containerTodo = document.querySelector('.containerTodo');
+    let titleTodoProject = document.querySelector('.titleTodoProject');
+
     createObjs('default','#25A7B9',0);
-    // projects[0]
-    itemProject[0].attributes.class = `itemProject item${projects[0].id} selected`;
+     projects[0].addTodo(defaultTodo())
+    titleTodoProject.innerText = `To do - ${findNameProjectById(projects[0].id)}`;
+    // itemProject[0].attributes.class = `itemProject item${projects[0].id} selected`;
 
-    domElements(itemProject);
-
+    // domElements(itemProject);
     
-    // projects[0].addTodo(defaultTodo());
-    
-    // console.log(deafult.todo);
-    console.log(projects);
+    // console.log('defaul creado en projects');
+    // console.log(projects);
 
-}
+};
 
 function changeProject() {
     
@@ -128,18 +126,20 @@ function changeProject() {
 
         let projectTarget = e.target;
         let projectId = projectTarget.dataset.projectId;
+        projectIdSelected = projectId;
 
-        console.log(projectId);
-        
 
-        // console.log(findNameProjectById(projectId));
         titleTodoProject.innerText = `To do - ${findNameProjectById(projectId)}`;
+        
+        const projectObjSelected = projects.find(project => project.id == projectId);
+        
+        // console.log(projectId);
+        // console.log(projects);
+        console.log(projectObjSelected);
 
+        EventManager.emit('changeProject',projectObjSelected.todo);
 
-        // console.log(projectTarget);
-        // titleTodoProject.innerText = `${projectItem.name}`;
-
-    })
+    });
 
 
 }
@@ -149,23 +149,22 @@ function findNameProjectById(projectId) {
     let foundProject = null;
 
     projects.forEach((project) => {
-        // console.log(project.id);
+
         if (project.id == projectId) {
 
             foundProject = project;
-            // console.log(project);
 
-            // console.log('founded');
         }
     });
 
     return foundProject.name;
-  }
+}
 
 function createPopUpNewProject() {
 
     const btnNewProject = document.querySelector('.btnNewProject');
 
+    defaultProject();
     changeProject()
 
     btnNewProject.addEventListener('click', () => {
@@ -222,11 +221,6 @@ function createObjs(projetName,color,projectId) {
     // console.log(projects[0].name);
 }
 
-function changeColorBgItemProject(count) {
-
-    let itemProject = document.querySelector(`.item${count}`);
-    itemProject.style.setProperty("background-color", colorInputColor);
-}
 
 function syncInputColor() {
     
@@ -267,4 +261,4 @@ function closeCreatorProject() {
 
 
 
-export {createPopUpNewProject,defaultProject,itemProject,countChilds};
+export {createPopUpNewProject,defaultProject,itemProject,countChilds,projects,projectIdSelected};
