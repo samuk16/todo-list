@@ -1,6 +1,6 @@
 import {EventManager} from './pubSub.js';
 
-import {itemProject,countChilds} from './projects.js';
+import {itemProject,countChilds,projectIdSelected} from './projects.js';
 
 import {arrTodoTemplate,countTodo} from './todos.js';
 
@@ -40,7 +40,7 @@ function addProjectDOM(project) {
 }
 
 function addTodoProjectItemDOM(obj) {
-
+    
     console.log(obj);
     
     arrTodoTemplate[0].attributes.class = `itemTodo${countTodo} todoStyle`;
@@ -57,10 +57,48 @@ function addTodoProjectItemDOM(obj) {
 
 }
 
-function renderTodo(arrProjects) {
+function renderTodo(arrTodos) {
+
+    let countClass = 0;
+
+    delTodos();
+
+    arrTodos.forEach(todo => {
+
+        arrTodoTemplate[0].attributes.class = `itemTodo${countClass} todoStyle`;
+
+        arrTodoTemplate[1].appendChild = `.itemTodo${countClass}`;
+        arrTodoTemplate[2].appendChild = `.itemTodo${countClass}`;
+        arrTodoTemplate[3].appendChild = `.itemTodo${countClass}`;
+
+        // arrTodoTemplate.forEach(item => item.appendChild = `.itemTodo${countTodo}`)
+
+        arrTodoTemplate[2].innerText = `${todo.name}`;
+        // console.log('added todo');
+        domElements(arrTodoTemplate);
+        countClass++;
+    })
+    console.log('hechoRenderTodo');
     
 
-    
+}
+
+function delTodos() {
+
+    const containerTodo = document.querySelector('.containerTodo');
+    const btnNewTodo = document.querySelector('.btnNewTodo');
+
+    // while (containerTodo.firstChild) {
+    //     containerTodo.removeChild(containerTodo.firstChild);
+    //   }
+    console.log('borrado');
+    while (containerTodo.firstChild !== btnNewTodo) {
+        containerTodo.removeChild(containerTodo.firstChild);
+    }
+
+    while (containerTodo.lastChild !== btnNewTodo) {
+        containerTodo.removeChild(containerTodo.lastChild);
+    }
 
 }
 
