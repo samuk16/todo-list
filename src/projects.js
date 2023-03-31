@@ -5,6 +5,14 @@ import {EventManager} from './pubSub.js';
 
 import {defaultTodo} from './todos.js';
 
+import tippy from 'tippy.js';
+
+import 'tippy.js/themes/light.css';
+
+import 'tippy.js/animations/scale.css';
+
+import 'tippy.js/animations/scale-subtle.css';
+
 
 let colorInputColor;
 let countChilds = 0;
@@ -90,6 +98,15 @@ function createObjProject(projectName,projectColor,projectId) {
     this.color = projectColor;
     this.id = projectId;
     this.todo = [];
+    this.isTipName = false;
+
+    this.onHover = function() {
+        if (!this.isTipName) {
+
+            this.isTipName = true;
+            
+        }
+    };
 
     this.addTodo = function(obj){
 
@@ -101,18 +118,14 @@ function createObjProject(projectName,projectColor,projectId) {
 
 function defaultProject() {
     
-    // const containerTodo = document.querySelector('.containerTodo');
     let titleTodoProject = document.querySelector('.titleTodoProject');
 
     createObjs('default','#25A7B9',0);
-     projects[0].addTodo(defaultTodo())
-    titleTodoProject.innerText = `To do - ${findNameProjectById(projects[0].id)}`;
-    // itemProject[0].attributes.class = `itemProject item${projects[0].id} selected`;
 
-    // domElements(itemProject);
+    projects[0].addTodo(defaultTodo())
+
+    titleTodoProject.innerText = `To do - ${findProjectById(projects[0].id).name}`;
     
-    // console.log('defaul creado en projects');
-    // console.log(projects);
 
 };
 
@@ -129,13 +142,9 @@ function changeProject() {
         projectIdSelected = projectId;
 
 
-        titleTodoProject.innerText = `To do - ${findNameProjectById(projectId)}`;
+        titleTodoProject.innerText = `To do - ${findProjectById(projectId).name}`;
         
         const projectObjSelected = projects.find(project => project.id == projectId);
-        
-        // console.log(projectId);
-        // console.log(projects);
-        console.log(projectObjSelected);
 
         EventManager.emit('changeProject',projectObjSelected.todo);
 
@@ -144,7 +153,7 @@ function changeProject() {
 
 }
 
-function findNameProjectById(projectId) {
+function findProjectById(projectId) {
 
     let foundProject = null;
 
@@ -157,7 +166,7 @@ function findNameProjectById(projectId) {
         }
     });
 
-    return foundProject.name;
+    return foundProject;
 }
 
 function findColorProjectById(projectId) {
@@ -182,6 +191,7 @@ function createPopUpNewProject() {
 
     defaultProject();
     changeProject()
+    hoverProject()
 
     btnNewProject.addEventListener('click', () => {
 
@@ -220,21 +230,14 @@ function createObjs(projetName,color,projectId) {
 
         projectItem = new createObjProject(`Project-${countChilds}`,color,projectId);
         EventManager.emit('projectCreated',projectItem)
-
     }else{
 
         projectItem = new createObjProject(projetName,color,projectId);
         EventManager.emit('projectCreated',projectItem)
-        // EventManager.on('todoAdded', function(project) {
-        //         console.log('Se agregó un todo al proyecto ' + project.name);
-            
-        // });
+      
     }
     projects.push(projectItem);
-    // projects[0].addTodo(new todos('hola', '2023-03-18'))
-    // console.log(projects);
-    // console.log(projects);
-    // console.log(projects[0].name);
+ 
 }
 
 
@@ -275,7 +278,40 @@ function closeCreatorProject() {
 
 };
 
+function hoverProject() {
+
+    const containerProjects = document.querySelector('.containerProjects');
+
+    containerProjects.addEventListener('mouseover', (e) => {
+
+        let hoverTarget = e.target;
+        let hoverProjectId = hoverTarget.dataset.projectId;
+
+        if (hoverProjectId) {
+            
+            if (!findProjectById(hoverProjectId).isTipName) {
+
+                findProjectById(hoverProjectId).onHover();
+                projectTipName(hoverTarget,hoverProjectId)
+            }
+        }
+        
+    })
+
+}
+
+function projectTipName(div,projectId) {
+
+    tippy(div,{
+
+        content: `${findProjectById(projectId).name}`,
+        animation:'scale-subtle',
+        inertia: true,
+        placement:'right',
+        theme: 'dark',
+    })
+
+}
 
 
-
-export {createPopUpNewProject,defaultProject,itemProject,countChilds,projects,projectIdSelected,findColorProjectById};
+export {createPopUpNewProject,defaultProject,itemProject,countChilds,projects,projectIdSelected,findColorProjectById,findProjectById};
