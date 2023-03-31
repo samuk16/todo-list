@@ -160,6 +160,22 @@ function findNameProjectById(projectId) {
     return foundProject.name;
 }
 
+function findColorProjectById(projectId) {
+
+    let foundColorProject = null;
+
+    projects.forEach((project) => {
+
+        if (project.id == projectId) {
+
+            foundColorProject = project;
+
+        }
+    });
+
+    return foundColorProject.color;
+}
+
 function createPopUpNewProject() {
 
     const btnNewProject = document.querySelector('.btnNewProject');
@@ -261,4 +277,5 @@ function closeCreatorProject() {
 
 
 
-export {createPopUpNewProject,defaultProject,itemProject,countChilds,projects,projectIdSelected};
+
+export {createPopUpNewProject,defaultProject,itemProject,countChilds,projects,projectIdSelected,findColorProjectById};
