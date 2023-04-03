@@ -1,7 +1,8 @@
 import createElementsDom from './domCreation.js';
 import {EventManager} from './pubSub.js';
-import {countChilds,projects,projectIdSelected} from './projects.js';
-
+import {countChilds,projects,projectIdSelected,findProjectById} from './projects.js';
+import 'tippy.js/animations/scale-subtle.css';
+import tippy from 'tippy.js';
 
 const arrPopUpTodo = [
 
@@ -249,13 +250,25 @@ const arrTodos= [];
 
 let countTodo = 0;
 
-function todos(name,description,dueDate,priority,projectId) {
+let priorityName;
+
+function todos(name,description,dueDate,priorityColor,priorityName,projectId,todoId) {
 
     this.name = name;
     this.description = description;
     this.dueDate = dueDate;
-    this.priority = priority;
+    this.priority = [priorityColor,priorityName];
     this.projectId = projectId;
+    this.todoId = todoId;
+    this.isTipPriority = false;
+
+    this.onHover = function() {
+        if (!this.isTipPriority) {
+
+            this.isTipPriority = true;
+            
+        }
+    };
 
 
 }
@@ -272,7 +285,7 @@ function domElements(arr) {
 
 function defaultTodo() {
     
-    let todoD = new todos('clean','limpiar loco','2023-03-25','rgb(219,118,61)',0);
+    let todoD = new todos('clean','limpiar loco','2023-03-25','rgb(219,118,61)','Medium',0,0);
     console.log(todoD);
     // EventManager.emit('todoCreated',todoD)
     arrTodos.push(todoD)
@@ -286,7 +299,7 @@ function popUpTodo() {
     const btnPopUpTodo = document.querySelector('.btnNewTodo');
 
     // defaultTodo();
-
+    hoverTodo();
     btnPopUpTodo.addEventListener('click', () => {
 
         domElements(arrPopUpTodo);
@@ -326,21 +339,24 @@ function choosePriority(target) {
     const arrPriorityColors = ['#DB3D3D','#DB763D','#3D99DB'];
 
     if (target.classList.contains('itemDd')) {
-        
-
 
         if (target.classList.contains('ddOp1')) {
 
             colorPrio.style.fill = arrPriorityColors[0];
+            priorityName = 'High';
+            console.log(priorityName);
 
         }else if(target.classList.contains('ddOp2')){
 
             colorPrio.style.fill = arrPriorityColors[1];
-
+            priorityName = 'Medium';
+            console.log(priorityName);
             
         }else{
 
             colorPrio.style.fill = arrPriorityColors[2];
+            priorityName = 'Low';
+            console.log(priorityName);
         }
     
     }
@@ -368,14 +384,8 @@ function createTodoObj() {
     btnCreateTodo.addEventListener('click', () => {
         
         countTodo++;
-        // console.log(inputNameTodo.value);
-        // console.log(colorPrio.style.fill);
-        // console.log(inputDescriptionTodo.value);
-        // console.log(inputDateTodo.value);
 
-        let todo = new todos(inputNameTodo.value,inputDescriptionTodo.value,inputDateTodo.value,colorPrio.style.fill,projectIdSelected);
-
-        // EventManager.emit('todoCreated',todo)
+        let todo = new todos(inputNameTodo.value,inputDescriptionTodo.value,inputDateTodo.value,colorPrio.style.fill,priorityName,projectIdSelected,countTodo);
 
         arrTodos.push(todo);
 
@@ -386,9 +396,8 @@ function createTodoObj() {
             project.addTodo(todo);
         }
 
-        // console.log(arrTodos);
         console.log(projects);
-        // return todo
+
     })
 
 
@@ -408,8 +417,55 @@ function delPopUpTodo() {
 
 };
 
+function hoverTodo() {
 
+    const containerTodo = document.querySelector('.containerTodo');
 
+    containerTodo.addEventListener('mouseover', (e) => {
+
+        let hoverTarget = e.target;
+        let hoverTodoId = hoverTarget.dataset.todoId;
+        let childPriority = hoverTarget.children[2];
+
+        if (hoverTodoId) {
+
+            let todoFounded = null;
+
+            findProjectById(projectIdSelected).todo.forEach(todo => {
+
+                if (todo.todoId == hoverTodoId) {
+
+                    todoFounded = todo;
+
+                    if (!todoFounded.isTipPriority) {
+
+                        todoFounded.onHover();
+                        todoTipNamePriority(childPriority,todoFounded);
+                        
+                    }                    
+
+                }
+
+            })
+
+        }
+        
+    })
+
+}
+
+function todoTipNamePriority(div,todo) {
+
+    tippy(div,{
+
+        content: `${todo.priority[1]}`,
+        animation:'scale-subtle',
+        inertia: true,
+        placement:'top',
+        theme: 'dark-todo',
+    })
+
+}
 
 
 
