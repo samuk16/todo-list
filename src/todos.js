@@ -246,6 +246,33 @@ const arrTodoTemplate= [
     },
 ]
 
+const arrTodoEditTemplate = [
+
+    {
+        elementType: 'div',
+        attributes: {class:'containerEditTodo'},
+        appendChild: '.todoStyle',
+    },
+
+    //  childs todoStyle
+
+    {
+        elementType: 'div',
+        attributes: {class:'containerSvgEdit'},
+        innerHTML: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 5H6C4.89543 5 4 5.89543 4 7V18C4 19.1046 4.89543 20 6 20H17C18.1046 20 19 19.1046 19 18V13M17.5858 3.58579C18.3668 2.80474 19.6332 2.80474 20.4142 3.58579C21.1953 4.36683 21.1953 5.63316 20.4142 6.41421L11.8284 15H9L9 12.1716L17.5858 3.58579Z" stroke="#E6E1E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+        appendChild: '.todoStyle',
+    },
+
+    {
+        elementType: 'div',
+        attributes: {class:'containerSvgDelete'},
+        innerHTML: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 7L18.1327 19.1425C18.0579 20.1891 17.187 21 16.1378 21H7.86224C6.81296 21 5.94208 20.1891 5.86732 19.1425L5 7M10 11V17M14 11V17M15 7V4C15 3.44772 14.5523 3 14 3H10C9.44772 3 9 3.44772 9 4V7M4 7H20" stroke="#E6E1E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+        appendChild: '.todoStyle',
+    },
+
+
+];
+
 const arrTodos= [];
 
 let countTodo = 0;
@@ -289,7 +316,7 @@ function defaultTodo() {
     console.log(todoD);
     // EventManager.emit('todoCreated',todoD)
     arrTodos.push(todoD)
-
+    // countTodo++;
 
 
     return todoD;
@@ -344,19 +371,16 @@ function choosePriority(target) {
 
             colorPrio.style.fill = arrPriorityColors[0];
             priorityName = 'High';
-            console.log(priorityName);
 
         }else if(target.classList.contains('ddOp2')){
 
             colorPrio.style.fill = arrPriorityColors[1];
             priorityName = 'Medium';
-            console.log(priorityName);
             
         }else{
 
             colorPrio.style.fill = arrPriorityColors[2];
             priorityName = 'Low';
-            console.log(priorityName);
         }
     
     }
@@ -383,6 +407,7 @@ function createTodoObj() {
 
     btnCreateTodo.addEventListener('click', () => {
         
+        
         countTodo++;
 
         let todo = new todos(inputNameTodo.value,inputDescriptionTodo.value,inputDateTodo.value,colorPrio.style.fill,priorityName,projectIdSelected,countTodo);
@@ -395,7 +420,6 @@ function createTodoObj() {
 
             project.addTodo(todo);
         }
-
         console.log(projects);
 
     })
@@ -426,6 +450,8 @@ function hoverTodo() {
         let hoverTarget = e.target;
         let hoverTodoId = hoverTarget.dataset.todoId;
         let childPriority = hoverTarget.children[2];
+
+        // console.log('hovertodo');
 
         if (hoverTodoId) {
 
@@ -467,6 +493,24 @@ function todoTipNamePriority(div,todo) {
 
 }
 
+function restartTodoTipPriority() {
+    
+    arrTodos.forEach(todo => {
+
+        if (todo.isTipPriority) {
+            todo.isTipPriority = false;
+        }
+
+    })
+
+    console.log(arrTodos);
+
+}
+
+function resetCountTodo() {
+    
+    countTodo = 0;
+}
 
 
-export {popUpTodo,defaultTodo,arrTodoTemplate,countTodo};
+export {popUpTodo,defaultTodo,arrTodoTemplate,countTodo,restartTodoTipPriority,resetCountTodo};
