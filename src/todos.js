@@ -246,7 +246,7 @@ const arrTodoTemplate= [
     },
 ]
 
-const arrTodoEditTemplate = [
+const arrTodoMenuTemplate = [
 
     {
         elementType: 'div',
@@ -327,6 +327,7 @@ function popUpTodo() {
 
     // defaultTodo();
     hoverTodo();
+    showMenuTodo();
     btnPopUpTodo.addEventListener('click', () => {
 
         domElements(arrPopUpTodo);
@@ -512,13 +513,60 @@ function resetCountTodo() {
     countTodo = 0;
 }
 
+function findTodoById(todoId) {
+    
+    // let hoverTarget = e.target;
+    // let hoverTodoId = hoverTarget.dataset.todoId;
+
+    let todoFounded = null;
+
+    findProjectById(projectIdSelected).todo.forEach(todo => {
+
+        if (todo.todoId == todoId) {
+
+            todoFounded = todo;
+            // console.log(todo);
+        }
+    })
+
+    return todoFounded;
+}
+
 function showMenuTodo() {
     
     const svgTodoMenu = document.querySelector('.svgTodoMenu');
-
-    svgTodoMenu.addEventListener('click', () => {
-
+    const containerTodo = document.querySelector('.containerTodo');
+    let toggle = false;
+    containerTodo.addEventListener('click', (e) => {
         
+        let target = e.target;
+
+        if (target.classList.contains('svgTodoMenu')) {
+
+            let father = target.parentNode;
+            let todoId = father.dataset.todoId;
+            let divAppendChild = father.classList[0];
+            console.log(divAppendChild);
+
+            toggle = !toggle;
+
+            if (toggle) {
+                
+                arrTodoMenuTemplate[0].appendChild =`.${divAppendChild}`;
+
+                EventManager.emit('createElements',arrTodoMenuTemplate)
+                
+            }else{
+
+                let containerMenuTodo = document.querySelector('.containerMenuTodo');
+
+                EventManager.emit('deleteElement', containerMenuTodo)                
+            }
+
+
+        }
+
+       
 
     });
 
