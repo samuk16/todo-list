@@ -551,7 +551,7 @@ function showMenuTodo() {
             toggle = !toggle;
 
             if (toggle) {
-                
+
                 arrTodoMenuTemplate[0].appendChild =`.${divAppendChild}`;
 
                 EventManager.emit('createElements',arrTodoMenuTemplate)
@@ -569,6 +569,12 @@ function showMenuTodo() {
        
 
     });
+
+}
+
+function showEditTodo() {
+    
+    
 
 }
 
