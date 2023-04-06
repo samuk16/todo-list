@@ -273,6 +273,117 @@ const arrTodoMenuTemplate = [
 
 ];
 
+const arrTodoEditTemplate = [
+
+    {
+        elementType: 'div',
+        attributes: {class:'containerTodoEdit'},
+        appendChild: '.containerTodo',
+    },
+
+    //  child containerTodo
+
+    {
+        elementType: 'div',
+        attributes: {class:'btnClosePopUpTodo'},
+        innerHTML: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12L12 4M4 4L12 12" stroke="#E6E1E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+        appendChild: '.containerTodoEdit',
+    },
+
+    {
+        elementType: 'div',
+        attributes: {class:'containerEditName'},
+        appendChild: '.containerTodoEdit',
+    },
+    {
+        elementType: 'div',
+        attributes: {class:'containerEditDescription'},
+        appendChild: '.containerTodoEdit',
+    },
+    {
+        elementType: 'div',
+        attributes: {class:'containerEditDateAndPriority'},
+        appendChild: '.containerTodoEdit',
+    },
+
+    {
+        elementType: 'div',
+        attributes: {class:'containerBtnsCancelSave'},
+        appendChild: '.containerTodoEdit',
+    },
+
+
+    //  child containerEditName
+
+    {
+        elementType: 'p',
+        attributes: {class:'pTodoEditName'},
+        innerText: 'Name',
+        appendChild: '.containerEditName',
+    },
+
+    {
+        elementType: 'div',
+        attributes: {class:'containerInputTodoEditName'},
+        innerHTML: '<input class ="input editName" type="text" name="editNameTodo">',
+        appendChild: '.containerEditName',
+
+    },
+
+    // child containerEditDescription
+
+    {
+        elementType: 'p',
+        attributes: {class:'pTodoEditName'},
+        innerText: 'Name',
+        appendChild: '.containerEditDescription',
+    },
+
+    {
+        elementType: 'div',
+        attributes: {class:'containerTodoEditDescription'},
+        innerHTML: '<textarea class="editDescription" cols="60">',
+        appendChild: '.containerEditDescription',
+
+    },
+
+    //  child containerEditDateAndPriority
+
+    {
+        elementType: 'div',
+        attributes: {class:'containerTodoEditDate'},
+        innerHTML: '<input class ="input date" type="date" name="editDateTodo">',
+        appendChild: '.containerEditDateAndPriority',
+
+    },
+
+    {
+        elementType: 'div',
+        attributes: {class:'containerTodoEditPriority'},
+        innerHTML: '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="prio" cx="6" cy="6" r="5.5" fill="#3D99DB"/></svg>',
+        appendChild: '.containerEditDateAndPriority',
+
+    },
+
+    //  child containerBtnsCancelSave
+
+    {
+        elementType: 'div',
+        attributes: {class:'containerBtnCancel'},
+        innerText: 'Cancel',
+        appendChild: '.containerBtnsCancelSave',
+    },
+
+    {
+        elementType: 'div',
+        attributes: {class:'containerBtnSave'},
+        innerText: 'Save',
+        appendChild: '.containerBtnsCancelSave',
+    },
+
+
+];
+
 const arrTodos= [];
 
 let countTodo = 0;
@@ -574,7 +685,7 @@ function showMenuTodo() {
 
 function showEditTodo() {
     
-    
+
 
 }
 
