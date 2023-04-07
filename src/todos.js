@@ -278,7 +278,7 @@ const arrTodoEditTemplate = [
     {
         elementType: 'div',
         attributes: {class:'containerTodoEdit'},
-        appendChild: '.containerTodo',
+        appendChild: 'body',
     },
 
     //  child containerTodo
@@ -335,14 +335,14 @@ const arrTodoEditTemplate = [
     {
         elementType: 'p',
         attributes: {class:'pTodoEditName'},
-        innerText: 'Name',
+        innerText: 'Description',
         appendChild: '.containerEditDescription',
     },
 
     {
         elementType: 'div',
         attributes: {class:'containerTodoEditDescription'},
-        innerHTML: '<textarea class="editDescription" cols="60">',
+        innerHTML: '<textarea class="editDescription" cols="50">',
         appendChild: '.containerEditDescription',
 
     },
@@ -352,7 +352,7 @@ const arrTodoEditTemplate = [
     {
         elementType: 'div',
         attributes: {class:'containerTodoEditDate'},
-        innerHTML: '<input class ="input date" type="date" name="editDateTodo">',
+        innerHTML: '<input class ="input editDate" type="date" name="editDateTodo">',
         appendChild: '.containerEditDateAndPriority',
 
     },
@@ -648,6 +648,7 @@ function showMenuTodo() {
     const svgTodoMenu = document.querySelector('.svgTodoMenu');
     const containerTodo = document.querySelector('.containerTodo');
     let toggle = false;
+
     containerTodo.addEventListener('click', (e) => {
         
         let target = e.target;
@@ -657,7 +658,7 @@ function showMenuTodo() {
             let father = target.parentNode;
             let todoId = father.dataset.todoId;
             let divAppendChild = father.classList[0];
-            console.log(divAppendChild);
+            // console.log(divAppendChild);
 
             toggle = !toggle;
 
@@ -666,7 +667,9 @@ function showMenuTodo() {
                 arrTodoMenuTemplate[0].appendChild =`.${divAppendChild}`;
 
                 EventManager.emit('createElements',arrTodoMenuTemplate)
-                
+
+                showEditTodo();
+
             }else{
 
                 let containerMenuTodo = document.querySelector('.containerMenuTodo');
@@ -685,9 +688,61 @@ function showMenuTodo() {
 
 function showEditTodo() {
     
+    let containerMenuTodo = document.querySelector('.containerMenuTodo');
 
+    containerMenuTodo.addEventListener('click', (e) => {
+
+        let target = e.target;
+
+        let todoId = target.parentNode.parentNode.dataset.todoId;
+
+        // console.log(findTodoById(todoId));
+
+
+
+        if (target.classList.contains('containerSvgEdit')) {
+            
+            fillEditTodo(findTodoById(todoId));
+
+            EventManager.emit('createElements',arrTodoEditTemplate);
+
+            delEditTodo();
+
+            let textArea = document.querySelector('.editDescription');
+
+            textArea.value = `${findTodoById(todoId).description}`;
+
+            
+
+
+        }
+
+    })  
 
 }
 
+
+function fillEditTodo(todoObj) {
+
+    arrTodoEditTemplate[7].innerHTML = `<input class ="input editName" type="text" name="editNameTodo" value="${todoObj.name}">`;
+    // arrTodoEditTemplate[9].innerHTML = `<textarea class="editDescription" cols="50" value="${todoObj.description}">`;
+    arrTodoEditTemplate[10].innerHTML = `<input class ="input editDate" type="date" name="editDateTodo" value="${todoObj.dueDate}">`;
+    arrTodoEditTemplate[11].innerHTML = `<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="prio" cx="6" cy="6" r="5.5" fill="${todoObj.priority[0]}"/></svg>`;
+
+    
+}
+
+function delEditTodo() {
+    
+    const containerTodoEdit = document.querySelector('.containerTodoEdit')
+    const btnClosePopUpTodo = document.querySelector('.btnClosePopUpTodo');
+
+    btnClosePopUpTodo.addEventListener('click', () => {
+
+        EventManager.emit('deleteElement', containerTodoEdit)
+
+    })
+
+}
 
 export {popUpTodo,defaultTodo,arrTodoTemplate,countTodo,restartTodoTipPriority,resetCountTodo};
