@@ -163,7 +163,7 @@ p{
     padding: 12px;
 }
 
-.btnClosePopUp{
+.btnClosePopUp,.btnClosePopUpTodo{
 
     position:absolute;
 
@@ -258,8 +258,10 @@ p{
 .containerTodo{
     position: relative;
 
-    /* display: flex;
-    flex-direction: column; */
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+
 
     background-color: var(--backContainer);
     border-radius: 16px;
@@ -270,7 +272,7 @@ p{
     padding: 30px ;
 }
 
-.itemTodo1{
+.todoStyle{
 
     display: flex;
     align-items: center;
@@ -291,6 +293,30 @@ p{
     
     cursor: pointer;
 }
+
+.svgTodoPriority{
+
+    display: grid;
+    place-content: center;
+
+    cursor: pointer;
+}
+
+.svgTodoMenu{
+
+    /* justify-self: flex-end; */
+    /* align-self: flex-end; */
+
+    margin-left: auto;
+
+    display: grid;
+    place-content: center;
+
+    cursor: pointer;
+
+
+}
+
 
 .btnNewTodo{
 
@@ -438,6 +464,11 @@ p{
 
 }
 
+.titleNewTodoName, .titleNewTodoDescription{
+
+    user-select: none;
+}
+
 .containerName, .containerDescription{
 
     display: flex;
@@ -462,4 +493,256 @@ p{
 
 .btnCreateTodo:hover{
     background-color: var(--backContainerSecond);
+}
+
+.containerTextAndPriority{
+
+    display: flex;
+    
+
+    gap: 30px;
+
+}
+
+.containerPriority{
+
+    justify-self: end;
+
+    position: relative;
+
+    display: grid;
+    place-items: center;
+
+    background-color: var(--backContainerSecond);
+
+    border: none;
+    outline: none;
+
+    border-radius: 16px;
+
+    width: 40px;
+    height: 40px;
+
+    cursor: pointer;
+}
+
+.dropDown{
+
+    position:absolute;
+
+    bottom: -30px;
+
+    display: flex;
+
+    gap: 7px;
+}
+
+.itemDd{
+
+
+
+    display: grid;
+    place-items: center;
+
+    width: 25px;
+    height: 25px;
+
+    border-radius: 5px;
+
+    background-color: var(--backContainerSecond);
+    
+    cursor: pointer;
+}
+
+.containerTextTodoName{
+
+    flex-grow: 2;
+    /* width: 90%; */
+}
+
+circle,svg{
+
+    pointer-events: none;
+}
+
+.ddOp1,.ddOp3{
+
+    position: relative;
+
+    top: -8px;
+}
+
+.containerMenuTodo{
+
+    position: absolute;
+    right: -90px;
+
+    display: flex;
+    gap: 13px;
+
+    background-color: var(--backContainerSecond);
+    padding: 13px;
+
+    border-radius: 16px;
+}
+
+.containerSvgEdit{
+    
+    border-radius: 5px;
+    display: grid;
+    place-content: center;
+    padding: 4px;
+
+    cursor: pointer;
+
+}
+.containerSvgEdit:hover{
+    
+    background-color: rgba(168, 199, 250, 0.15);
+
+}
+
+
+.containerSvgDelete{
+
+    border-radius: 5px;
+    display: grid;
+    place-content: center;
+    padding: 5px;
+
+    cursor: pointer;
+
+
+}
+.containerSvgDelete:hover{
+
+    background-color: rgba(179, 38, 30, 0.4);;
+}
+
+
+.containerTodoEdit{
+
+    position: absolute;
+    top: 30%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+
+    background-color: var(--backContainerSecond);
+
+    padding: 30px;
+
+    border-radius: 16px;
+
+}
+
+.containerEditName,.containerEditDescription{
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+}
+
+.editName{
+
+    background-color: var(--backContainer);
+    width: 100%;
+
+}
+
+.editDescription{
+
+    background-color: var(--backContainer);
+    border-radius: 16px;
+    outline: none;
+    border: none;
+}
+
+.containerEditDateAndPriority{
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.date{
+
+    background-color: var(--backContainer);
+
+}
+
+.containerTodoEditPriority{
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: var(--backContainer);
+    border-radius: 16px;
+
+    padding: 15px;
+}
+
+.containerBtnsCancelSave{
+
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+
+    color: var(--textDark);
+}
+
+.containerBtnCancel{
+
+    display: grid;
+    place-items: center;
+
+    background-color: var(--backContainer);
+    padding: 5px 0 ;
+    width: 100px;
+
+    border-radius: 12px;
+
+    user-select: none;
+    cursor: pointer;
+
+}
+
+.containerBtnSave{
+
+    display: grid;
+    place-items: center;
+
+    background-color: var(--backContainer);
+    padding: 5px 0;
+    width: 100px;
+
+
+    border-radius: 12px;
+
+    user-select: none;
+    cursor: pointer;
+
+}
+
+/* ----------------------------------------------------------- */
+
+.tippy-box[data-theme~='dark-project'] {
+    background-color: #332D41;
+    color: #E6E1E5;
+    border-radius: 16px;
+    padding: 5px 20px;
+    margin: 10px;
+}
+
+.tippy-box[data-theme~='dark-todo'] {
+    font-size: .8rem;
+    background-color: #332D41;
+    color: #E6E1E5;
+    border-radius: 16px;
+    padding: 5px 20px;
+    /* margin: 10px; */
+    box-shadow: 0 0 4px 3px rgba(0, 0, 0, 0.25);
 }
