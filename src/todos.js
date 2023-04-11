@@ -451,24 +451,57 @@ function popUpTodo() {
 function popUpPriority() {
     
     const containerPriority = document.querySelector('.containerPriority');
+    const containerTodoEditPriority = document.querySelector('.containerTodoEditPriority');
     let toggle = false;
 
-    containerPriority.addEventListener('click', (e) => {
 
-        toggle = !toggle;
+    if (containerPriority) {
 
-        if (toggle) {
-           
-            domElements(arrDropDown);
-            choosePriority(e.target)
-            
-        }else{
+        let toggle1 = false;
+        containerPriority.addEventListener('click', (e) => {
 
-            delPopUpPriotity();
-            choosePriority(e.target)
-            
-        }
-    })
+            toggle1 = !toggle1;
+    
+            if (toggle1) {
+                
+                arrDropDown[0].appendChild = '.containerPriority';
+                arrDropDown[0].attributes.class = 'dropDown';
+
+                domElements(arrDropDown);
+                choosePriority(e.target)
+                // console.log(toggle1);
+                // console.log(arrDropDown);
+                
+            }else{
+    
+                delPopUpPriotity();
+                choosePriority(e.target)
+                console.log(toggle1);   
+            }
+        })
+    }else{
+
+        containerTodoEditPriority.addEventListener('click', (e) => {
+
+            toggle = !toggle;
+    
+            if (toggle) {
+                
+                arrDropDown[0].appendChild = '.containerTodoEditPriority';
+                arrDropDown[0].attributes.class = 'dropDown editDropDown';
+
+                domElements(arrDropDown);
+                choosePriority(e.target)
+                
+            }else{
+    
+                delPopUpPriotity();
+                choosePriority(e.target)
+                
+            }
+        })
+    }
+    
 
 }
 
@@ -695,8 +728,10 @@ function showEditTodo() {
         let target = e.target;
 
         let todoId = target.parentNode.parentNode.dataset.todoId;
+        let todoItem = target.parentNode.parentNode.children;
 
-        // console.log(findTodoById(todoId));
+        let pTodo = todoItem[1]
+        let svgPriority = todoItem[2].children[0].children[0];
 
 
 
@@ -706,15 +741,15 @@ function showEditTodo() {
 
             EventManager.emit('createElements',arrTodoEditTemplate);
 
-            delEditTodo();
 
             let textArea = document.querySelector('.editDescription');
 
             textArea.value = `${findTodoById(todoId).description}`;
 
             
-
-
+            fillEditTodoNewInfo(findTodoById(todoId),pTodo,svgPriority);
+            delEditTodo();
+            popUpPriority();
         }
 
     })  
@@ -728,6 +763,33 @@ function fillEditTodo(todoObj) {
     // arrTodoEditTemplate[9].innerHTML = `<textarea class="editDescription" cols="50" value="${todoObj.description}">`;
     arrTodoEditTemplate[10].innerHTML = `<input class ="input editDate" type="date" name="editDateTodo" value="${todoObj.dueDate}">`;
     arrTodoEditTemplate[11].innerHTML = `<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="prio" cx="6" cy="6" r="5.5" fill="${todoObj.priority[0]}"/></svg>`;
+
+    
+}
+
+function fillEditTodoNewInfo(todo,pTodo,svgPriority) {
+    
+    const containerBtnSave = document.querySelector('.containerBtnSave')
+
+    const inputEditName = document.querySelector('.editName');
+    const textAreaDescription = document.querySelector('.editDescription');
+    const inputEditDate = document.querySelector('.editDate');
+    const editColorPriority = document.querySelector('.prio');
+
+    let arrTodoTitleAndSvg = [todo,pTodo,svgPriority];
+
+    containerBtnSave.addEventListener('click', () => {
+
+        todo.name = inputEditName.value;
+        todo.description = textAreaDescription.value;
+        todo.dueDate = inputEditDate.value;
+        todo.priority = [editColorPriority.style.fill,priorityName]
+
+        EventManager.emit('todoUpdated',arrTodoTitleAndSvg)
+
+
+
+    })
 
     
 }
