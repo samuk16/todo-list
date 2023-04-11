@@ -384,6 +384,41 @@ const arrTodoEditTemplate = [
 
 ];
 
+const arrPopUpDeleteConfirmation = [
+
+    {
+        elementType: 'div',
+        attributes: {class:'containerDeleteConfirmation'},
+        appendChild: 'body',
+
+    },
+
+    {
+        elementType: 'p',
+        attributes: {class:'titleDelConfirmation'},
+        appendChild: '.containerDeleteConfirmation',
+
+    },
+
+    {
+        elementType: 'div',
+        attributes: {class:'containerBtnCancel'},
+        innerText: 'Cancel',
+        appendChild: 'containerDeleteConfirmation',
+
+    },
+
+    {
+        elementType: 'div',
+        attributes: {class:'containerBtnDelete'},
+        innerText:'Delete',
+        appendChild: 'containerDeleteConfirmation',
+
+    },
+
+
+];
+
 const arrTodos= [];
 
 let countTodo = 0;
@@ -732,8 +767,7 @@ function showEditTodo() {
 
         let pTodo = todoItem[1]
         let svgPriority = todoItem[2].children[0].children[0];
-
-
+        let typpyInstance = todoItem[2];
 
         if (target.classList.contains('containerSvgEdit')) {
             
@@ -747,7 +781,7 @@ function showEditTodo() {
             textArea.value = `${findTodoById(todoId).description}`;
 
             
-            fillEditTodoNewInfo(findTodoById(todoId),pTodo,svgPriority);
+            fillEditTodoNewInfo(findTodoById(todoId),pTodo,svgPriority,typpyInstance);
             delEditTodo();
             popUpPriority();
         }
@@ -767,7 +801,7 @@ function fillEditTodo(todoObj) {
     
 }
 
-function fillEditTodoNewInfo(todo,pTodo,svgPriority) {
+function fillEditTodoNewInfo(todo,pTodo,svgPriority,typpyInstance) {
     
     const containerBtnSave = document.querySelector('.containerBtnSave')
 
@@ -776,7 +810,7 @@ function fillEditTodoNewInfo(todo,pTodo,svgPriority) {
     const inputEditDate = document.querySelector('.editDate');
     const editColorPriority = document.querySelector('.prio');
 
-    let arrTodoTitleAndSvg = [todo,pTodo,svgPriority];
+    let arrTodoTitleAndSvg = [todo,pTodo,svgPriority,typpyInstance];
 
     containerBtnSave.addEventListener('click', () => {
 
