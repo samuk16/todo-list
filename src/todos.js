@@ -393,26 +393,38 @@ const arrPopUpDeleteConfirmation = [
 
     },
 
+    //  chlids containerDeleteConfirmation
+
     {
         elementType: 'p',
         attributes: {class:'titleDelConfirmation'},
+        innerText: 'Are you sure?',
         appendChild: '.containerDeleteConfirmation',
 
     },
 
     {
         elementType: 'div',
-        attributes: {class:'containerBtnCancel'},
+        attributes: {class:'containerBtns'},
+        appendChild: '.containerDeleteConfirmation',
+
+    },
+
+    //  childs containerBtns
+
+    {
+        elementType: 'div',
+        attributes: {class:'containerBtnCancel btnDel'},
         innerText: 'Cancel',
-        appendChild: 'containerDeleteConfirmation',
+        appendChild: '.containerBtns',
 
     },
 
     {
         elementType: 'div',
-        attributes: {class:'containerBtnDelete'},
+        attributes: {class:'containerBtnDelete btnDel'},
         innerText:'Delete',
-        appendChild: 'containerDeleteConfirmation',
+        appendChild: '.containerBtns',
 
     },
 
@@ -737,6 +749,7 @@ function showMenuTodo() {
                 EventManager.emit('createElements',arrTodoMenuTemplate)
 
                 showEditTodo();
+                showDeleteConfirm();
 
             }else{
 
@@ -790,6 +803,57 @@ function showEditTodo() {
 
 }
 
+function showDeleteConfirm(){
+    
+    let containerMenuTodo = document.querySelector('.containerMenuTodo');
+
+
+    containerMenuTodo.addEventListener('click', (e) => {
+
+        let target = e.target;
+
+        let todoId = target.parentNode.parentNode.dataset.todoId;
+        let todoItem = target.parentNode.parentNode;
+
+
+
+        if (target.classList.contains('containerSvgDelete')) {
+            
+            EventManager.emit('createElements', arrPopUpDeleteConfirmation);
+
+            let containerDeleteConfirmation = document.querySelector('.containerDeleteConfirmation');
+
+            containerDeleteConfirmation.addEventListener('click', (e) => {
+
+                let targetContainerDel = e.target;
+
+                if (targetContainerDel.classList.contains('containerBtnDelete')) {
+                    
+                    EventManager.emit('deleteElement', todoItem);
+
+                    let todoIndex = arrTodos.findIndex(todo => todo.id == todoId) ;
+
+                    if (todoIndex !== -1){
+                        
+                        arrTodos.splice(todoIndex,1);
+
+                    }
+
+                    EventManager.emit('deleteElement', containerDeleteConfirmation);
+
+                }
+
+            })
+
+            
+
+
+        }
+
+    })
+
+    
+}
 
 function fillEditTodo(todoObj) {
 
