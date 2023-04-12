@@ -623,7 +623,10 @@ circle,svg{
 .containerTodoEdit{
 
     position: absolute;
-    top: 30%;
+    bottom: 50%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+
 
     display: flex;
     flex-direction: column;
@@ -667,7 +670,7 @@ circle,svg{
     justify-content: space-between;
 }
 
-.date{
+.editDate{
 
     background-color: var(--backContainer);
 
@@ -725,6 +728,99 @@ circle,svg{
     user-select: none;
     cursor: pointer;
 
+}
+
+.editDescription{
+
+    height: 120px;
+
+    background-color: var(--backContainer);
+
+    padding: 12px;
+
+    border-radius: 16px;
+
+    border: none;
+    outline: none;
+
+    resize: none;
+}
+
+.editDropDown{
+
+    bottom: 50px;
+}
+
+.editDropDown > :nth-child(1){
+
+    background-color: var(--backContainer);
+    
+}
+.editDropDown > :nth-child(2){
+
+    background-color: var(--backContainer);
+    
+}
+.editDropDown > :nth-child(3){
+
+    background-color: var(--backContainer);
+    
+}
+
+.containerDeleteConfirmation{
+
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+
+    background-color: var(--backContainerSecond);
+    border-radius: 16px;
+    padding: 30px 40px;
+
+
+}
+
+.btnDel{
+
+    display: grid;
+    place-items: center;
+
+    background-color: var(--backContainer);
+    border-radius: 12px;
+    padding: 5px 0;
+    color: var(--textDark);
+    width: 100px;
+
+}
+
+.containerBtns{
+
+    display: flex;
+    gap: 20px;
+    user-select: none;
+
+}
+
+.containerBtns > :nth-child(1){
+
+    background-color:#44445C;
+}
+.containerBtns > :nth-child(2){
+
+    background-color:rgba(179, 38, 30, 0.4);
+    cursor: pointer;
+}
+
+.titleDelConfirmation{
+
+    font-size: 1.4rem;
+    
 }
 
 /* ----------------------------------------------------------- */
