@@ -431,6 +431,35 @@ const arrPopUpDeleteConfirmation = [
 
 ];
 
+const arrTodoTodayAndWeek = [
+
+    {
+        elementType: 'div',
+        attributes: {class:'containerTodosTodayAndWeek'},
+        appendChild: '.containerCenterRight',
+
+    },
+
+    //  childs containerTodosTodayAndWeek
+
+    {
+        elementType: 'p',
+        attributes: {class:'titleTodayAndWeek'},
+        innerText:'test',
+        appendChild: '.containerTodosTodayAndWeek',
+
+    },
+
+    {
+        elementType: 'div',
+        attributes: {class:'TodosTodayAndWeek'},
+        appendChild: '.containerTodosTodayAndWeek',
+
+    },
+
+
+];
+
 const arrTodos= [];
 
 let countTodo = 0;
