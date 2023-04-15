@@ -4,6 +4,10 @@ import {countChilds,projects,projectIdSelected,findProjectById} from './projects
 import 'tippy.js/animations/scale-subtle.css';
 import tippy from 'tippy.js';
 
+import { format, compareAsc, Interval} from 'date-fns';
+import { formatDistance, subDays,eachDayOfInterval,add,getDay,getWeek,getWeekOfMonth,setWeek,startOfWeek,lastDayOfWeek,isWithinInterval } from 'date-fns'
+// import getDay from 'date-fns/fp/getDay'
+
 const arrPopUpTodo = [
 
     {
@@ -498,7 +502,7 @@ const arrTodoTodayAndWeek = [
 ];
 
 const arrTodos= [];
-
+const arrTodosWeek = [];
 let countTodo = 0;
 
 let priorityName;
@@ -591,7 +595,7 @@ function popUpPriority() {
     
                 delPopUpPriotity();
                 choosePriority(e.target)
-                console.log(toggle1);   
+                // console.log(toggle1);   
             }
         })
     }else{
@@ -680,7 +684,9 @@ function createTodoObj() {
 
             project.addTodo(todo);
         }
-        console.log(projects);
+        addTodosToCurrentWeekArr(todo);
+        console.log(arrTodosWeek);
+        // console.log(projects);
 
     })
 
@@ -989,6 +995,36 @@ function showTodayAndWeek() {
         }
     })
 
+}
+
+function addTodosToCurrentWeekArr(todo) {
+    
+
+    let todoDate = new Date(todo.dueDate);
+    let curretDay = new Date();
+    let firstDayWeek = startOfWeek(curretDay);
+    let lastDayWeek = lastDayOfWeek(curretDay);
+
+    const currentWeek = {
+
+        start: firstDayWeek,
+        end: lastDayWeek,
+
+    };
+
+    if (isWithinInterval(todoDate,currentWeek)) {
+        arrTodosWeek.push(todo);
+
+    }
+
+//     arrTodos.forEach(todo => {
+
+//         if (isWithinInterval(todo.dueDate,currentWeek)) {
+//             arrTodosWeek.push(todo);
+
+//         }
+
+//     })
 }
 
 export {popUpTodo,defaultTodo,arrTodoTemplate,countTodo,restartTodoTipPriority,resetCountTodo};
