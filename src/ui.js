@@ -29,8 +29,9 @@ function init() {
 
     EventManager.on('deleteElement', delElements);
 
-    // EventManager.on('todoUpdated', addTodoProjectItemDOM)
-
+    EventManager.on('todoUpdated', editTodo);
+    
+    EventManager.on('renderTodos', renderTodosTodayAndWeek);
 
 }
 
@@ -77,6 +78,7 @@ function renderTodo(arrTodos) {
 
     arrTodos.forEach(todo => {
 
+        arrTodoTemplate[0].appendChild = `.containerTodo`;
         arrTodoTemplate[0].attributes.class = `itemTodo${countClass} todoStyle`;
         arrTodoTemplate[0].attributes['data-todo-id'] = `${todo.todoId}`;
 
@@ -102,6 +104,39 @@ function renderTodo(arrTodos) {
 
 }
 
+function renderTodosTodayAndWeek(arrTodos) {
+    
+    let countClass = 0;
+
+    delTodosTodayAndWeek();
+
+    arrTodos.forEach(todo => {
+
+
+        arrTodoTemplate[0].appendChild = `.todosTodayAndWeek`;
+        arrTodoTemplate[0].attributes.class = `itemTodoTW${countClass} todoStyle`;
+        arrTodoTemplate[0].attributes['data-todo-id'] = `${todo.todoId}`;
+
+
+        arrTodoTemplate[1].appendChild = `.itemTodoTW${countClass}`;
+        arrTodoTemplate[2].appendChild = `.itemTodoTW${countClass}`;
+        arrTodoTemplate[3].appendChild = `.itemTodoTW${countClass}`;
+        arrTodoTemplate[4].appendChild = `.itemTodoTW${countClass}`;
+
+
+        arrTodoTemplate[1].innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="${findProjectById(todo.projectId).color}" stroke-width="2"/></svg>`;
+        arrTodoTemplate[3].innerHTML = `<svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="svgPriority" cx="3" cy="3" r="3" fill="${todo.priority[0]}"/></svg>`;
+
+        // arrTodoTemplate.forEach(item => item.appendChild = `.itemTodo${countTodo}`)
+
+        arrTodoTemplate[2].innerText = `${todo.name}`;
+        // console.log('added todo');
+        domElements(arrTodoTemplate);
+        countClass++;
+    })
+
+}
+
 function delTodos() {
 
     const containerTodo = document.querySelector('.containerTodo');
@@ -110,7 +145,6 @@ function delTodos() {
     // while (containerTodo.firstChild) {
     //     containerTodo.removeChild(containerTodo.firstChild);
     //   }
-    console.log('borrado');
     while (containerTodo.firstChild !== btnNewTodo) {
         containerTodo.removeChild(containerTodo.firstChild);
     }
@@ -121,10 +155,21 @@ function delTodos() {
 
 }
 
+function delTodosTodayAndWeek() {
+    const containerTodosTodayAndWeek = document.querySelector('.todosTodayAndWeek');
+
+
+    while (containerTodosTodayAndWeek.firstChild !== btnNewTodo) {
+        containerTodosTodayAndWeek.removeChild(containerTodosTodayAndWeek.firstChild);
+    }
+}
+
 function delElements(element) {
     
     element.remove();
 
 }
+
+
 
 export {init};
