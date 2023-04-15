@@ -171,5 +171,15 @@ function delElements(element) {
 }
 
 
+function editTodo(arr) {
+    
+    let instance = arr[3]._tippy;
+    // console.log(pTodo);
+    // console.log(svgPriority);
+
+    arr[1].textContent = arr[0].name;
+    arr[2].style.fill = arr[0].priority[0];
+    instance.setContent(`${arr[0].priority[1]}`)
+}
 
 export {init};
