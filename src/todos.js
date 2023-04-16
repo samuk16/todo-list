@@ -5,7 +5,7 @@ import 'tippy.js/animations/scale-subtle.css';
 import tippy from 'tippy.js';
 
 import { format, compareAsc, Interval} from 'date-fns';
-import { formatDistance, subDays,eachDayOfInterval,add,getDay,getWeek,getWeekOfMonth,setWeek,startOfWeek,lastDayOfWeek,isWithinInterval } from 'date-fns'
+import { formatDistance, subDays,eachDayOfInterval,add,getDay,getWeek,getWeekOfMonth,setWeek,startOfWeek,lastDayOfWeek,isWithinInterval,isEqual,isSameDay} from 'date-fns'
 // import getDay from 'date-fns/fp/getDay'
 
 const arrPopUpTodo = [
@@ -686,6 +686,7 @@ function createTodoObj() {
             project.addTodo(todo);
         }
         addTodosToCurrentWeekArr(todo);
+        addTodosToCurrentDayArr(todo);
         console.log(arrTodosWeek);
         // console.log(projects);
 
@@ -996,7 +997,7 @@ function showTodayAndWeek() {
             if (target.classList.contains('svgToday')) {
             
                 titleTodayAndWeek.textContent = 'Today';
-    
+                EventManager.emit('renderTodos',arrTodosToday)
             }
             if (target.classList.contains('svgWeek')) {
                 
@@ -1011,6 +1012,7 @@ function showTodayAndWeek() {
             
                 arrTodoTodayAndWeek[1].innerText = 'Today';
                 EventManager.emit('createElements', arrTodoTodayAndWeek);
+                EventManager.emit('renderTodos',arrTodosToday)
     
             }
             if (target.classList.contains('svgWeek')) {
@@ -1058,6 +1060,18 @@ function addTodosToCurrentWeekArr(todo) {
 //         }
 
 //     })
+}
+
+function addTodosToCurrentDayArr(todo) {
+    
+    let curretDay = new Date();
+    let [yearTodo, monthTodo, dayTodo] = todo.dueDate.split('-');
+    let todoDate = new Date(parseInt(yearTodo), parseInt(monthTodo) - 1, parseInt(dayTodo));
+
+    if (isSameDay(curretDay,todoDate)) {
+        arrTodosToday.push(todo);    
+    }
+
 }
 
 export {popUpTodo,defaultTodo,arrTodoTemplate,countTodo,restartTodoTipPriority,resetCountTodo};
