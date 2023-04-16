@@ -464,45 +464,46 @@ const arrTodoTodayAndWeek = [
     //   child temporal
 
 
-    {
-        elementType: 'div',
-        attributes: {class:'itemTodo todoStyle test1'},
-        appendChild: '.todosTodayAndWeek',
-    },
+    // {
+    //     elementType: 'div',
+    //     attributes: {class:'itemTodo todoStyle test1'},
+    //     appendChild: '.todosTodayAndWeek',
+    // },
 
     //  childs itemTodo
 
-    {
-        elementType: 'div',
-        attributes: {class:'svgTodo'},
-        innerHTML: '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="#25A7B9" stroke-width="2"/></svg>',
-        appendChild: '.itemTodo',
-    },
+    // {
+    //     elementType: 'div',
+    //     attributes: {class:'svgTodo'},
+    //     innerHTML: '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="#25A7B9" stroke-width="2"/></svg>',
+    //     appendChild: '.itemTodo',
+    // },
 
-    {
-        elementType: 'p',
-        attributes: {class:'pTodo'},
-        innerText: 'test',
-        appendChild: '.itemTodo',
-    },
+    // {
+    //     elementType: 'p',
+    //     attributes: {class:'pTodo'},
+    //     innerText: 'test',
+    //     appendChild: '.itemTodo',
+    // },
 
-    {
-        elementType: 'div',
-        attributes: {class:'svgTodoPriority'},
-        innerHTML: '<svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="svgPriority" cx="3" cy="3" r="3" fill="#CA1D1D"/></svg>',
-        appendChild: '.itemTodo',
-    },
+    // {
+    //     elementType: 'div',
+    //     attributes: {class:'svgTodoPriority'},
+    //     innerHTML: '<svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="svgPriority" cx="3" cy="3" r="3" fill="#CA1D1D"/></svg>',
+    //     appendChild: '.itemTodo',
+    // },
 
-    {
-        elementType: 'div',
-        attributes: {class:'svgTodoMenu'},
-        innerHTML: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12H5.01M12 12H12.01M19 12H19.01M6 12C6 12.5523 5.55228 13 5 13C4.44772 13 4 12.5523 4 12C4 11.4477 4.44772 11 5 11C5.55228 11 6 11.4477 6 12ZM13 12C13 12.5523 12.5523 13 12 13C11.4477 13 11 12.5523 11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12ZM20 12C20 12.5523 19.5523 13 19 13C18.4477 13 18 12.5523 18 12C18 11.4477 18.4477 11 19 11C19.5523 11 20 11.4477 20 12Z" stroke="#E6E1E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-        appendChild: '.itemTodo',
-    },
+    // {
+    //     elementType: 'div',
+    //     attributes: {class:'svgTodoMenu'},
+    //     innerHTML: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12H5.01M12 12H12.01M19 12H19.01M6 12C6 12.5523 5.55228 13 5 13C4.44772 13 4 12.5523 4 12C4 11.4477 4.44772 11 5 11C5.55228 11 6 11.4477 6 12ZM13 12C13 12.5523 12.5523 13 12 13C11.4477 13 11 12.5523 11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12ZM20 12C20 12.5523 19.5523 13 19 13C18.4477 13 18 12.5523 18 12C18 11.4477 18.4477 11 19 11C19.5523 11 20 11.4477 20 12Z" stroke="#E6E1E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    //     appendChild: '.itemTodo',
+    // },
 ];
 
 const arrTodos= [];
 const arrTodosWeek = [];
+const arrTodosToday = [];
 let countTodo = 0;
 
 let priorityName;
@@ -982,17 +983,49 @@ function delEditTodo() {
 function showTodayAndWeek() {
     
     const containerTodayAndWeek = document.querySelector('.containerTodayAndWeek');
-
+    const containerCenterRight = document.querySelector('.containerCenterRight');
 
     containerTodayAndWeek.addEventListener('click', (e) => {
 
         let target = e.target;
         
-        if (target.classList.contains('svgToday')) {
+        if (containerCenterRight.children[1]) {
             
-            EventManager.emit('createElements', arrTodoTodayAndWeek);
+            let titleTodayAndWeek = document.querySelector('.titleTodayAndWeek');
+
+            if (target.classList.contains('svgToday')) {
+            
+                titleTodayAndWeek.textContent = 'Today';
+    
+            }
+            if (target.classList.contains('svgWeek')) {
+                
+                titleTodayAndWeek.textContent = 'Week';
+                EventManager.emit('renderTodos',arrTodosWeek)
+            }
+
+
+        }else{
+
+            if (target.classList.contains('svgToday')) {
+            
+                arrTodoTodayAndWeek[1].innerText = 'Today';
+                EventManager.emit('createElements', arrTodoTodayAndWeek);
+    
+            }
+            if (target.classList.contains('svgWeek')) {
+                
+                arrTodoTodayAndWeek[1].innerText = 'Week';
+                EventManager.emit('createElements', arrTodoTodayAndWeek);
+                EventManager.emit('renderTodos',arrTodosWeek)
+            }
 
         }
+
+        
+
+        // EventManager.emit('createElements', arrTodoTodayAndWeek);
+
     })
 
 }
