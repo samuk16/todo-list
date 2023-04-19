@@ -687,7 +687,7 @@ function createTodoObj() {
         }
         addTodosToCurrentWeekArr(todo);
         addTodosToCurrentDayArr(todo);
-        console.log(arrTodosWeek);
+        // console.log(arrTodosWeek);
         // console.log(projects);
 
     })
@@ -957,10 +957,10 @@ function fillEditTodoNewInfo(todo,pTodo,svgPriority,typpyInstance) {
         todo.name = inputEditName.value;
         todo.description = textAreaDescription.value;
         todo.dueDate = inputEditDate.value;
-        todo.priority = [editColorPriority.style.fill,priorityName]
+        todo.priority = [editColorPriority.style.fill,priorityName];
 
-        EventManager.emit('todoUpdated',arrTodoTitleAndSvg)
-
+        EventManager.emit('todoUpdated',arrTodoTitleAndSvg);
+        verifyTodoRequirements();
 
 
     })
@@ -994,6 +994,8 @@ function showTodayAndWeek() {
             
             let titleTodayAndWeek = document.querySelector('.titleTodayAndWeek');
 
+            verifyTodoRequirements();
+
             if (target.classList.contains('svgToday')) {
             
                 titleTodayAndWeek.textContent = 'Today';
@@ -1007,6 +1009,9 @@ function showTodayAndWeek() {
 
 
         }else{
+
+            verifyTodoRequirements();
+            // verifyAndAddToWeek();
 
             if (target.classList.contains('svgToday')) {
             
@@ -1024,10 +1029,6 @@ function showTodayAndWeek() {
 
         }
 
-        
-
-        // EventManager.emit('createElements', arrTodoTodayAndWeek);
-
     })
 
 }
@@ -1035,10 +1036,12 @@ function showTodayAndWeek() {
 function addTodosToCurrentWeekArr(todo) {
     
 
-    let todoDate = new Date(todo.dueDate);
-    let curretDay = new Date();
-    let firstDayWeek = startOfWeek(curretDay);
-    let lastDayWeek = lastDayOfWeek(curretDay);
+    // let todoDate = new Date(todo.dueDate);
+    let [yearTodo, monthTodo, dayTodo] = todo.dueDate.split('-');
+    let todoDate = new Date(parseInt(yearTodo), parseInt(monthTodo) - 1, parseInt(dayTodo));
+    let currentDay = new Date();
+    let firstDayWeek = startOfWeek(currentDay);
+    let lastDayWeek = lastDayOfWeek(currentDay);
 
     const currentWeek = {
 
@@ -1049,29 +1052,110 @@ function addTodosToCurrentWeekArr(todo) {
 
     if (isWithinInterval(todoDate,currentWeek)) {
         arrTodosWeek.push(todo);
+        EventManager.emit('renderTodos',arrTodosWeek)
+
 
     }
-
-//     arrTodos.forEach(todo => {
-
-//         if (isWithinInterval(todo.dueDate,currentWeek)) {
-//             arrTodosWeek.push(todo);
-
-//         }
-
-//     })
 }
 
 function addTodosToCurrentDayArr(todo) {
     
-    let curretDay = new Date();
+    let currentDay = new Date();
     let [yearTodo, monthTodo, dayTodo] = todo.dueDate.split('-');
     let todoDate = new Date(parseInt(yearTodo), parseInt(monthTodo) - 1, parseInt(dayTodo));
 
-    if (isSameDay(curretDay,todoDate)) {
+    if (isSameDay(currentDay,todoDate)) {
         arrTodosToday.push(todo);    
+        EventManager.emit('renderTodos',arrTodosToday)
+
     }
 
 }
+
+function verifyTodoRequirements() {
+
+    arrTodos.forEach(todo => {
+
+        verifyAndAddToToday(todo);
+        verifyAndAddToWeek(todo);
+    });
+
+}
+  
+function verifyAndAddToWeek(todo) {
+
+    let [yearTodo, monthTodo, dayTodo] = todo.dueDate.split('-');
+    let todoDate = new Date(parseInt(yearTodo), parseInt(monthTodo) - 1, parseInt(dayTodo));
+    let currentDay = new Date();
+    let firstDayWeek = startOfWeek(currentDay);
+    let lastDayWeek = lastDayOfWeek(currentDay);
+
+    const currentWeek = {
+      start: firstDayWeek,
+      end: lastDayWeek,
+    };
+
+    if (!isWithinInterval(todoDate,currentWeek)) {
+
+        let todoWeekIndex = arrTodosWeek.findIndex(todoItem => todoItem.todoId == todo.todoId );
+
+        if (todoWeekIndex !== -1){
+
+            arrTodosWeek.splice(todoWeekIndex,1)
+            EventManager.emit('delTodosTW',)
+            EventManager.emit('renderTodos',arrTodosWeek)
+            // console.log('no estaba, se agrego al array week');
+
+        }
+
+    }else{
+
+        if (!arrTodosWeek.some(todoItem => todoItem.todoId === todo.todoId)) {
+
+            arrTodosWeek.push(todo);
+            EventManager.emit('renderTodos', arrTodosWeek);
+        // console.log('se agrego al array week');
+
+        }
+    }
+}
+
+function verifyAndAddToToday(todo) {
+
+    
+    let currentDay = new Date();
+    let [yearTodo, monthTodo, dayTodo] = todo.dueDate.split('-');
+    let todoDate = new Date(parseInt(yearTodo), parseInt(monthTodo) - 1, parseInt(dayTodo));
+
+    if (!isSameDay(currentDay,todoDate)) {
+            
+        let todoTodayIndex = arrTodosToday.findIndex(todoItem => todoItem.todoId == todo.todoId ) ;
+
+        if (todoTodayIndex !== -1){
+                
+            arrTodosToday.splice(todoTodayIndex,1);
+            EventManager.emit('delTodosTW',)
+            EventManager.emit('renderTodos',arrTodosToday)
+            // console.log('no estaba, se agrego al array today');
+
+        }
+            
+    }else{
+
+            const todoTodayIndex = arrTodosToday.findIndex(todoItem => todoItem.todoId == todo.todoId );
+        
+            if (todoTodayIndex === -1) {
+              arrTodosToday.push(todo); 
+              EventManager.emit('renderTodos', arrTodosToday);
+            }
+        
+            // arrTodosToday.push(todo);
+            // EventManager.emit('delTodosTW',)
+            // EventManager.emit('renderTodos',arrTodosToday)
+            // console.log('ya esta en el array today');
+
+    }
+}
+  
 
 export {popUpTodo,defaultTodo,arrTodoTemplate,countTodo,restartTodoTipPriority,resetCountTodo};
