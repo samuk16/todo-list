@@ -3,10 +3,7 @@ import {EventManager} from './pubSub.js';
 import {countChilds,projects,projectIdSelected,findProjectById} from './projects.js';
 import 'tippy.js/animations/scale-subtle.css';
 import tippy from 'tippy.js';
-
-import { format, compareAsc, Interval} from 'date-fns';
-import { formatDistance, subDays,eachDayOfInterval,add,getDay,getWeek,getWeekOfMonth,setWeek,startOfWeek,lastDayOfWeek,isWithinInterval,isEqual,isSameDay} from 'date-fns'
-// import getDay from 'date-fns/fp/getDay'
+import { startOfWeek,lastDayOfWeek,isWithinInterval,isSameDay} from 'date-fns'
 
 const arrPopUpTodo = [
 
@@ -652,7 +649,6 @@ function choosePriority(target) {
 
 }
 
-
 function delPopUpPriotity() {
     
     const dropDown = document.querySelector('.dropDown');
@@ -891,8 +887,6 @@ function showDeleteConfirm(){
         let todoId = target.parentNode.parentNode.dataset.todoId;
         let todoItem = target.parentNode.parentNode;
 
-
-
         if (target.classList.contains('containerSvgDelete')) {
             
             EventManager.emit('createElements', arrPopUpDeleteConfirmation);
@@ -904,16 +898,8 @@ function showDeleteConfirm(){
                 let targetContainerDel = e.target;
 
                 if (targetContainerDel.classList.contains('containerBtnDelete')) {
-                    
-                    EventManager.emit('deleteElement', todoItem);
 
-                    let todoIndex = arrTodos.findIndex(todo => todo.id == todoId) ;
-
-                    if (todoIndex !== -1){
-                        
-                        arrTodos.splice(todoIndex,1);
-
-                    }
+                    delTodoDOMandArr(todoId,todoItem)
 
                     EventManager.emit('deleteElement', containerDeleteConfirmation);
 
@@ -929,6 +915,62 @@ function showDeleteConfirm(){
     })
 
     
+}
+
+function findTodoTodayAndWeekById(todoId) {
+
+    let todosTodayAndWeek = document.querySelector('.todosTodayAndWeek');
+    let childrenTodayAndWeek = todosTodayAndWeek.children;
+    let arrChildrens = Array.from(childrenTodayAndWeek);
+
+
+    let todoFounded = arrChildrens.find(todo => todo.dataset.todoId == todoId)
+
+    return todoFounded;
+}
+
+function delTodoDOMandArr(todoId,itemDOM) {
+    
+    let todoIndex = arrTodos.findIndex(todo => todo.todoId == todoId);
+    let todoIndexToday = arrTodosToday.findIndex(todo => todo.todoId == todoId);
+    let todoIndexWeek = arrTodosWeek.findIndex(todo => todo.todoId == todoId);
+    let titleTodayAndWeek = document.querySelector('.titleTodayAndWeek');
+
+
+
+    if (todoIndex !== -1){
+                        
+        arrTodos.splice(todoIndex,1);
+
+    }
+
+    if (todoIndexToday !== -1){
+                        
+        arrTodosToday.splice(todoIndexToday,1);
+
+    }
+
+    if (todoIndexWeek !== -1){
+                        
+        arrTodosWeek.splice(todoIndexWeek,1);
+
+    }
+
+    EventManager.emit('deleteElement', itemDOM);
+    
+    if (titleTodayAndWeek.textContent == 'Today'){
+        
+        EventManager.emit('deleteElement', findTodoTodayAndWeekById(todoId));
+        
+    }else{
+
+        EventManager.emit('deleteElement', findTodoTodayAndWeekById(todoId));
+
+    }
+
+
+
+
 }
 
 function fillEditTodo(todoObj) {
@@ -1036,7 +1078,6 @@ function showTodayAndWeek() {
 function addTodosToCurrentWeekArr(todo) {
     
 
-    // let todoDate = new Date(todo.dueDate);
     let [yearTodo, monthTodo, dayTodo] = todo.dueDate.split('-');
     let todoDate = new Date(parseInt(yearTodo), parseInt(monthTodo) - 1, parseInt(dayTodo));
     let currentDay = new Date();
@@ -1051,8 +1092,21 @@ function addTodosToCurrentWeekArr(todo) {
     };
 
     if (isWithinInterval(todoDate,currentWeek)) {
+
+        let titleTodayAndWeek = document.querySelector('.titleTodayAndWeek');
+        let todosTodayAndWeek = document.querySelector('.todosTodayAndWeek');
+
         arrTodosWeek.push(todo);
-        EventManager.emit('renderTodos',arrTodosWeek)
+
+        if (todosTodayAndWeek) {
+            if (titleTodayAndWeek.textContent == 'Week'){
+                
+                EventManager.emit('renderTodos', arrTodosWeek);    
+            }
+        }
+        
+
+        // EventManager.emit('renderTodos',arrTodosWeek)
 
 
     }
@@ -1065,8 +1119,22 @@ function addTodosToCurrentDayArr(todo) {
     let todoDate = new Date(parseInt(yearTodo), parseInt(monthTodo) - 1, parseInt(dayTodo));
 
     if (isSameDay(currentDay,todoDate)) {
+
+        let titleTodayAndWeek = document.querySelector('.titleTodayAndWeek');
+        let todosTodayAndWeek = document.querySelector('.todosTodayAndWeek');
+
+
         arrTodosToday.push(todo);    
-        EventManager.emit('renderTodos',arrTodosToday)
+
+        if (todosTodayAndWeek) {
+
+            if (titleTodayAndWeek.textContent == 'Today'){
+                
+                EventManager.emit('renderTodos', arrTodosToday);    
+            }
+        }
+
+        
 
     }
 
@@ -1104,17 +1172,24 @@ function verifyAndAddToWeek(todo) {
             arrTodosWeek.splice(todoWeekIndex,1)
             EventManager.emit('delTodosTW',)
             EventManager.emit('renderTodos',arrTodosWeek)
-            // console.log('no estaba, se agrego al array week');
 
         }
 
     }else{
 
+
         if (!arrTodosWeek.some(todoItem => todoItem.todoId === todo.todoId)) {
 
+            let titleTodayAndWeek = document.querySelector('.titleTodayAndWeek');
+
+
             arrTodosWeek.push(todo);
-            EventManager.emit('renderTodos', arrTodosWeek);
-        // console.log('se agrego al array week');
+
+            // if (titleTodayAndWeek.textContent == 'Week'){
+
+            //     EventManager.emit('renderTodos', arrTodosWeek);    
+            // }
+            
 
         }
     }
@@ -1136,23 +1211,23 @@ function verifyAndAddToToday(todo) {
             arrTodosToday.splice(todoTodayIndex,1);
             EventManager.emit('delTodosTW',)
             EventManager.emit('renderTodos',arrTodosToday)
-            // console.log('no estaba, se agrego al array today');
 
         }
             
     }else{
 
-            const todoTodayIndex = arrTodosToday.findIndex(todoItem => todoItem.todoId == todo.todoId );
-        
-            if (todoTodayIndex === -1) {
-              arrTodosToday.push(todo); 
-              EventManager.emit('renderTodos', arrTodosToday);
-            }
-        
-            // arrTodosToday.push(todo);
-            // EventManager.emit('delTodosTW',)
-            // EventManager.emit('renderTodos',arrTodosToday)
-            // console.log('ya esta en el array today');
+        const todoTodayIndex = arrTodosToday.findIndex(todoItem => todoItem.todoId == todo.todoId );
+        let titleTodayAndWeek = document.querySelector('.titleTodayAndWeek');
+
+        if (todoTodayIndex === -1) {
+
+            arrTodosToday.push(todo);
+
+            // if (titleTodayAndWeek.textContent == 'Today') {
+            //     EventManager.emit('renderTodos', arrTodosToday);    
+            // }
+            
+        }
 
     }
 }
