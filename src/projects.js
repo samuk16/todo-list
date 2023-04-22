@@ -3,13 +3,11 @@ import createElementsDom from './domCreation.js';
 
 import {EventManager} from './pubSub.js';
 
-import {defaultTodo} from './todos.js';
+import {defaultTodo,restartTodoTipPriority,resetCountTodo} from './todos.js';
 
 import tippy from 'tippy.js';
 
 import 'tippy.js/themes/light.css';
-
-import 'tippy.js/animations/scale.css';
 
 import 'tippy.js/animations/scale-subtle.css';
 
@@ -148,6 +146,9 @@ function changeProject() {
 
         EventManager.emit('changeProject',projectObjSelected.todo);
 
+        restartTodoTipPriority();
+        // resetCountTodo();
+
     });
 
 
@@ -191,7 +192,8 @@ function createPopUpNewProject() {
 
     defaultProject();
     changeProject()
-    hoverProject()
+    hoverProject();
+    todayAndWeekTipName();
 
     btnNewProject.addEventListener('click', () => {
 
@@ -308,10 +310,34 @@ function projectTipName(div,projectId) {
         animation:'scale-subtle',
         inertia: true,
         placement:'right',
-        theme: 'dark',
+        theme: 'dark-project',
     })
 
 }
 
+function todayAndWeekTipName(){
+    
+    let svgToday = document.querySelector('.svgToday')
+    let svgWeek = document.querySelector('.svgWeek')
 
-export {createPopUpNewProject,defaultProject,itemProject,countChilds,projects,projectIdSelected,findColorProjectById,findProjectById};
+
+    tippy(svgToday,{
+        content: `Today`,
+        animation:'scale-subtle',
+        inertia: true,
+        placement:'right',
+        theme: 'dark-project',
+
+    })
+    tippy(svgWeek,{
+        content: `Week`,
+        animation:'scale-subtle',
+        inertia: true,
+        placement:'right',
+        theme: 'dark-project',
+
+    })
+}
+
+
+export {createPopUpNewProject,defaultProject,itemProject,countChilds,projects,projectIdSelected,findProjectById};
