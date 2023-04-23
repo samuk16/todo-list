@@ -514,6 +514,7 @@ function todos(name,description,dueDate,priorityColor,priorityName,projectId,tod
     this.projectId = projectId;
     this.todoId = todoId;
     this.isTipPriority = false;
+    this.complete = false;
 
     this.onHover = function() {
         if (!this.isTipPriority) {
@@ -1230,6 +1231,13 @@ function verifyAndAddToToday(todo) {
         }
 
     }
+}
+
+function todoDone() {
+    
+    
+
+
 }
   
 
