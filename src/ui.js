@@ -2,7 +2,7 @@ import {EventManager} from './pubSub.js';
 
 import {itemProject,countChilds,projectIdSelected,findColorProjectById,findProjectById} from './projects.js';
 
-import {arrTodoTemplate,countTodo} from './todos.js';
+import {arrTodoTemplate,countTodo,checkTodoDone} from './todos.js';
 
 import createElementsDom from './domCreation.js';
 
@@ -33,6 +33,8 @@ function init() {
     
     EventManager.on('renderTodos', renderTodosTodayAndWeek);
 
+    EventManager.on('delTodosTW', delTodosTodayAndWeek);
+
 }
 
 function addProjectDOM(project) {    
@@ -49,7 +51,7 @@ function addProjectDOM(project) {
 function addTodoProjectItemDOM(obj) {
     
     // console.log(obj);
-
+    arrTodoTemplate[0].appendChild = `.containerTodo`;
     arrTodoTemplate[0].attributes.class = `itemTodo${countTodo} todoStyle`;
     arrTodoTemplate[0].attributes['data-todo-id'] = `${countTodo}`;
 
@@ -59,7 +61,10 @@ function addTodoProjectItemDOM(obj) {
     arrTodoTemplate[3].appendChild = `.itemTodo${countTodo}`;
     arrTodoTemplate[4].appendChild = `.itemTodo${countTodo}`;
     
-    arrTodoTemplate[1].innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="${findProjectById(obj.projectId).color}" stroke-width="2"/></svg>`;
+    arrTodoTemplate[1].innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="circlePath" cx="10" cy="10" r="9" stroke="${findProjectById(obj.projectId).color}" stroke-width="2"/></svg>`;
+    // arrTodoTemplate[1].attributes['data-todo-id-app'] = `${obj.todoId}`;
+    arrTodoTemplate[1].attributes.class = `svgTodo svgTodo${obj.todoId}`;
+
     arrTodoTemplate[3].innerHTML = `<svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="svgPriority" cx="3" cy="3" r="3" fill="${obj.priority[0]}"/></svg>`;
     
     // console.log('todoagregado');
@@ -88,8 +93,9 @@ function renderTodo(arrTodos) {
         arrTodoTemplate[3].appendChild = `.itemTodo${countClass}`;
         arrTodoTemplate[4].appendChild = `.itemTodo${countClass}`;
 
-
-        arrTodoTemplate[1].innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="${findProjectById(todo.projectId).color}" stroke-width="2"/></svg>`;
+        checkTodoDone(todo);
+        // arrTodoTemplate[1].innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="circlePath" cx="10" cy="10" r="9" stroke="${findProjectById(todo.projectId).color}" stroke-width="2"/></svg>`;
+        arrTodoTemplate[1].attributes.class = `svgTodo svgTodo${todo.todoId}`;
         arrTodoTemplate[3].innerHTML = `<svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="svgPriority" cx="3" cy="3" r="3" fill="${todo.priority[0]}"/></svg>`;
 
         // arrTodoTemplate.forEach(item => item.appendChild = `.itemTodo${countTodo}`)
@@ -159,9 +165,23 @@ function delTodosTodayAndWeek() {
     const containerTodosTodayAndWeek = document.querySelector('.todosTodayAndWeek');
 
 
-    while (containerTodosTodayAndWeek.firstChild !== btnNewTodo) {
-        containerTodosTodayAndWeek.removeChild(containerTodosTodayAndWeek.firstChild);
+    // if (containerTodosTodayAndWeek.children[2]) {
+        
+    // }
+    // while (containerTodosTodayAndWeek.children[2].firstChild) {
+    //     containerTodosTodayAndWeek.removeChild(containerTodosTodayAndWeek.children[2].firstChild);
+    // }
+
+    if (containerTodosTodayAndWeek) {
+
+        while (containerTodosTodayAndWeek.firstChild) {
+            containerTodosTodayAndWeek.removeChild(containerTodosTodayAndWeek.firstChild);
+        }    
     }
+    // while (containerTodosTodayAndWeek.firstChild) {
+    //     containerTodosTodayAndWeek.removeChild(containerTodosTodayAndWeek.firstChild);
+    // }
+    
 }
 
 function delElements(element) {
