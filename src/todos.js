@@ -4,6 +4,7 @@ import {countChilds,projects,projectIdSelected,findProjectById} from './projects
 import 'tippy.js/animations/scale-subtle.css';
 import tippy from 'tippy.js';
 import { startOfWeek,lastDayOfWeek,isWithinInterval,isSameDay} from 'date-fns'
+import anime from 'animejs/lib/anime.es.js';
 
 const arrPopUpTodo = [
 
@@ -514,13 +515,23 @@ function todos(name,description,dueDate,priorityColor,priorityName,projectId,tod
     this.projectId = projectId;
     this.todoId = todoId;
     this.isTipPriority = false;
-    this.complete = false;
+    this.done = false;
 
     this.onHover = function() {
         if (!this.isTipPriority) {
 
             this.isTipPriority = true;
             
+        }
+    };
+
+    this.toggleDone = function() {
+        if (!this.done) {
+
+            this.done = true;
+            
+        }else{
+            this.done = false;
         }
     };
 
@@ -556,6 +567,7 @@ function popUpTodo() {
     hoverTodo();
     showMenuTodo();
     showTodayAndWeek();
+    todoDone();
 
     btnPopUpTodo.addEventListener('click', () => {
 
@@ -1234,11 +1246,158 @@ function verifyAndAddToToday(todo) {
 }
 
 function todoDone() {
-    
-    
+
+    let arrSvgDone = [
+        {
+            elementType: 'div',
+            attributes: {class:'containerSvgDone'},
+            innerHTML: '<svg class="svgDone" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path class="pathDone" d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#9920B7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+            appendChild: '.svgTodo',
+        },
+    ];
+
+    let arrSvgNotDone = [
+        {
+            elementType: 'div',
+            attributes: {class:'containerSvgNotDone'},
+            innerHTML:'<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="circlePath" cx="10" cy="10" r="9" stroke="#9920B7" stroke-width="2"/></svg>',
+            appendChild: 'body',
+        },
+    ]
+
+    let containerTodos = document.querySelector('.containerTodo');
+
+    containerTodos.addEventListener('click', (e) =>{
+
+        let target = e.target;
+
+        if (target.parentNode.firstChild.classList.contains('svgTodo')) {
+            
+            let itemTodoId = target.parentNode.dataset.todoId;
+            let circlePathTarget = target.firstChild.firstChild;
+
+            console.log(target.parentNode);
+
+            if (!findTodoById(itemTodoId).done) {
+
+                hideSvg(circlePathTarget);
+
+                setTimeout(() => {
+
+                    circlePathTarget.style.stroke = 'transparent';    
+                    EventManager.emit('deleteElement', target.firstChild)
+
+                    arrSvgDone[0].appendChild = `.svgTodo${itemTodoId}`;
+                    EventManager.emit('createElements', arrSvgDone);
+
+                    let pathSvgDone = target.firstChild.firstChild.firstChild;
+
+                    pathSvgDone.style.stroke = `${findProjectById(findTodoById(itemTodoId).projectId).color}`;
+
+                    let svgDone = target.firstChild.firstChild;
+
+                    showSvg(pathSvgDone);
+
+                },1000);
+
+                findTodoById(itemTodoId).toggleDone();
+
+            }
+
+            
+
+        }else if(target.parentNode.classList.contains('svgTodo')){
+
+            let itemTodoId2 = target.parentNode.parentNode.dataset.todoId ;
+
+            if (!findTodoById(itemTodoId2).done) {
+                
+                findTodoById(itemTodoId2).toggleDone();
+                
+                let pathSvgNotDone2 = document.querySelector(`.circlePath${itemTodoId2}`);
+
+                hideSvg(pathSvgNotDone2);
+
+                setTimeout(() => {
+
+                    EventManager.emit('deleteElement', target)
+
+                    arrSvgDone[0].appendChild = `.svgTodo${itemTodoId2}`;
+                    arrSvgDone[0].innerHTML = `<svg class="svgDone" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path class="pathSvgDone${itemTodoId2}" d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#9920B7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+                    
+                    EventManager.emit('createElements', arrSvgDone);
+
+
+                    let pathSvgDone = document.querySelector(`.pathSvgDone${itemTodoId2}`);
+
+                    pathSvgDone.style.stroke = `${findProjectById(findTodoById(itemTodoId2).projectId).color}`;
+
+                    showSvg(pathSvgDone);
+
+                },1000);
+
+
+            }else{
+
+                findTodoById(itemTodoId2).toggleDone();
+
+                hideSvg(target.parentNode.firstChild.firstChild.firstChild);
+
+                setTimeout(() => {
+
+                    EventManager.emit('deleteElement', target)
+
+                    arrSvgNotDone[0].appendChild = `.svgTodo${itemTodoId2}`;
+                    arrSvgNotDone[0].innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="circlePath${itemTodoId2}" cx="10" cy="10" r="9" stroke="#9920B7" stroke-width="2"/></svg>`;
+                    
+                    EventManager.emit('createElements', arrSvgNotDone);
+
+                    let pathSvgNotDone2 = document.querySelector(`.circlePath${itemTodoId2}`);
+
+                    pathSvgNotDone2.style.stroke = `${findProjectById(findTodoById(itemTodoId2).projectId).color}`;
+
+                    showSvg(pathSvgNotDone2);
+
+
+                },1000);
+
+
+            }
+
+
+        }
+    })
 
 
 }
-  
+
+function hideSvg(target){
+    
+    anime({
+        targets:target,
+        strokeDashoffset: [anime.setDashoffset, 0],
+        easing: 'easeInOutSine',
+        direction:'reverse',
+        duration: 1000,
+    
+    });
+
+    
+
+}
+
+function showSvg(target) {
+    
+    anime({
+        targets:target,
+        strokeDashoffset: [anime.setDashoffset, 0],
+        easing: 'easeInOutSine',
+        duration: 1200,
+        direction: 'normal',                
+    })
+
+}
+
+
 
 export {popUpTodo,defaultTodo,arrTodoTemplate,countTodo,restartTodoTipPriority,resetCountTodo};
