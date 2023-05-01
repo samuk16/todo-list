@@ -1302,6 +1302,29 @@ function todoDone() {
 
                 findTodoById(itemTodoId).toggleDone();
 
+            }else{
+
+                findTodoById(itemTodoId).toggleDone();
+
+                hideSvg(target.parentNode.firstChild.firstChild.firstChild);
+
+                setTimeout(() => {
+
+                    EventManager.emit('deleteElement', target.firstChild)
+
+                    arrSvgNotDone[0].appendChild = `.svgTodo${itemTodoId}`;
+                    arrSvgNotDone[0].innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="circlePath${itemTodoId}" cx="10" cy="10" r="9" stroke="#9920B7" stroke-width="2"/></svg>`;
+                    
+                    EventManager.emit('createElements', arrSvgNotDone);
+
+                    let pathSvgNotDone2 = document.querySelector(`.circlePath${itemTodoId}`);
+
+                    pathSvgNotDone2.style.stroke = `${findProjectById(findTodoById(itemTodoId).projectId).color}`;
+
+                    showSvg(pathSvgNotDone2);
+
+
+                },1000);
             }
 
             
@@ -1398,6 +1421,18 @@ function showSvg(target) {
 
 }
 
+function checkTodoDone(todo) {
+
+    if (todo.done) {
+
+        arrTodoTemplate[1].innerHTML = `<svg class="svgDone" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path class="pathSvgDone${todo.todoId}" d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="${findProjectById(todo.projectId).color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    
+    }else{
+
+        arrTodoTemplate[1].innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="circlePath" cx="10" cy="10" r="9" stroke="${findProjectById(todo.projectId).color}" stroke-width="2"/></svg>`;
+    }
+
+}
 
 
-export {popUpTodo,defaultTodo,arrTodoTemplate,countTodo,restartTodoTipPriority,resetCountTodo};
+export {popUpTodo,defaultTodo,arrTodoTemplate,countTodo,restartTodoTipPriority,resetCountTodo,checkTodoDone};
