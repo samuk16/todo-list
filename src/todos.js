@@ -5,6 +5,7 @@ import 'tippy.js/animations/scale-subtle.css';
 import tippy from 'tippy.js';
 import { startOfWeek,lastDayOfWeek,isWithinInterval,isSameDay} from 'date-fns'
 import anime from 'animejs/lib/anime.es.js';
+import { id } from 'date-fns/locale';
 
 const arrPopUpTodo = [
 
@@ -805,7 +806,7 @@ function restartTodoTipPriority() {
 
     })
 
-    console.log(arrTodos);
+    // console.log(arrTodos);
 
 }
 
@@ -1279,171 +1280,97 @@ function todoDone() {
     containerTodos.addEventListener('click', (e) =>{
 
         let target = e.target;
-        // target.parentNode.firstChild.classList.contains('svgTodo')
-        // if (target.classList.contains('containerSvgNotDone') || target.classList.contains('containerSvgDone') || target.classList.contains('svgTodo') ) {
-            
-        //     let itemTodoId = target.parentNode.dataset.todoId;
-        //     let circlePathTarget = target.firstChild.firstChild;
-
-        //     console.log(target.parentNode.parentNode);
-        //     console.log(itemTodoId);
-        //     console.log(findTodoById(itemTodoId).done);
-
-        //     if (!findTodoById(itemTodoId).done) {
-
-        //         hideSvg(circlePathTarget);
-
-        //         setTimeout(() => {
-
-        //             // circlePathTarget.style.stroke = 'transparent';
-        //             EventManager.emit('deleteElement', target.firstChild)
-
-        //             arrSvgDone[0].appendChild = `.svgTodo${itemTodoId}`;
-        //             arrSvgDone[0].innerHTML = `<svg class="svgDone" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path class="pathSvgDone${itemTodoId}" d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#9920B7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-
-        //             EventManager.emit('createElements', arrSvgDone);
-
-        //             // let pathSvgDone = target.firstChild.firstChild.firstChild;
-
-        //             // pathSvgDone.style.stroke = `${findProjectById(findTodoById(itemTodoId).projectId).color}`;
-
-        //             // let svgDone = target.firstChild.firstChild;
-
-        //             // showSvg(pathSvgDone);
-
-        //             console.log(itemTodoId);
-
-        //             let pathSvgDone = document.querySelector(`.pathSvgDone${itemTodoId}`);
-
-        //             pathSvgDone.style.stroke = `${findProjectById(findTodoById(itemTodoId).projectId).color}`;
-
-        //             showSvg(pathSvgDone);
-
-        //         },1000);
-
-        //         findTodoById(itemTodoId).toggleDone();
-
-        //         itemTodoId = target.parentNode.parentNode.dataset.todoId;
-
-        //     }else{
-
-        //         findTodoById(itemTodoId).toggleDone();
-
-        //         hideSvg(target.parentNode.firstChild.firstChild.firstChild);
-
-        //         setTimeout(() => {
-
-        //             EventManager.emit('deleteElement', target.firstChild)
-
-        //             arrSvgNotDone[0].appendChild = `.svgTodo${itemTodoId}`;
-        //             arrSvgNotDone[0].innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="circlePath${itemTodoId}" cx="10" cy="10" r="9" stroke="#9920B7" stroke-width="2"/></svg>`;
-                    
-        //             EventManager.emit('createElements', arrSvgNotDone);
-
-        //             let pathSvgNotDone2 = document.querySelector(`.circlePath${itemTodoId}`);
-
-        //             pathSvgNotDone2.style.stroke = `${findProjectById(findTodoById(itemTodoId).projectId).color}`;
-
-        //             showSvg(pathSvgNotDone2);
-
-
-        //         },1000);
-        //     }
-
-            
-        //     // target.parentNode.classList.contains('svgTodo')
-        // }else if(target.classList.contains('containerSvgNotDone') || target.classList.contains('containerSvgDone')){
-
-        //     let itemTodoId2 = target.parentNode.parentNode.dataset.todoId ;
-
-        //     if (!findTodoById(itemTodoId2).done) {
-                
-        //         findTodoById(itemTodoId2).toggleDone();
-                
-        //         let pathSvgNotDone2 = document.querySelector(`.circlePath${itemTodoId2}`);
-
-        //         hideSvg(pathSvgNotDone2);
-
-        //         setTimeout(() => {
-
-        //             EventManager.emit('deleteElement', target)
-
-        //             arrSvgDone[0].appendChild = `.svgTodo${itemTodoId2}`;
-        //             arrSvgDone[0].innerHTML = `<svg class="svgDone" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path class="pathSvgDone${itemTodoId2}" d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#9920B7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-                    
-        //             EventManager.emit('createElements', arrSvgDone);
-
-
-        //             let pathSvgDone = document.querySelector(`.pathSvgDone${itemTodoId2}`);
-
-        //             pathSvgDone.style.stroke = `${findProjectById(findTodoById(itemTodoId2).projectId).color}`;
-
-        //             showSvg(pathSvgDone);
-
-        //         },1000);
-
-
-        //     }else{
-
-        //         findTodoById(itemTodoId2).toggleDone();
-
-        //         hideSvg(target.parentNode.firstChild.firstChild.firstChild);
-
-        //         setTimeout(() => {
-
-        //             EventManager.emit('deleteElement', target)
-
-        //             arrSvgNotDone[0].appendChild = `.svgTodo${itemTodoId2}`;
-        //             arrSvgNotDone[0].innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="circlePath${itemTodoId2}" cx="10" cy="10" r="9" stroke="#9920B7" stroke-width="2"/></svg>`;
-                    
-        //             EventManager.emit('createElements', arrSvgNotDone);
-
-        //             let pathSvgNotDone2 = document.querySelector(`.circlePath${itemTodoId2}`);
-
-        //             pathSvgNotDone2.style.stroke = `${findProjectById(findTodoById(itemTodoId2).projectId).color}`;
-
-        //             showSvg(pathSvgNotDone2);
-
-
-        //         },1000);
-
-
-        //     }
-
-
-        // }
 
         if (target.classList.contains('svgTodo')) {
 
             let testId;
-            
+
             target.parentNode.parentNode.dataset.todoId ? testId = target.parentNode.parentNode.dataset.todoId : testId = target.parentNode.dataset.todoId ;
             
             if (!findTodoById(testId).done){
 
-                findTodoById(testId).toggleDone();
+                
 
-                target.parentNode.parentNode.dataset.todoId ? EventManager.emit('deleteElement',target) : EventManager.emit('deleteElement',target.firstChild);
+                // target.parentNode.parentNode.dataset.todoId ? EventManager.emit('deleteElement',target) : EventManager.emit('deleteElement',target.firstChild);
 
                 editArrSvgDone(testId)
 
-                EventManager.emit('createElements',arrSvgDone);
+                // EventManager.emit('createElements',arrSvgDone);
+
+                animationSvg(testId,target);
+
+                findTodoById(testId).toggleDone();
 
             }else{
 
-                findTodoById(testId).toggleDone();
                 
-                target.parentNode.parentNode.dataset.todoId ? EventManager.emit('deleteElement',target) : EventManager.emit('deleteElement',target.firstChild);
+                
+                // target.parentNode.parentNode.dataset.todoId ? EventManager.emit('deleteElement',target) : EventManager.emit('deleteElement',target.firstChild);
 
                 editArrSvgNotDone(testId);
 
-                EventManager.emit('createElements',arrSvgNotDone);
+                // EventManager.emit('createElements',arrSvgNotDone);   
+                animationSvg(testId,target)
+
+                findTodoById(testId).toggleDone();
             }
 
         }
     })
 
 
+}
+
+function animationSvg(todoId,target){
+
+    let todoTarget = arrTodos.find(todo => todo.todoId == todoId);
+
+    // console.log(todoTarget);
+
+    let circlePath = document.querySelector(`.circlePath${todoId}`);
+
+
+
+    if (!findTodoById(todoId).done) {
+        
+
+        hideSvg(circlePath);
+
+        setTimeout(() => {
+
+            target.parentNode.parentNode.dataset.todoId ? EventManager.emit('deleteElement',target) : EventManager.emit('deleteElement',target.firstChild);
+
+            EventManager.emit('createElements',arrSvgDone);
+
+            let pathSvgDone = document.querySelector(`.pathSvgDone${todoId}`);
+
+            showSvg(pathSvgDone);
+
+        },1000)
+
+    }else{
+
+        let pathSvgDone = document.querySelector(`.pathSvgDone${todoId}`);
+
+        hideSvg(pathSvgDone)
+
+        setTimeout(() => {
+
+            target.parentNode.parentNode.dataset.todoId ? EventManager.emit('deleteElement',target) : EventManager.emit('deleteElement',target.firstChild);
+
+            EventManager.emit('createElements',arrSvgNotDone);
+
+            let circlePath = document.querySelector(`.circlePath${todoId}`);
+
+            showSvg(circlePath);
+
+        }, 1000);
+
+        
+
+
+    }
+    
 }
 
 function editArrSvgDone(id) {
@@ -1460,7 +1387,7 @@ function editArrSvgNotDone(id) {
     let colorStroke = findProjectById(findTodoById(id).projectId).color;
 
     arrSvgNotDone[0].appendChild = `.svgTodo${id}`;
-    arrSvgNotDone[0].innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="circlePath" cx="10" cy="10" r="9" stroke="${colorStroke}" stroke-width="2"/></svg>`;
+    arrSvgNotDone[0].innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="circlePath${id}" cx="10" cy="10" r="9" stroke="${colorStroke}" stroke-width="2"/></svg>`;
 
 
 }
@@ -1473,10 +1400,9 @@ function hideSvg(target){
         easing: 'easeInOutSine',
         direction:'reverse',
         duration: 1000,
-    
     });
 
-    
+    // console.log(target);
 
 }
 
@@ -1489,6 +1415,9 @@ function showSvg(target) {
         duration: 1200,
         direction: 'normal',                
     })
+
+    // console.log(target);
+
 
 }
 
