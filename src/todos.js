@@ -515,8 +515,24 @@ const arrSvgDone = [
         appendChild: '.svgTodo',
     },
 ];
+const arrSvgDoneTW = [
+    {
+        elementType: 'div',
+        attributes: {class:'svgTodo containerSvgDone'},
+        innerHTML: '<svg class="svgDone" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path class="pathDone" d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#9920B7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+        appendChild: '.svgTodo',
+    },
+];
 
 const arrSvgNotDone = [
+    {
+        elementType: 'div',
+        attributes: {class:'svgTodo containerSvgNotDone'},
+        innerHTML:'<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="circlePath" cx="10" cy="10" r="9" stroke="#9920B7" stroke-width="2"/></svg>',
+        appendChild: 'body',
+    },
+]
+const arrSvgNotDoneTW = [
     {
         elementType: 'div',
         attributes: {class:'svgTodo containerSvgNotDone'},
@@ -1294,6 +1310,7 @@ function todoDone() {
                 // target.parentNode.parentNode.dataset.todoId ? EventManager.emit('deleteElement',target) : EventManager.emit('deleteElement',target.firstChild);
 
                 editArrSvgDone(testId)
+                editArrSvgDoneTW(testId)
 
                 // EventManager.emit('createElements',arrSvgDone);
 
@@ -1308,6 +1325,7 @@ function todoDone() {
                 // target.parentNode.parentNode.dataset.todoId ? EventManager.emit('deleteElement',target) : EventManager.emit('deleteElement',target.firstChild);
 
                 editArrSvgNotDone(testId);
+                editArrSvgNotDoneTW(testId);
 
                 // EventManager.emit('createElements',arrSvgNotDone);   
                 animationSvg(testId,target)
@@ -1323,12 +1341,73 @@ function todoDone() {
 
 function animationSvg(todoId,target){
 
-    let todoTarget = arrTodos.find(todo => todo.todoId == todoId);
+    // let todoTarget = arrTodos.find(todo => todo.todoId == todoId);
 
     // console.log(todoTarget);
 
     let circlePath = document.querySelector(`.circlePath${todoId}`);
 
+    let containerTAW = document.querySelector('.todosTodayAndWeek');
+
+    if (containerTAW) {
+
+        let todoTWTarget = document.querySelector(`.svgTodoTW${todoId}`);
+
+        if (todoTWTarget) {
+
+            if (!findTodoById(todoId).done) {
+            
+                let circlePathTW = document.querySelector(`.circlePathTW${todoId}`);
+                let containerSvg = document.querySelector(`.svgTodoTW${todoId}`);
+                
+                hideSvg(circlePathTW);
+        
+                setTimeout(() => {
+        
+                    // target.parentNode.parentNode.dataset.todoId ? EventManager.emit('deleteElement',target) : EventManager.emit('deleteElement',target.firstChild);
+                    EventManager.emit('deleteElement',containerSvg.firstChild)
+                    // console.log(containerSvg.firstChild);
+        
+                    EventManager.emit('createElements',arrSvgDoneTW);
+        
+                    let pathSvgDoneTW = document.querySelector(`.pathSvgDoneTW${todoId}`);
+        
+                    showSvg(pathSvgDoneTW);
+        
+                },1000)
+        
+            }else{
+        
+                let pathSvgDoneTW = document.querySelector(`.pathSvgDoneTW${todoId}`);
+                
+                let containerSvg = document.querySelector(`.svgTodoTW${todoId}`);
+    
+    
+                hideSvg(pathSvgDoneTW)
+        
+                setTimeout(() => {
+        
+                    // target.parentNode.parentNode.dataset.todoId ? EventManager.emit('deleteElement',target) : EventManager.emit('deleteElement',target.firstChild);
+    
+                    EventManager.emit('deleteElement',containerSvg.firstChild)
+    
+    
+                    EventManager.emit('createElements',arrSvgNotDoneTW);
+        
+                    let circlePathTW = document.querySelector(`.circlePathTW${todoId}`);
+        
+                    showSvg(circlePathTW);
+        
+                }, 1000);
+        
+                
+        
+        
+            }
+        }
+
+        
+    }
 
 
     if (!findTodoById(todoId).done) {
@@ -1382,12 +1461,30 @@ function editArrSvgDone(id) {
 
 
 }
+function editArrSvgDoneTW(id) {
+    
+    let colorStroke = findProjectById(findTodoById(id).projectId).color;
+
+    arrSvgDoneTW[0].appendChild = `.svgTodoTW${id}`;
+    arrSvgDoneTW[0].innerHTML = `<svg class="svgDone" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path class="pathSvgDoneTW${id}" d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="${colorStroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+
+}
 function editArrSvgNotDone(id) {
     
     let colorStroke = findProjectById(findTodoById(id).projectId).color;
 
     arrSvgNotDone[0].appendChild = `.svgTodo${id}`;
     arrSvgNotDone[0].innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="circlePath${id}" cx="10" cy="10" r="9" stroke="${colorStroke}" stroke-width="2"/></svg>`;
+
+
+}
+function editArrSvgNotDoneTW(id) {
+    
+    let colorStroke = findProjectById(findTodoById(id).projectId).color;
+
+    arrSvgNotDoneTW[0].appendChild = `.svgTodoTW${id}`;
+    arrSvgNotDoneTW[0].innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="circlePathTW${id}" cx="10" cy="10" r="9" stroke="${colorStroke}" stroke-width="2"/></svg>`;
 
 
 }
@@ -1429,10 +1526,22 @@ function checkTodoDone(todo) {
     
     }else{
 
-        arrTodoTemplate[1].innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="circlePath" cx="10" cy="10" r="9" stroke="${findProjectById(todo.projectId).color}" stroke-width="2"/></svg>`;
+        arrTodoTemplate[1].innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="circlePath${todo.todoId}" cx="10" cy="10" r="9" stroke="${findProjectById(todo.projectId).color}" stroke-width="2"/></svg>`;
+    }
+
+}
+function checkTodoDoneTW(todo) {
+
+    if (todo.done) {
+
+        arrTodoTemplate[1].innerHTML = `<svg class="svgDone" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path class="pathSvgDoneTW${todo.todoId}" d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="${findProjectById(todo.projectId).color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    
+    }else{
+
+        arrTodoTemplate[1].innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="circlePathTW${todo.todoId}" cx="10" cy="10" r="9" stroke="${findProjectById(todo.projectId).color}" stroke-width="2"/></svg>`;
     }
 
 }
 
 
-export {popUpTodo,defaultTodo,arrTodoTemplate,countTodo,restartTodoTipPriority,resetCountTodo,checkTodoDone};
+export {popUpTodo,defaultTodo,arrTodoTemplate,countTodo,restartTodoTipPriority,resetCountTodo,checkTodoDone,checkTodoDoneTW};
