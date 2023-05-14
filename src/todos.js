@@ -1299,13 +1299,17 @@ function todoDone() {
 
         if (target.classList.contains('svgTodo')) {
 
+
             let testId;
 
+
             target.parentNode.parentNode.dataset.todoId ? testId = target.parentNode.parentNode.dataset.todoId : testId = target.parentNode.dataset.todoId ;
-            
+
+            target.setAttributte('disabled', true)
+
             if (!findTodoById(testId).done){
 
-                
+
 
                 // target.parentNode.parentNode.dataset.todoId ? EventManager.emit('deleteElement',target) : EventManager.emit('deleteElement',target.firstChild);
 
@@ -1450,6 +1454,19 @@ function animationSvg(todoId,target){
 
     }
     
+}
+
+function disableMouseEvents(target){
+    
+    target.style.pointerEvents = 'none';
+
+}
+
+function enableMouseEvents(target){
+    
+    target.style.pointerEvents = 'auto';
+
+
 }
 
 function editArrSvgDone(id) {
