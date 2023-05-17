@@ -598,7 +598,8 @@ function defaultTodo() {
     arrTodos.push(todoD)
     // countTodo++;
 
-
+    // testText();
+    // lineThrough();
     return todoD;
 }
 
@@ -1305,7 +1306,8 @@ function todoDone() {
 
             target.parentNode.parentNode.dataset.todoId ? testId = target.parentNode.parentNode.dataset.todoId : testId = target.parentNode.dataset.todoId ;
 
-            target.setAttributte('disabled', true)
+            // target.setAttributte('disabled', true)
+            disableMouseEvents(target);
 
             if (!findTodoById(testId).done){
 
@@ -1368,9 +1370,7 @@ function animationSvg(todoId,target){
         
                 setTimeout(() => {
         
-                    // target.parentNode.parentNode.dataset.todoId ? EventManager.emit('deleteElement',target) : EventManager.emit('deleteElement',target.firstChild);
                     EventManager.emit('deleteElement',containerSvg.firstChild)
-                    // console.log(containerSvg.firstChild);
         
                     EventManager.emit('createElements',arrSvgDoneTW);
         
@@ -1378,7 +1378,7 @@ function animationSvg(todoId,target){
         
                     showSvg(pathSvgDoneTW);
         
-                },1000)
+                },700)
         
             }else{
         
@@ -1391,7 +1391,6 @@ function animationSvg(todoId,target){
         
                 setTimeout(() => {
         
-                    // target.parentNode.parentNode.dataset.todoId ? EventManager.emit('deleteElement',target) : EventManager.emit('deleteElement',target.firstChild);
     
                     EventManager.emit('deleteElement',containerSvg.firstChild)
     
@@ -1402,7 +1401,7 @@ function animationSvg(todoId,target){
         
                     showSvg(circlePathTW);
         
-                }, 1000);
+                }, 700);
         
                 
         
@@ -1429,7 +1428,7 @@ function animationSvg(todoId,target){
 
             showSvg(pathSvgDone);
 
-        },1000)
+        },700)
 
     }else{
 
@@ -1447,7 +1446,7 @@ function animationSvg(todoId,target){
 
             showSvg(circlePath);
 
-        }, 1000);
+        }, 700);
 
         
 
@@ -1465,7 +1464,6 @@ function disableMouseEvents(target){
 function enableMouseEvents(target){
     
     target.style.pointerEvents = 'auto';
-
 
 }
 
@@ -1513,11 +1511,10 @@ function hideSvg(target){
         strokeDashoffset: [anime.setDashoffset, 0],
         easing: 'easeInOutSine',
         direction:'reverse',
-        duration: 1000,
+        duration: 700,
     });
 
     // console.log(target);
-
 }
 
 function showSvg(target) {
@@ -1526,12 +1523,42 @@ function showSvg(target) {
         targets:target,
         strokeDashoffset: [anime.setDashoffset, 0],
         easing: 'easeInOutSine',
-        duration: 1200,
-        direction: 'normal',                
+        duration: 700,
+        direction: 'normal',
+        complete: containerFMouseETextO(target),           
     })
 
-    // console.log(target);
+}
 
+function containerFMouseETextO(target) {
+    enableMouseEvents(target.parentNode.parentNode.parentNode)
+    textOpacity(target)
+}
+
+function textOpacity(target) {
+
+    let test1 = target.parentNode.parentNode.parentNode.parentNode.childNodes[1];
+    let idTarget = target.parentNode.parentNode.parentNode.parentNode.dataset.todoId;
+
+    if (!findTodoById(idTarget).done){
+
+        anime({
+            targets: test1,
+            easing: 'easeInOutSine',
+            direction: 'normal',
+            opacity:1,
+            duration: 300,
+        }) 
+        
+    }else{
+        anime({
+            targets: test1,
+            easing: 'easeInOutSine',
+            direction: 'normal',
+            opacity:.5,
+            duration: 300,
+        }) 
+    }
 
 }
 
@@ -1559,6 +1586,5 @@ function checkTodoDoneTW(todo) {
     }
 
 }
-
 
 export {popUpTodo,defaultTodo,arrTodoTemplate,countTodo,restartTodoTipPriority,resetCountTodo,checkTodoDone,checkTodoDoneTW};
