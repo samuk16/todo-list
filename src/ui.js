@@ -2,9 +2,11 @@ import {EventManager} from './pubSub.js';
 
 import {itemProject,countChilds,projectIdSelected,findColorProjectById,findProjectById} from './projects.js';
 
-import {arrTodoTemplate,countTodo,checkTodoDone} from './todos.js';
+import {arrTodoTemplate,countTodo,checkTodoDone, checkTodoDoneTW} from './todos.js';
 
 import createElementsDom from './domCreation.js';
+
+import anime from 'animejs/lib/anime.es.js';
 
 function domElements(arr) {
 
@@ -61,7 +63,7 @@ function addTodoProjectItemDOM(obj) {
     arrTodoTemplate[3].appendChild = `.itemTodo${countTodo}`;
     arrTodoTemplate[4].appendChild = `.itemTodo${countTodo}`;
     
-    arrTodoTemplate[1].innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="circlePath" cx="10" cy="10" r="9" stroke="${findProjectById(obj.projectId).color}" stroke-width="2"/></svg>`;
+    arrTodoTemplate[1].innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="circlePath${obj.todoId}" cx="10" cy="10" r="9" stroke="${findProjectById(obj.projectId).color}" stroke-width="2"/></svg>`;
     // arrTodoTemplate[1].attributes['data-todo-id-app'] = `${obj.todoId}`;
     arrTodoTemplate[1].attributes.class = `svgTodo svgTodo${obj.todoId}`;
 
@@ -129,8 +131,9 @@ function renderTodosTodayAndWeek(arrTodos) {
         arrTodoTemplate[3].appendChild = `.itemTodoTW${countClass}`;
         arrTodoTemplate[4].appendChild = `.itemTodoTW${countClass}`;
 
-
-        arrTodoTemplate[1].innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="${findProjectById(todo.projectId).color}" stroke-width="2"/></svg>`;
+        checkTodoDoneTW(todo)
+        arrTodoTemplate[1].attributes.class = `svgTodo svgTodoTW${todo.todoId}`;
+        // arrTodoTemplate[1].innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="${findProjectById(todo.projectId).color}" stroke-width="2"/></svg>`;
         arrTodoTemplate[3].innerHTML = `<svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="svgPriority" cx="3" cy="3" r="3" fill="${todo.priority[0]}"/></svg>`;
 
         // arrTodoTemplate.forEach(item => item.appendChild = `.itemTodo${countTodo}`)
