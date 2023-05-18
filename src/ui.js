@@ -36,6 +36,12 @@ function init() {
     EventManager.on('renderTodos', renderTodosTodayAndWeek);
 
     EventManager.on('delTodosTW', delTodosTodayAndWeek);
+    
+    EventManager.on('animationEntry', animationEntry);
+    
+    EventManager.on('animationOut', animationOut);
+
+    
 
 }
 
@@ -203,6 +209,33 @@ function editTodo(arr) {
     arr[1].textContent = arr[0].name;
     arr[2].style.fill = arr[0].priority[0];
     instance.setContent(`${arr[0].priority[1]}`)
+}
+
+function animationEntry(target) {
+    
+    anime({
+        targets:target,
+        opacity: [0,1],
+        scale : [0,1],
+        easing: 'easeOutExpo',
+        duration: 250,
+        direction: 'normal',
+    })
+
+}
+
+function animationOut(target) {
+    
+    anime({
+        targets:target,
+        filter: 'blur(5px)',
+        opacity: [1,0],
+        scale : [1,0],
+        easing: 'easeOutExpo',
+        duration: 500,
+        // direction: 'normal',
+    })
+
 }
 
 export {init};
