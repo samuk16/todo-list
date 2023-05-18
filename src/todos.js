@@ -876,6 +876,8 @@ function showMenuTodo() {
 
                 EventManager.emit('createElements',arrTodoMenuTemplate)
 
+                animationEntry(father.lastChild);
+
                 showEditTodo();
                 showDeleteConfirm();
 
@@ -1564,7 +1566,27 @@ function textOpacity(target) {
 
 function animationEntry(target) {
     
+    anime({
+        targets:target,
+        opacity: [0,1],
+        scale : [0,1],
+        easing: 'easeOutExpo',
+        duration: 250,
+        direction: 'normal',
+    })
+
+}
+
+function animationOut(target) {
     
+    anime({
+        targets:target,
+        opacity: [1,0],
+        scale : [1,0],
+        easing: 'easeOutExpo',
+        duration: 250,
+        direction: 'normal',
+    })
 
 }
 
