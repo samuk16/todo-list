@@ -1562,6 +1562,12 @@ function textOpacity(target) {
 
 }
 
+function animationEntry(target) {
+    
+    
+
+}
+
 function checkTodoDone(todo) {
 
     if (todo.done) {
