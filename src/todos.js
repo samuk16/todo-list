@@ -615,6 +615,10 @@ function popUpTodo() {
     btnPopUpTodo.addEventListener('click', () => {
 
         domElements(arrPopUpTodo);
+
+        let containerPopUpNewTodo = document.querySelector('.containerPopUpNewTodo');
+        EventManager.emit('animationEntry', containerPopUpNewTodo)
+
         createTodoObj();
         popUpPriority();
         delPopUpTodo();
@@ -755,7 +759,11 @@ function delPopUpTodo() {
 
     btnClosePopUpTodo.addEventListener('click', () => {
 
-        containerPopUpNewTodo.remove();
+        animationOut(containerPopUpNewTodo);                
+
+        setTimeout( ()=> {
+            EventManager.emit('deleteElement', containerPopUpNewTodo)
+        },100)
 
     })
 
@@ -855,7 +863,7 @@ function showMenuTodo() {
     
     const svgTodoMenu = document.querySelector('.svgTodoMenu');
     const containerTodo = document.querySelector('.containerTodo');
-    let toggle = false;
+    // let toggle = false;
 
     containerTodo.addEventListener('click', (e) => {
         
@@ -868,9 +876,8 @@ function showMenuTodo() {
             let divAppendChild = father.classList[0];
             // console.log(divAppendChild);
 
-            toggle = !toggle;
-
-            if (toggle) {
+            // toggle = !toggle;
+            if (!father.lastChild.classList.contains('containerMenuTodo')) {
 
                 arrTodoMenuTemplate[0].appendChild =`.${divAppendChild}`;
 
@@ -884,8 +891,12 @@ function showMenuTodo() {
             }else{
 
                 let containerMenuTodo = document.querySelector('.containerMenuTodo');
+                
+                animationOut(containerMenuTodo);                
 
-                EventManager.emit('deleteElement', containerMenuTodo)                
+                setTimeout( ()=> {
+                    EventManager.emit('deleteElement', containerMenuTodo)
+                },100)
             }
 
 
@@ -917,7 +928,16 @@ function showEditTodo() {
             fillEditTodo(findTodoById(todoId));
 
             EventManager.emit('createElements',arrTodoEditTemplate);
+            
+            EventManager.emit('animationOut',containerMenuTodo)
 
+            setTimeout( ()=> {
+                EventManager.emit('deleteElement', containerMenuTodo)
+            },100)
+
+            let containerTodoEdit = document.querySelector('.containerTodoEdit');
+
+            EventManager.emit('animationEntry',containerTodoEdit)
 
             let textArea = document.querySelector('.editDescription');
 
@@ -949,7 +969,15 @@ function showDeleteConfirm(){
             
             EventManager.emit('createElements', arrPopUpDeleteConfirmation);
 
+            EventManager.emit('animationOut',containerMenuTodo)
+
+            setTimeout( ()=> {
+                EventManager.emit('deleteElement', containerMenuTodo)
+            },100)
+
             let containerDeleteConfirmation = document.querySelector('.containerDeleteConfirmation');
+
+            EventManager.emit('animationEntry', containerDeleteConfirmation);
 
             containerDeleteConfirmation.addEventListener('click', (e) => {
 
@@ -959,7 +987,21 @@ function showDeleteConfirm(){
 
                     delTodoDOMandArr(todoId,todoItem)
 
-                    EventManager.emit('deleteElement', containerDeleteConfirmation);
+                    EventManager.emit('animationOut',containerDeleteConfirmation)
+
+                    setTimeout(()=>{
+
+                        EventManager.emit('deleteElement', containerDeleteConfirmation);
+                    },100)
+
+                }else if(targetContainerDel.classList.contains('containerBtnCancel')){
+
+                    EventManager.emit('animationOut',containerDeleteConfirmation)
+
+                    setTimeout(()=>{
+
+                        EventManager.emit('deleteElement', containerDeleteConfirmation);
+                    },100)
 
                 }
 
@@ -1016,15 +1058,18 @@ function delTodoDOMandArr(todoId,itemDOM) {
 
     EventManager.emit('deleteElement', itemDOM);
     
-    if (titleTodayAndWeek.textContent == 'Today'){
+    if (titleTodayAndWeek) {
+        if (titleTodayAndWeek.textContent == 'Today'){
         
-        EventManager.emit('deleteElement', findTodoTodayAndWeekById(todoId));
-        
-    }else{
-
-        EventManager.emit('deleteElement', findTodoTodayAndWeekById(todoId));
-
+            EventManager.emit('deleteElement', findTodoTodayAndWeekById(todoId));
+            
+        }else{
+    
+            EventManager.emit('deleteElement', findTodoTodayAndWeekById(todoId));
+    
+        }
     }
+    
 
 
 
@@ -1062,6 +1107,12 @@ function fillEditTodoNewInfo(todo,pTodo,svgPriority,typpyInstance) {
         EventManager.emit('todoUpdated',arrTodoTitleAndSvg);
         verifyTodoRequirements();
 
+        EventManager.emit('animationOut',containerBtnSave.parentNode.parentNode)
+
+        setTimeout(()=>{
+
+            EventManager.emit('deleteElement', containerBtnSave.parentNode.parentNode);
+        },100)
 
     })
 
@@ -1072,10 +1123,27 @@ function delEditTodo() {
     
     const containerTodoEdit = document.querySelector('.containerTodoEdit')
     const btnClosePopUpTodo = document.querySelector('.btnClosePopUpTodo');
+    const containerBtnCancel = document.querySelector('.containerBtnCancel');
 
     btnClosePopUpTodo.addEventListener('click', () => {
+        
+        EventManager.emit('animationOut',containerTodoEdit)
 
-        EventManager.emit('deleteElement', containerTodoEdit)
+        setTimeout(()=>{
+
+            EventManager.emit('deleteElement', containerTodoEdit)
+        },100)
+
+    })
+
+    containerBtnCancel.addEventListener('click', () => {
+        
+        EventManager.emit('animationOut',containerTodoEdit)
+
+        setTimeout(()=>{
+
+            EventManager.emit('deleteElement', containerTodoEdit)
+        },100)
 
     })
 
@@ -1581,11 +1649,12 @@ function animationOut(target) {
     
     anime({
         targets:target,
+        filter: 'blur(5px)',
         opacity: [1,0],
-        scale : [1,0],
+        scale : [1,.8],
         easing: 'easeOutExpo',
-        duration: 250,
-        direction: 'normal',
+        duration: 500,
+        // direction: 'normal',
     })
 
 }
