@@ -230,12 +230,23 @@ function animationOut(target) {
         targets:target,
         filter: 'blur(5px)',
         opacity: [1,0],
-        scale : [1,0],
+        scale : [1,.8],
         easing: 'easeOutExpo',
-        duration: 500,
+        duration: 300,
         // direction: 'normal',
     })
 
+}
+
+function transitionBgBtn(target) {
+    
+    anime({
+        targets:target,
+        backgroundColor: '#2b2636',
+        easing: 'easeOutExpo',
+        duration: 200,
+        // direction: 'normal',
+    })
 }
 
 export {init};
