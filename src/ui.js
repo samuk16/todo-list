@@ -41,6 +41,10 @@ function init() {
     
     EventManager.on('animationOut', animationOut);
 
+    EventManager.on('transitionBgBtn', transitionBgBtn);
+    
+    // EventManager.on('animationOut', animationOut);
+
     
 
 }
@@ -80,7 +84,7 @@ function addTodoProjectItemDOM(obj) {
     arrTodoTemplate[2].innerText = `${obj.name}`;
 
     domElements(arrTodoTemplate);
-
+    animationEntry(`.itemTodo${obj.todoId}`)
 }
 
 function renderTodo(arrTodos) {
@@ -238,15 +242,84 @@ function animationOut(target) {
 
 }
 
-function transitionBgBtn(target) {
+function transitionBgBtn(arr) {
     
-    anime({
-        targets:target,
-        backgroundColor: '#2b2636',
-        easing: 'easeOutExpo',
-        duration: 200,
-        // direction: 'normal',
+    
+
+    arr[0].addEventListener('mouseover', () => {
+
+        anime({
+            targets:arr[0],
+            backgroundColor: '#2b2636',
+            scale: [
+                { value: 1, duration: 0 },
+                { value: 1.1, duration: 500 }
+            ],
+            easing: 'easeOutExpo',
+            duration: 200,
+            // direction: 'normal',
+        })
+
     })
+
+    arr[0].addEventListener('mouseout', () => {
+
+        anime({
+            targets:arr[0],
+            backgroundColor: `${arr[1]}`,
+            scale: [
+                { value: 1.1, duration: 0 },
+                { value: 1, duration: 500 }
+              ],
+            easing: 'easeOutExpo',
+            duration: 300,
+            // direction: 'normal',
+        })
+
+    })
+
+    
 }
+
+function transitionBgBtn2(arr) {
+    
+    
+
+    arr[0].addEventListener('mouseover', () => {
+
+        anime({
+            targets:arr[0],
+            backgroundColor: '#2b2636',
+            scale: [
+                { value: 1, duration: 0 },
+                { value: 1.1, duration: 500 }
+            ],
+            easing: 'easeOutExpo',
+            duration: 200,
+            // direction: 'normal',
+        })
+
+    })
+
+    arr[0].addEventListener('mouseout', () => {
+
+        anime({
+            targets:arr[0],
+            backgroundColor: `${arr[1]}`,
+            scale: [
+                { value: 1.1, duration: 0 },
+                { value: 1, duration: 500 }
+              ],
+            easing: 'easeOutExpo',
+            duration: 300,
+            // direction: 'normal',
+        })
+
+    })
+
+    
+}
+
+
 
 export {init};
