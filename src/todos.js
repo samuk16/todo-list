@@ -352,7 +352,7 @@ const arrTodoEditTemplate = [
     {
         elementType: 'div',
         attributes: {class:'containerTodoEditDescription'},
-        innerHTML: '<textarea class="editDescription" cols="50">',
+        innerHTML: '<textarea class="editDescription" cols="45">',
         appendChild: '.containerEditDescription',
 
     },
@@ -606,6 +606,11 @@ function defaultTodo() {
 function popUpTodo() {
     const btnPopUpTodo = document.querySelector('.btnNewTodo');
 
+    let colorBgBtn = getComputedStyle(btnPopUpTodo).getPropertyValue('--backContainer');
+
+    let arrColorAndBtn1 = [btnPopUpTodo,colorBgBtn,'#2b2636'];
+
+    EventManager.emit('transitionBgBtn', arrColorAndBtn1);
     // defaultTodo();
     hoverTodo();
     showMenuTodo();
@@ -617,6 +622,15 @@ function popUpTodo() {
         domElements(arrPopUpTodo);
 
         let containerPopUpNewTodo = document.querySelector('.containerPopUpNewTodo');
+        let name = document.querySelector('.name')
+        let description = document.querySelector('.description')
+        let containerPriority = document.querySelector('.containerPriority')
+        let date = document.querySelector('.date')
+
+        EventManager.emit('transitionBgInput',name)
+        EventManager.emit('transitionBgInput',description)
+        EventManager.emit('transitionBgInput',containerPriority)
+        EventManager.emit('transitionBgInput',date)
         EventManager.emit('animationEntry', containerPopUpNewTodo)
 
         createTodoObj();
@@ -724,6 +738,12 @@ function createTodoObj() {
     const inputDescriptionTodo = document.querySelector('.description')
     const colorPrio = document.querySelector('.prio');
 
+
+    let colorBgBtn = getComputedStyle(btnCreateTodo).getPropertyValue('--backContainer');
+
+    let arrColorAndBtn1 = [btnCreateTodo,colorBgBtn,'#2b2636'];
+
+    EventManager.emit('transitionBgBtn',arrColorAndBtn1)
      
 
     btnCreateTodo.addEventListener('click', () => {
@@ -756,6 +776,12 @@ function delPopUpTodo() {
     
     const containerPopUpNewTodo = document.querySelector('.containerPopUpNewTodo');
     const btnClosePopUpTodo = document.querySelector('.btnClosePopUpTodo');
+
+    let colorBgBtn = getComputedStyle(btnClosePopUpTodo).getPropertyValue('--backContainer');
+
+    let arrColorAndBtn1 = [btnClosePopUpTodo,colorBgBtn,'#2b2636'];
+
+    EventManager.emit('transitionBgBtn',arrColorAndBtn1)
 
     btnClosePopUpTodo.addEventListener('click', () => {
 
@@ -874,29 +900,37 @@ function showMenuTodo() {
             let father = target.parentNode;
             let todoId = father.dataset.todoId;
             let divAppendChild = father.classList[0];
-            // console.log(divAppendChild);
 
             // toggle = !toggle;
             if (!father.lastChild.classList.contains('containerMenuTodo')) {
 
                 arrTodoMenuTemplate[0].appendChild =`.${divAppendChild}`;
+                arrTodoMenuTemplate[0].attributes.class =`containerMenuTodo${todoId} containerMenuTodo`;
+
+                arrTodoMenuTemplate[1].appendChild =`.containerMenuTodo${todoId}`;
+                arrTodoMenuTemplate[2].appendChild =`.containerMenuTodo${todoId}`;
+
 
                 EventManager.emit('createElements',arrTodoMenuTemplate)
+
 
                 animationEntry(father.lastChild);
 
                 showEditTodo();
                 showDeleteConfirm();
 
+
             }else{
 
-                let containerMenuTodo = document.querySelector('.containerMenuTodo');
+                let containerMenuTodo = document.querySelector(`.containerMenuTodo${todoId}`);
                 
                 animationOut(containerMenuTodo);                
 
                 setTimeout( ()=> {
+
                     EventManager.emit('deleteElement', containerMenuTodo)
                 },100)
+
             }
 
 
@@ -912,6 +946,16 @@ function showEditTodo() {
     
     let containerMenuTodo = document.querySelector('.containerMenuTodo');
 
+    let containerSvgEdit = document.querySelector('.containerSvgEdit')
+
+    let colorBgBtn = getComputedStyle(containerSvgEdit).getPropertyValue('--backContainerSecond');
+
+    let arrColorAndBtn1 = [containerSvgEdit,colorBgBtn,'rgba(168, 199, 250, 0.3)'];
+
+    EventManager.emit('transitionBgBtn', arrColorAndBtn1);
+
+
+
     containerMenuTodo.addEventListener('click', (e) => {
 
         let target = e.target;
@@ -923,12 +967,27 @@ function showEditTodo() {
         let svgPriority = todoItem[2].children[0].children[0];
         let typpyInstance = todoItem[2];
 
+       
+
         if (target.classList.contains('containerSvgEdit')) {
-            
+
             fillEditTodo(findTodoById(todoId));
 
             EventManager.emit('createElements',arrTodoEditTemplate);
             
+            let containerBtnSave = document.querySelector('.containerBtnSave')
+            let containerBtnCancel = document.querySelector('.containerBtnCancel')
+            let editName = document.querySelector('.editName')
+            let editDate = document.querySelector('.editDate')
+            let editDescription = document.querySelector('.editDescription')
+            let containerTodoEditPriority = document.querySelector('.containerTodoEditPriority')
+
+            EventManager.emit('transitionBgBtn2',containerBtnSave)
+            EventManager.emit('transitionBgBtn2',containerBtnCancel)
+            EventManager.emit('transitionBgInput',editName)
+            EventManager.emit('transitionBgInput',editDate)
+            EventManager.emit('transitionBgInput',editDescription)
+            EventManager.emit('transitionBgInput',containerTodoEditPriority)
             EventManager.emit('animationOut',containerMenuTodo)
 
             setTimeout( ()=> {
@@ -940,7 +999,6 @@ function showEditTodo() {
             EventManager.emit('animationEntry',containerTodoEdit)
 
             let textArea = document.querySelector('.editDescription');
-
             textArea.value = `${findTodoById(todoId).description}`;
 
             
@@ -957,6 +1015,13 @@ function showDeleteConfirm(){
     
     let containerMenuTodo = document.querySelector('.containerMenuTodo');
 
+    let containerSvgDelete = document.querySelector('.containerSvgDelete')
+
+    let colorBgBtn = getComputedStyle(containerSvgDelete).getPropertyValue('--backContainerSecond');
+
+    let arrColorAndBtn1 = [containerSvgDelete,colorBgBtn,'rgba(179, 38, 30, 0.4)'];
+
+    EventManager.emit('transitionBgBtn', arrColorAndBtn1);
 
     containerMenuTodo.addEventListener('click', (e) => {
 
@@ -979,11 +1044,19 @@ function showDeleteConfirm(){
 
             EventManager.emit('animationEntry', containerDeleteConfirmation);
 
+            let containerBtnDelete = document.querySelector('.containerBtnDelete');
+            let containerBtnCancel = document.querySelector('.containerBtnCancel');
+
+            EventManager.emit('transitionBgBtn2',containerBtnDelete)
+            EventManager.emit('transitionBgBtn2',containerBtnCancel)
+
             containerDeleteConfirmation.addEventListener('click', (e) => {
 
                 let targetContainerDel = e.target;
 
                 if (targetContainerDel.classList.contains('containerBtnDelete')) {
+
+                    
 
                     delTodoDOMandArr(todoId,todoItem)
 
@@ -1125,6 +1198,12 @@ function delEditTodo() {
     const btnClosePopUpTodo = document.querySelector('.btnClosePopUpTodo');
     const containerBtnCancel = document.querySelector('.containerBtnCancel');
 
+    let colorBgBtn = getComputedStyle(btnClosePopUpTodo).getPropertyValue('--backContainer');
+
+    let arrColorAndBtn1 = [btnClosePopUpTodo,colorBgBtn,'#2b2636'];
+
+    EventManager.emit('transitionBgBtn',arrColorAndBtn1)
+
     btnClosePopUpTodo.addEventListener('click', () => {
         
         EventManager.emit('animationOut',containerTodoEdit)
@@ -1184,14 +1263,22 @@ function showTodayAndWeek() {
             if (target.classList.contains('svgToday')) {
             
                 arrTodoTodayAndWeek[1].innerText = 'Today';
+
                 EventManager.emit('createElements', arrTodoTodayAndWeek);
+                
+                let containerTodosTodayAndWeek = document.querySelector('.containerTodosTodayAndWeek');
+
+                EventManager.emit('animationEntry', containerTodosTodayAndWeek);
+
                 EventManager.emit('renderTodos',arrTodosToday)
     
             }
             if (target.classList.contains('svgWeek')) {
                 
                 arrTodoTodayAndWeek[1].innerText = 'Week';
+
                 EventManager.emit('createElements', arrTodoTodayAndWeek);
+
                 EventManager.emit('renderTodos',arrTodosWeek)
             }
 
