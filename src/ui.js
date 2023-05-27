@@ -43,7 +43,9 @@ function init() {
 
     EventManager.on('transitionBgBtn', transitionBgBtn);
     
-    // EventManager.on('animationOut', animationOut);
+    EventManager.on('transitionBgBtn2', transitionBgBtn2);
+
+    EventManager.on('transitionBgInput', transitionBgInput);
 
     
 
@@ -250,7 +252,7 @@ function transitionBgBtn(arr) {
 
         anime({
             targets:arr[0],
-            backgroundColor: '#2b2636',
+            backgroundColor: `${arr[2]}`,
             scale: [
                 { value: 1, duration: 0 },
                 { value: 1.1, duration: 500 }
@@ -270,7 +272,7 @@ function transitionBgBtn(arr) {
             scale: [
                 { value: 1.1, duration: 0 },
                 { value: 1, duration: 500 }
-              ],
+            ],
             easing: 'easeOutExpo',
             duration: 300,
             // direction: 'normal',
@@ -285,14 +287,15 @@ function transitionBgBtn2(arr) {
     
     
 
-    arr[0].addEventListener('mouseover', () => {
+    arr.addEventListener('mouseover', () => {
 
         anime({
-            targets:arr[0],
-            backgroundColor: '#2b2636',
+            targets:arr,
+            // backgroundColor: `${arr[2]}`,
+            filter:[{value: 'brightness(1)', duration:0},{value:'brightness(1.5)',duration: 400}],
             scale: [
                 { value: 1, duration: 0 },
-                { value: 1.1, duration: 500 }
+                { value: 1.08, duration: 400 }
             ],
             easing: 'easeOutExpo',
             duration: 200,
@@ -301,23 +304,56 @@ function transitionBgBtn2(arr) {
 
     })
 
-    arr[0].addEventListener('mouseout', () => {
+    arr.addEventListener('mouseout', () => {
 
         anime({
-            targets:arr[0],
-            backgroundColor: `${arr[1]}`,
+            targets:arr,
+            // backgroundColor: `${arr[1]}`,
+            filter:[{value: 'brightness(1.5)', duration:0},{value:'brightness(1)',duration: 400}],
             scale: [
-                { value: 1.1, duration: 0 },
-                { value: 1, duration: 500 }
-              ],
+                { value: 1.08, duration: 0 },
+                { value: 1, duration: 400 }
+            ],
             easing: 'easeOutExpo',
-            duration: 300,
+            duration: 200,
             // direction: 'normal',
         })
 
     })
 
+}
+
+function transitionBgInput(arr) {
     
+    
+
+    arr.addEventListener('mouseover', (e) => {
+        e.stopPropagation();
+        anime({
+            targets:arr,
+            // backgroundColor: `${arr[2]}`,
+            filter:[{value: 'brightness(1)', duration:0},{value:'brightness(1.5)',duration: 400}],
+            easing: 'easeOutExpo',
+            duration: 200,
+            // direction: 'normal',
+        })
+
+    })
+
+    arr.addEventListener('mouseout', (e) => {
+        e.stopPropagation();
+        anime({
+            targets:arr,
+            // backgroundColor: `${arr[1]}`,
+            filter:[{value: 'brightness(1.5)', duration:0},{value:'brightness(1)',duration: 400}],
+            easing: 'easeOutExpo',
+            duration: 200,
+            // direction: 'normal',
+        })
+
+    })
+
+
 }
 
 
