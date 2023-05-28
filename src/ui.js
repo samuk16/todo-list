@@ -47,6 +47,8 @@ function init() {
 
     EventManager.on('transitionBgInput', transitionBgInput);
 
+    EventManager.on('animationError', animationError);
+
     
 
 }
@@ -353,6 +355,17 @@ function transitionBgInput(arr) {
 
     })
 
+
+}
+
+function animationError(target){
+    
+    anime({
+        targets: target,
+        translateX:[{value: 10,duration: 100},{value: -10,duration: 50},{value: 10,duration: 100},{value: -10,duration: 50},{value:0,duration: 200}],
+        easing: 'easeOutExpo',
+        duration: 300,
+    })
 
 }
 
