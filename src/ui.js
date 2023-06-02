@@ -49,6 +49,12 @@ function init() {
 
     EventManager.on('animationError', animationError);
 
+    EventManager.on('transitionChangeTitle', transitionChangeTitle);
+
+    EventManager.on('transitionGhostEntry', transitionGhostEntry);
+
+    EventManager.on('transitionGhostOut', transitionGhostOut);
+
     
 
 }
@@ -77,6 +83,8 @@ function addTodoProjectItemDOM(obj) {
     arrTodoTemplate[3].appendChild = `.itemTodo${countTodo}`;
     arrTodoTemplate[4].appendChild = `.itemTodo${countTodo}`;
     
+    checkTodoDone(obj);
+
     arrTodoTemplate[1].innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="circlePath${obj.todoId}" cx="10" cy="10" r="9" stroke="${findProjectById(obj.projectId).color}" stroke-width="2"/></svg>`;
     // arrTodoTemplate[1].attributes['data-todo-id-app'] = `${obj.todoId}`;
     arrTodoTemplate[1].attributes.class = `svgTodo svgTodo${obj.todoId}`;
@@ -136,7 +144,7 @@ function renderTodosTodayAndWeek(arrTodos) {
 
 
         arrTodoTemplate[0].appendChild = `.todosTodayAndWeek`;
-        arrTodoTemplate[0].attributes.class = `itemTodoTW${countClass} todoStyle`;
+        arrTodoTemplate[0].attributes.class = `itemTodoTW${countClass} todoStyle TW`;
         arrTodoTemplate[0].attributes['data-todo-id'] = `${todo.todoId}`;
 
 
@@ -369,6 +377,65 @@ function animationError(target){
 
 }
 
+function transitionChangeTitle(target) {
+    
+    anime({
+        targets:target,
+        translateY:[{value: -20,duration: 200},{value: 100,duration: 100},{value: -20,duration: 200},{value: 0,duration: 100}],
+        opacity:[{value: 0,duration:500},{value: 1,duration:200}],
+        easing: 'easeOutExpo',
+        duration: 200,
+        // direction: 'normal',
+    })
+
+}
+
+function transitionGhostEntry(target) {
+    
+    anime({
+        targets:target,
+        translateY:[{value: -10,duration: 200},{value: 0,duration: 300}],
+        opacity:[{value: 1,duration:0},{value: 0,duration:400},{value: 1,duration:100}],
+        easing: 'easeOutExpo',
+        duration: 300,
+        // direction: 'normal',
+    })
+
+}
+function transitionGhostOut(arr) {
+    
+    anime({
+        targets:arr[0],
+        translateY:[{value: -10,duration: 200}],
+        opacity:[{value: 0,duration:200}],
+        easing: 'easeOutExpo',
+        duration: 300,
+        complete: transitionOrganizeItems(arr[0]),
+        // direction: 'normal',
+    })
+
+}
+
+function transitionOrganizeItems(item) {
+    
+    
+    const remainingItems = document.querySelectorAll('.todoStyle');
+    
+    anime({
+        targets: remainingItems,
+        translateY: [{value: 0,duration: 200}],
+        opacity: [{value: 0,duration: 300},{value: 1,duration: 200}],
+        easing: 'easeInOutQuad',
+        duration: 300,
+        delay: function(target, index, total) {
+            return index * 50;
+        }
+    });
+        
+        
+        
+   
+}
 
 
 export {init};
