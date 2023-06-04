@@ -55,6 +55,10 @@ function init() {
 
     EventManager.on('transitionGhostOut', transitionGhostOut);
 
+    EventManager.on('transitionOrganizeItems', transitionOrganizeItems);
+
+    EventManager.on('transitionBtnClick', transitionBtnClick);
+
     
 
 }
@@ -410,20 +414,20 @@ function transitionGhostOut(arr) {
         opacity:[{value: 0,duration:200}],
         easing: 'easeOutExpo',
         duration: 300,
-        complete: transitionOrganizeItems(arr[0]),
+        complete: transitionOrganizeItems(),
         // direction: 'normal',
     })
 
 }
 
-function transitionOrganizeItems(item) {
+function transitionOrganizeItems() {
     
     
     const remainingItems = document.querySelectorAll('.todoStyle');
     
     anime({
         targets: remainingItems,
-        translateY: [{value: 0,duration: 200}],
+        translateY: [{value: 0,duration: 100}],
         opacity: [{value: 0,duration: 300},{value: 1,duration: 200}],
         easing: 'easeInOutQuad',
         duration: 300,
@@ -435,6 +439,16 @@ function transitionOrganizeItems(item) {
         
         
    
+}
+
+function transitionBtnClick(target) {
+
+    anime({
+        targets: target,
+        scale: [{value: 1,duration: 100},{value: 1.1,duration: 100}],
+        easing: 'easeInOutQuad',
+        duration: 200,
+    });
 }
 
 
