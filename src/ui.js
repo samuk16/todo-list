@@ -59,6 +59,12 @@ function init() {
 
     EventManager.on('transitionBtnClick', transitionBtnClick);
 
+    EventManager.on('transitionScale', transitionHoverScale);
+
+    EventManager.on('transitionHeight', transitionHeight);
+
+    EventManager.on('transitionGhostEntryProjects', transitionGhostEntryProjects);
+
     
 
 }
@@ -451,5 +457,58 @@ function transitionBtnClick(target) {
     });
 }
 
+function transitionHoverScale(target) {
+
+    // let containerTarget = document.querySelector(`${target}`);
+
+    target.addEventListener('mouseover', () => {
+
+        anime({
+            targets: target,
+            scale: [{value: 1,duration: 100},{value: 1.1,duration: 200}],
+            easing: 'easeInOutQuad',
+            duration: 100,
+        });
+
+    })
+
+    target.addEventListener('mouseout', () => {
+
+        anime({
+            targets:target,
+            scale: [{value: 1.1,duration: 100},{value: 1,duration: 200}],
+            easing: 'easeOutExpo',
+            duration: 100,
+            // direction: 'normal',
+        })
+
+    })
+}
+
+function transitionHeight(target) {
+    
+    let height = target.offsetHeight;
+    let newHeight = height + 37;
+    anime({
+        targets:target,
+        height: [{value: `${test}px`}],
+        easing: 'easeOutExpo',
+        duration: 200,
+    })
+
+}
+
+function transitionGhostEntryProjects(target) {
+    
+    anime({
+        targets:target,
+        translateY:[{value: -10,duration: 200},{value: 0,duration: 300}],
+        opacity:[{value: 0,duration:200},{value: 1,duration:100}],
+        easing: 'easeOutExpo',
+        duration: 300,
+        // direction: 'normal',
+    })
+
+}
 
 export {init};
