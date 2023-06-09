@@ -136,18 +136,44 @@ function changeProject() {
     containerProjects.addEventListener('click', (e) => {
 
         let projectTarget = e.target;
-        let projectId = projectTarget.dataset.projectId;
-        projectIdSelected = projectId;
+
+        if (!projectTarget.classList.contains('containerProjects')) {
+
+            let projectId = projectTarget.dataset.projectId;
+            projectIdSelected = projectId;
+
+            EventManager.emit('transitionChangeTitle','.titleTodoProject')
+
+            setTimeout(() => {
+
+                titleTodoProject.innerText = `To do - ${findProjectById(projectId).name}`;
+
+            },200)
 
 
-        titleTodoProject.innerText = `To do - ${findProjectById(projectId).name}`;
-        
-        const projectObjSelected = projects.find(project => project.id == projectId);
+            const projectObjSelected = projects.find(project => project.id == projectId);
+            
+            EventManager.emit('changeProject',projectObjSelected.todo);
+            let arrTagets = ['.todoStyle'];
+            EventManager.emit('transitionGhostOut',arrTagets)
 
-        EventManager.emit('changeProject',projectObjSelected.todo);
+            let containerTodo = document.querySelector('.containerTodo');
+            let childs = Array.from(containerTodo.children);
+            
+            childs.forEach((todo) => {
+                if (!todo.classList.contains('btnNewTodo')) {
 
-        restartTodoTipPriority();
-        // resetCountTodo();
+                    let colorBgBtn = getComputedStyle(todo.children[3]).getPropertyValue('--backContainerSecond');
+                    let arrColorAndBtn1 = [todo.children[3],colorBgBtn,'#3f3852'];
+
+                    EventManager.emit('transitionBgBtn',arrColorAndBtn1)
+                }
+            })
+
+         
+
+            restartTodoTipPriority();
+        }       
 
     });
 
@@ -170,38 +196,42 @@ function findProjectById(projectId) {
     return foundProject;
 }
 
-function findColorProjectById(projectId) {
-
-    let foundColorProject = null;
-
-    projects.forEach((project) => {
-
-        if (project.id == projectId) {
-
-            foundColorProject = project;
-
-        }
-    });
-
-    return foundColorProject.color;
-}
-
 function createPopUpNewProject() {
 
     const btnNewProject = document.querySelector('.btnNewProject');
+
+    let colorBgBtn = getComputedStyle(btnNewProject).getPropertyValue('--backgroundMain');
+
+    let arrColorAndBtn = [btnNewProject,colorBgBtn,'#2b2636'];
+
+    EventManager.emit('transitionBgBtn', arrColorAndBtn)
+    
 
     defaultProject();
     changeProject()
     hoverProject();
     todayAndWeekTipName();
 
-    btnNewProject.addEventListener('click', () => {
+    btnNewProject.addEventListener('click', (e) => {
 
-        domElements(arrNewProject);
-        closeCreatorProject();
-        addNewProject();
-        syncInputColor();
-        getColorFromInputColor()
+        EventManager.emit('transitionBtnClick',btnNewProject)
+
+        let target = e.target;
+        if (!target.parentNode.lastChild.classList.contains('containerNewProject')) {
+
+            domElements(arrNewProject);
+            
+            let containerNewProject = document.querySelector('.containerNewProject');
+
+            EventManager.emit('animationEntry', containerNewProject)
+
+            closeCreatorProject();
+            addNewProject();
+            syncInputColor();
+            getColorFromInputColor()
+        }
+        // console.log(target.parentNode.lastChild);
+        
 
     });
 
@@ -212,36 +242,45 @@ function addNewProject() {
 
     const btnAddProject = document.querySelector('.btnCreateProject'); 
     const inputText = document.querySelector('.inputText');
-    
+    let containerProjects = document.querySelector('.containerProjects');
+
+    let colorBgBtn = getComputedStyle(btnAddProject).getPropertyValue('--backContainer');
+
+    let arrColorAndBtn1 = [btnAddProject,colorBgBtn,'#2b2636'];
+
+    EventManager.emit('transitionBgBtn',arrColorAndBtn1)
+
+
     btnAddProject.addEventListener('click', () => {
 
         countChilds++;
+
+        EventManager.emit('transitionHeight', containerProjects)
+
         createObjs(inputText.value,colorInputColor,countChilds);
-        // itemProject[0].attributes.class = `itemProject item${countChilds}`;
-        // itemProject[0].attributes['data-project-id'] = `${countChilds}`;
-        
-        // domElements(itemProject);
-        // changeColorBgItemProject(countChilds);            
+        EventManager.emit('transitionGhostEntryProjects', containerProjects.lastChild)         
 
     })
 }
 function createObjs(projetName,color,projectId) {
     let projectItem;
-
+    let containerProjects = document.querySelector('.containerProjects');
     if (projetName == '') {
 
         projectItem = new createObjProject(`Project-${countChilds}`,color,projectId);
         EventManager.emit('projectCreated',projectItem)
+        // EventManager.emit('transitionGhostEntry', containerProjects.lastChild)
     }else{
 
         projectItem = new createObjProject(projetName,color,projectId);
         EventManager.emit('projectCreated',projectItem)
+        // EventManager.emit('transitionGhostEntry', containerProjects.lastChild)
       
     }
+    
     projects.push(projectItem);
  
 }
-
 
 function syncInputColor() {
     
@@ -271,10 +310,20 @@ function closeCreatorProject() {
     const btnClosePopUp = document.querySelector('.btnClosePopUp');
     const containerNewProject = document.querySelector('.containerNewProject');
 
+    let colorBgBtn = getComputedStyle(btnClosePopUp).getPropertyValue('--backContainer');
+
+    let arrColorAndBtn1 = [btnClosePopUp,colorBgBtn,'#2b2636'];
+
+    EventManager.emit('transitionBgBtn',arrColorAndBtn1)
 
     btnClosePopUp.addEventListener('click', () => {
 
-        containerTodoLeft.removeChild(containerNewProject);
+        EventManager.emit('animationOut', containerNewProject)
+
+        setTimeout(() => {
+
+            containerTodoLeft.removeChild(containerNewProject);
+        },100)
 
     })
 
@@ -283,14 +332,21 @@ function closeCreatorProject() {
 function hoverProject() {
 
     const containerProjects = document.querySelector('.containerProjects');
+    const itemProject = document.querySelector('.itemProject');
+
+    
+    
 
     containerProjects.addEventListener('mouseover', (e) => {
 
         let hoverTarget = e.target;
         let hoverProjectId = hoverTarget.dataset.projectId;
-
+        
         if (hoverProjectId) {
             
+            let projectTarget = document.querySelector(`.item${hoverProjectId}`);
+            EventManager.emit('transitionScale', projectTarget);
+
             if (!findProjectById(hoverProjectId).isTipName) {
 
                 findProjectById(hoverProjectId).onHover();
