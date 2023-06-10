@@ -120,6 +120,8 @@ function defaultProject() {
 
     createObjs('default','#25A7B9',0);
 
+    EventManager.emit('transitionGhostEntryProjects','.itemProject')
+
     projects[0].addTodo(defaultTodo())
 
     titleTodoProject.innerText = `To do - ${findProjectById(projects[0].id).name}`;
