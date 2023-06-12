@@ -213,6 +213,7 @@ function createPopUpNewProject() {
     changeProject()
     hoverProject();
     todayAndWeekTipName();
+    projectSelected();
 
     btnNewProject.addEventListener('click', (e) => {
 
@@ -346,8 +347,8 @@ function hoverProject() {
         
         if (hoverProjectId) {
             
-            let projectTarget = document.querySelector(`.item${hoverProjectId}`);
-            EventManager.emit('transitionScale', projectTarget);
+            // let projectTarget = document.querySelector(`.item${hoverProjectId}`);
+            // EventManager.emit('transitionScale', projectTarget);
 
             if (!findProjectById(hoverProjectId).isTipName) {
 
@@ -397,5 +398,38 @@ function todayAndWeekTipName(){
     })
 }
 
+function projectSelected() {
+    
+    const containerProjects = document.querySelector('.containerProjects');
+
+    containerProjects.addEventListener('click', (e) => {
+
+        let clickedTarget = e.target;
+        let clickedProjectId = clickedTarget.dataset.projectId;
+
+        if (clickedProjectId) {
+
+            let clicked = document.querySelector('.clicked');
+
+            if (clicked) {
+                
+                clicked.style.outlineWidth = '0px';
+                clicked.classList.remove('clicked')
+            }
+
+            let projectClicked = document.querySelector(`.item${clickedProjectId}`);
+            projectClicked.classList.add('clicked')
+
+            EventManager.emit('transitionProjectSelected', projectClicked)
+
+            
+
+
+
+        }
+
+    })
+
+}
 
 export {createPopUpNewProject,defaultProject,itemProject,countChilds,projects,projectIdSelected,findProjectById};
