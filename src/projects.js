@@ -11,11 +11,9 @@ import 'tippy.js/themes/light.css';
 
 import 'tippy.js/animations/scale-subtle.css';
 
-
 let colorInputColor;
 let countChilds = 0;
-const projects = [];
-
+let projects = [];
 let projectIdSelected = 0;
 
 const arrNewProject = [
@@ -110,21 +108,30 @@ function createObjProject(projectName,projectColor,projectId) {
 
         this.todo.push(obj);
         EventManager.emit('todoCreated', obj);
+        // populateStorageP();
+        // console.log(projects);
 
     }
 };
 
 function defaultProject() {
     
-    let titleTodoProject = document.querySelector('.titleTodoProject');
 
-    createObjs('default','#25A7B9',0);
+    if (!projects[0]) {
 
-    EventManager.emit('transitionGhostEntryProjects','.itemProject')
+        let titleTodoProject = document.querySelector('.titleTodoProject');
 
-    projects[0].addTodo(defaultTodo())
+        createObjs('default','#25A7B9',0);
 
-    titleTodoProject.innerText = `To do - ${findProjectById(projects[0].id).name}`;
+        EventManager.emit('transitionGhostEntryProjects','.itemProject')
+
+        projects[0].addTodo(defaultTodo())
+
+        titleTodoProject.innerText = `To do - ${findProjectById(projects[0].id).name}`;
+        console.log('default');
+    }
+
+    
     
 
 };
@@ -208,13 +215,14 @@ function createPopUpNewProject() {
 
     EventManager.emit('transitionBgBtn', arrColorAndBtn)
     
-
+    exist();
+    // renderLastProject();
     defaultProject();
     changeProject()
     hoverProject();
     todayAndWeekTipName();
     projectSelected();
-
+    
     btnNewProject.addEventListener('click', (e) => {
 
         EventManager.emit('transitionBtnClick',btnNewProject)
@@ -238,6 +246,7 @@ function createPopUpNewProject() {
 
     });
 
+    
 
 }
 
@@ -280,8 +289,10 @@ function createObjs(projetName,color,projectId) {
         // EventManager.emit('transitionGhostEntry', containerProjects.lastChild)
       
     }
-    
     projects.push(projectItem);
+    populateStorageP();
+    console.log(countChilds);
+
  
 }
 
@@ -421,8 +432,7 @@ function projectSelected() {
             projectClicked.classList.add('clicked')
 
             EventManager.emit('transitionProjectSelected', projectClicked)
-
-            
+            console.log(projectIdSelected);            
 
 
 
@@ -432,4 +442,115 @@ function projectSelected() {
 
 }
 
-export {createPopUpNewProject,defaultProject,itemProject,countChilds,projects,projectIdSelected,findProjectById};
+function populateStorageP() {
+
+    const serializedArray = JSON.stringify(projects, (key, value) => {
+        if (typeof value === 'function') {
+          return value.toString();
+        }
+        return value;
+    });
+
+    localStorage.setItem('arrProjects', serializedArray)
+    localStorage.setItem('countChilds', countChilds)
+
+
+    // setProjects();
+    // localStorage.clear();
+}
+
+function setProjects() {
+    
+    let countChildSaved = localStorage.getItem('countChilds');
+  
+    
+    const storedArray = localStorage.getItem('arrProjects');
+
+    const deserializedArray = JSON.parse(storedArray, (key, value) => {
+
+        if (typeof value === 'string' && value.includes('function')) {
+
+          return eval(`(${value})`);
+        }
+        return value;
+    });
+
+    projects = deserializedArray;
+    countChilds = countChildSaved;
+    EventManager.emit('renderProjects',projects)
+    EventManager.emit('transitionGhostEntryProjects','.itemProject')
+
+    console.log(projects);
+    // localStorage.clear();
+    renderLastProject();
+}
+
+
+function exist() {
+
+    if(!localStorage.getItem('countChilds')) {
+        populateStorageP();
+        
+    }else {
+        setProjects();
+    }
+}
+
+function renderLastProject() {
+    
+    let lastIdProject = localStorage.getItem('lastProjectIdSelected');
+    console.log(lastIdProject);
+    let itemProject = document.querySelector(`.item${lastIdProject}`);
+    let titleTodoProject = document.querySelector('.titleTodoProject');
+
+    itemProject.classList.add('clicked')
+
+
+    EventManager.emit('transitionChangeTitle','.titleTodoProject')
+
+    setTimeout(() => {
+
+                titleTodoProject.innerText = `To do - ${findProjectById(lastIdProject).name}`;
+
+    },200)
+
+
+    const projectObjSelected = projects.find(project => project.id == lastIdProject);
+            
+    EventManager.emit('changeProject',projectObjSelected.todo);
+
+    let arrTagets = ['.todoStyle'];
+
+    EventManager.emit('transitionGhostOut',arrTagets)
+
+    let containerTodo = document.querySelector('.containerTodo');
+
+    let childs = Array.from(containerTodo.children);
+            
+    childs.forEach((todo) => {
+        if (!todo.classList.contains('btnNewTodo')) {
+
+            let colorBgBtn = getComputedStyle(todo.children[3]).getPropertyValue('--backContainerSecond');
+            let arrColorAndBtn1 = [todo.children[3],colorBgBtn,'#3f3852'];
+
+            EventManager.emit('transitionBgBtn',arrColorAndBtn1)
+        }
+    })
+
+         
+
+    restartTodoTipPriority();
+
+}
+
+function saveLastProjectSelected() {
+    
+    window.addEventListener('beforeunload', () => {
+
+        localStorage.setItem('lastProjectIdSelected', projectIdSelected)
+
+    })
+
+}
+saveLastProjectSelected();
+export {createPopUpNewProject,defaultProject,itemProject,countChilds,projects,projectIdSelected,findProjectById,populateStorageP};
