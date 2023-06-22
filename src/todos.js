@@ -920,6 +920,8 @@ function showMenuTodo() {
 
         if (target.classList.contains('svgTodoMenu')) {
 
+            
+
             EventManager.emit('transitionBtnClick',target)
 
             let father = target.parentNode;
@@ -935,9 +937,9 @@ function showMenuTodo() {
                 arrTodoMenuTemplate[1].appendChild =`.containerMenuTodo${todoId}`;
                 arrTodoMenuTemplate[2].appendChild =`.containerMenuTodo${todoId}`;
 
-
+                
                 EventManager.emit('createElements',arrTodoMenuTemplate)
-
+                removeOverflow();
 
                 animationEntry(father.lastChild);
 
@@ -955,7 +957,9 @@ function showMenuTodo() {
                 setTimeout( ()=> {
 
                     EventManager.emit('deleteElement', containerMenuTodo)
+                    addOverflow();
                 },100)
+                
 
             }
 
@@ -1584,10 +1588,10 @@ function todoDone() {
 
                 animationSvg(testId,target);
 
-                // findTodoById(testId).toggleDone();
-                changeTodoDone(findTodoById(testId));
+                findTodoById(testId).toggleDone();
+                // changeTodoDone(findTodoById(testId));
                 console.log(projects);
-                console.log(arrTodos);
+                // console.log(arrTodos);
             }else{
 
                 
@@ -1601,7 +1605,7 @@ function todoDone() {
                 animationSvg(testId,target)
 
                 findTodoById(testId).toggleDone();
-                changeTodoDone(findTodoById(testId));
+                // changeTodoDone(findTodoById(testId));
                 console.log(findTodoById(testId));
                 console.log(projects);
                 console.log(arrTodos);
@@ -1930,5 +1934,35 @@ function saveOnPageReload() {
     })
 
 }
+
+function removeOverflow() {
+    
+    const containerTodo = document.querySelector('.containerTodo')
+    const containerTodoCenter = document.querySelector('.containerTodoCenter')
+    const outer = document.querySelector('.outer')
+
+    containerTodo.style.overflowY = 'visible';
+    containerTodo.style.overflowX = 'visible';
+    outer.style.overflow = 'visible';
+
+    containerTodoCenter.style.overflowY = 'clip';
+
+
+}
+
+function addOverflow() {
+    
+    const containerTodo = document.querySelector('.containerTodo')
+    const containerTodoCenter = document.querySelector('.containerTodoCenter')
+    const outer = document.querySelector('.outer')
+
+    containerTodo.style.overflowY = 'auto';
+    containerTodo.style.overflowX = 'hidden';
+    outer.style.overflow = 'hidden';
+
+    containerTodoCenter.style.removeProperty('overflow-y');
+}
+
+
 saveOnPageReload();
 export {popUpTodo,defaultTodo,arrTodoTemplate,countTodo,restartTodoTipPriority,resetCountTodo,checkTodoDone,checkTodoDoneTW};
