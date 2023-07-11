@@ -163,8 +163,16 @@ function changeProject() {
             const projectObjSelected = projects.find(project => project.id == projectId);
             
             EventManager.emit('changeProject',projectObjSelected.todo);
-            let arrTagets = ['.todoStyle'];
+            let arrTagets = ['.TP'];
             EventManager.emit('transitionGhostOut',arrTagets)
+
+            findProjectById(projectId).todo.forEach( todo => {
+                
+                if (todo.isTipPriority == true) {
+                    todo.isTipPriority = false;
+                }
+
+            } )
 
             let containerTodo = document.querySelector('.containerTodo');
             let childs = Array.from(containerTodo.children);
@@ -192,7 +200,6 @@ function changeProject() {
 function findProjectById(projectId) {
 
     let foundProject = null;
-
     projects.forEach((project) => {
 
         if (project.id == projectId) {
@@ -475,6 +482,21 @@ function setProjects() {
         return value;
     });
 
+    deserializedArray.forEach(objP => {
+
+        if (objP.isTipName == true) {
+            objP.isTipName = false;
+        }
+
+        objP.todo.forEach(todo => {
+
+            if (todo.isTipPriority == true) {
+                todo.isTipPriority = false;
+            }
+
+        })
+    })
+
     projects = deserializedArray;
     countChilds = countChildSaved;
     EventManager.emit('renderProjects',projects)
@@ -501,6 +523,7 @@ function renderLastProject() {
     let lastIdProject = localStorage.getItem('lastProjectIdSelected');
     console.log(lastIdProject);
     let itemProject = document.querySelector(`.item${lastIdProject}`);
+    console.log(itemProject);
     let titleTodoProject = document.querySelector('.titleTodoProject');
 
     itemProject.classList.add('clicked')
@@ -548,6 +571,7 @@ function saveLastProjectSelected() {
     window.addEventListener('beforeunload', () => {
 
         localStorage.setItem('lastProjectIdSelected', projectIdSelected)
+        populateStorageP();
 
     })
 
