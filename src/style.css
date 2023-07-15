@@ -1053,7 +1053,62 @@ circle,svg{
 
   /* ----------------------------------------------------------- */
 
- 
+  .containerLeftMobile{
+    
+    position: fixed;
+    bottom: 0px;
+
+    width: 100%;
+
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+
+
+    height: 60px;
+  }
+
+  .containerProjectsM{
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+
+    cursor: pointer;
+
+  }
+  .containerTodayM{
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+
+    cursor: pointer;
+
+  }
+  .containerWeekM{
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+
+    cursor: pointer;
+
+  }
+  .titleProjectsM{
+    color: #FFFFFF;
+  }
+  .titleTodayM{
+    color: #FFFFFF;
+
+  }
+  .titleWeekM{
+    color: #FFFFFF;
+
+  }
 
   /* ----------------------------------------------------------- */
 
