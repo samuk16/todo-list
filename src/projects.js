@@ -78,6 +78,43 @@ const itemProject = [
     },
 ]
 
+const itemProjectMobile = [
+
+    {
+        elementType: 'div',
+        attributes: {class:'containerItemProjectMobile'},
+        appendChild: '.containerProjectsMobile',
+
+    },
+
+
+    {
+        elementType: 'div',
+        attributes: {class:'itemProject', 'data-project-id': '0',style:"background-color: #25A7B9;"},
+        appendChild: '.containerItemProjectMobile',
+    },
+
+    {
+        elementType: 'p',
+        attributes: {class:'titleProjectMobile'},
+        innerText: 'Name',
+        appendChild: '.containerItemProjectMobile',
+
+    },
+]
+
+const arrContainerProjectsMobile = [
+
+    {
+        elementType: 'div',
+        attributes: {class:'containerProjectsMobile'},
+        appendChild: '.body',
+
+    },
+
+
+]
+
 function domElements(arr) {
 
     arr.forEach(elementObject => {
@@ -576,5 +613,10 @@ function saveLastProjectSelected() {
     })
 
 }
+
+function menuMobile() {
+    
+}
+
 saveLastProjectSelected();
 export {createPopUpNewProject,defaultProject,itemProject,countChilds,projects,projectIdSelected,findProjectById,populateStorageP};
