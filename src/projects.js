@@ -69,6 +69,59 @@ const arrNewProject = [
 
 
 ];
+const arrNewProjectMobile = [
+
+    {
+        elementType: 'div',
+        attributes: {class:'containerNewProject'},
+        appendChild: 'body',
+
+    },
+
+    //  childs containerNewProject
+
+    {
+        elementType: 'p',
+        attributes: {class:'titleNewProject'},
+        innerText: 'Name',
+        appendChild: '.containerNewProject',
+
+    },
+
+    {
+        elementType: 'div',
+        attributes: {class:'btnClosePopUp'},
+        innerHTML: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12L12 4M4 4L12 12" stroke="#E6E1E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+        appendChild: '.containerNewProject',
+    },
+
+    {
+        elementType: 'div',
+        attributes: {class:'containerInputText'},
+        innerHTML: '<input class ="inputText" type="text" name="nameProject" required>',
+        appendChild: '.containerNewProject',
+
+    },
+    
+    {
+        elementType: 'div',
+        attributes: {class:'btnCreateProject'},
+        innerHTML: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.00033 2.66666V13.3333M13.3337 7.99999L2.66699 7.99999" stroke="#E6E1E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+        appendChild: '.containerNewProject',
+    },
+
+    // child containerinputText
+
+    {
+        elementType: 'div',
+        attributes: {class:'containerInputColor'},
+        innerHTML: '<input type="color" class="inputColor">',
+        appendChild: '.containerInputText',
+
+    },
+
+
+];
 
 const itemProject = [
     {
@@ -90,7 +143,7 @@ const itemProjectMobile = [
 
     {
         elementType: 'div',
-        attributes: {class:'itemProject', 'data-project-id': '0',style:"background-color: #25A7B9;"},
+        attributes: {class:'colorItemProject',style:"background-color: #25A7B9;"},
         appendChild: '.containerItemProjectMobile',
     },
 
@@ -101,15 +154,24 @@ const itemProjectMobile = [
         appendChild: '.containerItemProjectMobile',
 
     },
+
+    
 ]
 
 const arrContainerProjectsMobile = [
 
     {
         elementType: 'div',
-        attributes: {class:'containerProjectsMobile'},
-        appendChild: '.body',
+        attributes: {class:'containerProjectsMobile',style:'position:absolute; bottom: 50px;'},
+        appendChild: 'body',
 
+    },
+
+    {
+        elementType: 'div',
+        attributes: {class:'btnNewProjectM'},
+        innerHTML: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 4V20M20 12L4 12" stroke="#E6E1E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+        appendChild: '.containerProjectsMobile',
     },
 
 
@@ -364,7 +426,7 @@ function getColorFromInputColor() {
 
 function closeCreatorProject() {
 
-    const containerTodoLeft = document.querySelector('.containerTodoLeft');
+    // const containerTodoLeft = document.querySelector('.containerTodoLeft');
     const btnClosePopUp = document.querySelector('.btnClosePopUp');
     const containerNewProject = document.querySelector('.containerNewProject');
 
@@ -380,7 +442,7 @@ function closeCreatorProject() {
 
         setTimeout(() => {
 
-            containerTodoLeft.removeChild(containerNewProject);
+            EventManager.emit('deleteElement', containerNewProject)
         },100)
 
     })
@@ -616,7 +678,54 @@ function saveLastProjectSelected() {
 
 function menuMobile() {
     
+    const btnProjectsM = document.querySelector('.containerProjectsM');
+
+    btnProjectsM.addEventListener('click', () => {  
+
+        const containerProjectsMobile = document.querySelector('.containerProjectsMobile');
+        
+        if (!containerProjectsMobile) {
+
+            // const test = document.querySelector('.containerProjectsMobile');
+
+            
+            const coords = btnProjectsM.getBoundingClientRect();
+
+            arrContainerProjectsMobile[0].attributes.style = `bottom:80px; left:${coords.left - 28.9}px;`;
+
+            EventManager.emit('createElements', arrContainerProjectsMobile)
+            EventManager.emit('renderProjectsMobile', projects)
+            popUpNewProjectMobile();
+
+        }else{
+            EventManager.emit('deleteElement', containerProjectsMobile)
+        }
+
+    })
+
+}
+
+function popUpNewProjectMobile() {
+    
+    const btnNewProject = document.querySelector('.btnNewProjectM');
+
+    btnNewProject.addEventListener('click', () => {
+
+        EventManager.emit('createElements', arrNewProjectMobile)
+
+        // arrNewProjectMobile[0].attributes.style = `bottom:80px; left:${coords.left - 28.9}px;`;
+
+        let containerNewProject = document.querySelector('.containerNewProject');
+
+        EventManager.emit('animationEntry', containerNewProject)
+
+        closeCreatorProject();
+        addNewProject();
+        syncInputColor();
+        getColorFromInputColor()
+    })
+
 }
 
 saveLastProjectSelected();
-export {createPopUpNewProject,defaultProject,itemProject,countChilds,projects,projectIdSelected,findProjectById,populateStorageP};
+export {createPopUpNewProject,defaultProject,itemProject,countChilds,projects,projectIdSelected,findProjectById,populateStorageP,menuMobile,itemProjectMobile};
