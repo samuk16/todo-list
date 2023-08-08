@@ -73,7 +73,7 @@ const arrNewProjectMobile = [
 
     {
         elementType: 'div',
-        attributes: {class:'containerNewProject'},
+        attributes: {class:' containerNewProjectM'},
         appendChild: 'body',
 
     },
@@ -84,7 +84,7 @@ const arrNewProjectMobile = [
         elementType: 'p',
         attributes: {class:'titleNewProject'},
         innerText: 'Name',
-        appendChild: '.containerNewProject',
+        appendChild: '.containerNewProjectM',
 
     },
 
@@ -92,14 +92,14 @@ const arrNewProjectMobile = [
         elementType: 'div',
         attributes: {class:'btnClosePopUp'},
         innerHTML: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12L12 4M4 4L12 12" stroke="#E6E1E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-        appendChild: '.containerNewProject',
+        appendChild: '.containerNewProjectM',
     },
 
     {
         elementType: 'div',
         attributes: {class:'containerInputText'},
         innerHTML: '<input class ="inputText" type="text" name="nameProject" required>',
-        appendChild: '.containerNewProject',
+        appendChild: '.containerNewProjectM',
 
     },
     
@@ -107,7 +107,7 @@ const arrNewProjectMobile = [
         elementType: 'div',
         attributes: {class:'btnCreateProject'},
         innerHTML: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.00033 2.66666V13.3333M13.3337 7.99999L2.66699 7.99999" stroke="#E6E1E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-        appendChild: '.containerNewProject',
+        appendChild: '.containerNewProjectM',
     },
 
     // child containerinputText
@@ -238,8 +238,12 @@ function defaultProject() {
 function changeProject() {
     
     let titleTodoProject = document.querySelector('.titleTodoProject');
-    const containerProjects = document.querySelector('.containerProjects');
+    let containerProjects = document.querySelector('.containerProjects');
+    let containerProjectsM = document.querySelector('.containerProjectsMobile');
 
+    // if (containerProjectsM) {
+    //     containerProjects = containerProjectsM;
+    // }
 
     containerProjects.addEventListener('click', (e) => {
 
@@ -249,6 +253,8 @@ function changeProject() {
 
             let projectId = projectTarget.dataset.projectId;
             projectIdSelected = projectId;
+
+            console.log(projectIdSelected);
 
             EventManager.emit('transitionChangeTitle','.titleTodoProject')
 
@@ -429,6 +435,7 @@ function closeCreatorProject() {
     // const containerTodoLeft = document.querySelector('.containerTodoLeft');
     const btnClosePopUp = document.querySelector('.btnClosePopUp');
     const containerNewProject = document.querySelector('.containerNewProject');
+    const containerNewProjectM = document.querySelector('.containerNewProjectM');
 
     let colorBgBtn = getComputedStyle(btnClosePopUp).getPropertyValue('--backContainer');
 
@@ -438,11 +445,17 @@ function closeCreatorProject() {
 
     btnClosePopUp.addEventListener('click', () => {
 
-        EventManager.emit('animationOut', containerNewProject)
+        containerNewProject ? EventManager.emit('animationOut', containerNewProject) : EventManager.emit('animationOut', containerNewProjectM); 
+        // EventManager.emit('animationOut', containerNewProject)
 
         setTimeout(() => {
 
-            EventManager.emit('deleteElement', containerNewProject)
+            if (containerNewProject) {
+                EventManager.emit('deleteElement', containerNewProject)                
+            }else{
+                EventManager.emit('deleteElement', containerNewProjectM)
+            }
+
         },100)
 
     })
@@ -696,6 +709,7 @@ function menuMobile() {
             EventManager.emit('createElements', arrContainerProjectsMobile)
             EventManager.emit('renderProjectsMobile', projects)
             popUpNewProjectMobile();
+            changeProjectMobile();
 
         }else{
             EventManager.emit('deleteElement', containerProjectsMobile)
@@ -708,16 +722,17 @@ function menuMobile() {
 function popUpNewProjectMobile() {
     
     const btnNewProject = document.querySelector('.btnNewProjectM');
+    const containerProjectsMobile = document.querySelector('.containerProjectsMobile');
 
     btnNewProject.addEventListener('click', () => {
 
         EventManager.emit('createElements', arrNewProjectMobile)
-
+        EventManager.emit('deleteElement', containerProjectsMobile)
         // arrNewProjectMobile[0].attributes.style = `bottom:80px; left:${coords.left - 28.9}px;`;
 
-        let containerNewProject = document.querySelector('.containerNewProject');
+        let containerNewProjectM = document.querySelector('.containerNewProjectM');
 
-        EventManager.emit('animationEntry', containerNewProject)
+        EventManager.emit('animationEntry', containerNewProjectM)
 
         closeCreatorProject();
         addNewProject();
@@ -725,6 +740,75 @@ function popUpNewProjectMobile() {
         getColorFromInputColor()
     })
 
+}
+
+function changeProjectMobile() {
+    
+    let titleTodoProject = document.querySelector('.titleTodoProject');
+    let containerProjects = document.querySelector('.containerProjects');
+    let containerProjectsM = document.querySelector('.containerProjectsMobile');
+
+    containerProjectsM.addEventListener('click', (e) => {
+
+        let projectTarget = e.target;
+        // console.log(projectTarget.parentNode);
+        if (!projectTarget.classList.contains('containerProjectsMobile')) {
+
+            let projectId 
+
+            if (!projectTarget.dataset.projectId) {
+                projectId = projectTarget.parentNode.dataset.projectId;
+            }else{
+                projectId = projectTarget.dataset.projectId;                
+            }
+            
+            // console.log(projectId);
+            projectIdSelected = projectId;
+
+            console.log(projectIdSelected);
+
+            EventManager.emit('transitionChangeTitle','.titleTodoProject')
+
+            setTimeout(() => {
+
+                titleTodoProject.innerText = `To do - ${findProjectById(projectId).name}`;
+
+            },200)
+
+
+            const projectObjSelected = projects.find(project => project.id == projectId);
+            
+            EventManager.emit('changeProject',projectObjSelected.todo);
+            let arrTagets = ['.TP'];
+            EventManager.emit('transitionGhostOut',arrTagets)
+
+            findProjectById(projectId).todo.forEach( todo => {
+                
+                if (todo.isTipPriority == true) {
+                    todo.isTipPriority = false;
+                }
+
+            } )
+
+            let containerTodo = document.querySelector('.containerTodo');
+            let childs = Array.from(containerTodo.children);
+            
+            childs.forEach((todo) => {
+                if (!todo.classList.contains('btnNewTodo')) {
+
+                    let colorBgBtn = getComputedStyle(todo.children[3]).getPropertyValue('--backContainerSecond');
+                    let arrColorAndBtn1 = [todo.children[3],colorBgBtn,'#3f3852'];
+
+                    EventManager.emit('transitionBgBtn',arrColorAndBtn1)
+                }
+            })
+
+         
+
+            restartTodoTipPriority();
+        }       
+
+    });
 }
 
 saveLastProjectSelected();
