@@ -1,6 +1,6 @@
 import createElementsDom from './domCreation.js';
 import {EventManager} from './pubSub.js';
-import {countChilds,projects,projectIdSelected,findProjectById,populateStorageP} from './projects.js';
+import {countChilds,projects,projectIdSelected,findProjectById,populateStorageP, itemProject} from './projects.js';
 import 'tippy.js/animations/scale-subtle.css';
 import tippy from 'tippy.js';
 import { startOfWeek,lastDayOfWeek,isWithinInterval,isSameDay} from 'date-fns'
@@ -214,7 +214,7 @@ const arrTodoTemplate= [
 
     {
         elementType: 'div',
-        attributes: {class:'itemTodo todoStyle'},
+        attributes: {class:'itemTodo todoStyle TP'},
         appendChild: '.containerTodo',
     },
 
@@ -462,49 +462,51 @@ const arrTodoTodayAndWeek = [
 
     {
         elementType: 'div',
-        attributes: {class:'todosTodayAndWeek'},
+        attributes: {class:'outerTW'},
         appendChild: '.containerTodosTodayAndWeek',
+    },
+
+    {
+        elementType: 'div',
+        attributes: {class:'todosTodayAndWeek'},
+        appendChild: '.outerTW',
 
     },
 
-    //   child temporal
+];
 
+const arrTodoTodayAndWeekMobile = [
 
-    // {
-    //     elementType: 'div',
-    //     attributes: {class:'itemTodo todoStyle test1'},
-    //     appendChild: '.todosTodayAndWeek',
-    // },
+    {
+        elementType: 'div',
+        attributes: {class:'containerTodosTodayAndWeekM'},
+        appendChild: 'body',
 
-    //  childs itemTodo
+    },
 
-    // {
-    //     elementType: 'div',
-    //     attributes: {class:'svgTodo'},
-    //     innerHTML: '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="#25A7B9" stroke-width="2"/></svg>',
-    //     appendChild: '.itemTodo',
-    // },
+    //  childs containerTodosTodayAndWeek
 
-    // {
-    //     elementType: 'p',
-    //     attributes: {class:'pTodo'},
-    //     innerText: 'test',
-    //     appendChild: '.itemTodo',
-    // },
+    {
+        elementType: 'p',
+        attributes: {class:'titleTodayAndWeek'},
+        innerText:'test',
+        appendChild: '.containerTodosTodayAndWeekM',
 
-    // {
-    //     elementType: 'div',
-    //     attributes: {class:'svgTodoPriority'},
-    //     innerHTML: '<svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="svgPriority" cx="3" cy="3" r="3" fill="#CA1D1D"/></svg>',
-    //     appendChild: '.itemTodo',
-    // },
+    },
 
-    // {
-    //     elementType: 'div',
-    //     attributes: {class:'svgTodoMenu'},
-    //     innerHTML: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12H5.01M12 12H12.01M19 12H19.01M6 12C6 12.5523 5.55228 13 5 13C4.44772 13 4 12.5523 4 12C4 11.4477 4.44772 11 5 11C5.55228 11 6 11.4477 6 12ZM13 12C13 12.5523 12.5523 13 12 13C11.4477 13 11 12.5523 11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12ZM20 12C20 12.5523 19.5523 13 19 13C18.4477 13 18 12.5523 18 12C18 11.4477 18.4477 11 19 11C19.5523 11 20 11.4477 20 12Z" stroke="#E6E1E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-    //     appendChild: '.itemTodo',
-    // },
+    {
+        elementType: 'div',
+        attributes: {class:'outerTW'},
+        appendChild: '.containerTodosTodayAndWeekM',
+    },
+
+    {
+        elementType: 'div',
+        attributes: {class:'todosTodayAndWeek'},
+        appendChild: '.outerTW',
+
+    },
+
 ];
 
 const arrSvgDone = [
@@ -642,6 +644,8 @@ function popUpTodo() {
             createTodoObj();
             popUpPriority();
             delPopUpTodo();
+
+            updateLatestIdFromObjectsArray();
         }
 
         
@@ -758,7 +762,8 @@ function createTodoObj() {
     btnCreateTodo.addEventListener('click', () => {
         
         
-        countTodo++;
+        // countTodo++;
+        updateLatestIdFromObjectsArray()
 
         let todo = new todos(inputNameTodo.value,inputDescriptionTodo.value,inputDateTodo.value,colorPrio.style.fill,priorityName,projectIdSelected,countTodo);
 
@@ -769,7 +774,7 @@ function createTodoObj() {
         if (project) {
 
             project.addTodo(todo);
-            console.log(project.todo);
+            // console.log(project.todo);
             populateStorageP();
         }
         addTodosToCurrentWeekArr(todo);
@@ -786,6 +791,27 @@ function createTodoObj() {
     })
 
 
+}
+
+function updateLatestIdFromObjectsArray() {
+    
+    let maxId = 0;
+
+    projects.forEach(itemProject => {
+
+        let tempId = 0;
+
+        if (itemProject.todo[itemProject.todo.length - 1]) {
+            tempId = itemProject.todo[itemProject.todo.length - 1].todoId;   
+            
+            if (tempId > maxId) {
+                maxId = tempId;
+            }
+        }
+             
+    })
+
+    return  countTodo = maxId + 1;    
 }
 
 function delPopUpTodo() {
@@ -1172,16 +1198,24 @@ function findTodoTodayAndWeekById(todoId) {
 
 function delTodoDOMandArr(todoId,itemDOM) {
     
-    let todoIndex = arrTodos.findIndex(todo => todo.todoId == todoId);
+    // let todoIndex = arrTodos.findIndex(todo => todo.todoId == todoId);
+    let todoArr = findProjectById(findTodoById(todoId).projectId).todo;
+    let todoIndex = todoArr.findIndex(todo => todo.todoId == todoId);
     let todoIndexToday = arrTodosToday.findIndex(todo => todo.todoId == todoId);
     let todoIndexWeek = arrTodosWeek.findIndex(todo => todo.todoId == todoId);
     let titleTodayAndWeek = document.querySelector('.titleTodayAndWeek');
 
 
 
+    // if (todoIndex !== -1){
+                        
+    //     arrTodos.splice(todoIndex,1);
+
+    // }
+
     if (todoIndex !== -1){
                         
-        arrTodos.splice(todoIndex,1);
+        todoArr.splice(todoIndex,1);
 
     }
 
@@ -1205,7 +1239,7 @@ function delTodoDOMandArr(todoId,itemDOM) {
 
         EventManager.emit('deleteElement', itemDOM);
 
-    },300)
+    },200)
 
     
 
@@ -1215,13 +1249,25 @@ function delTodoDOMandArr(todoId,itemDOM) {
 
         if (titleTodayAndWeek.textContent == 'Today'){
 
-            EventManager.emit('transitionGhostOut',findTodoTodayAndWeekById(todoId))
-            EventManager.emit('deleteElement', findTodoTodayAndWeekById(todoId));
+            let arrTargetsTW = ['.TW'];
+            EventManager.emit('transitionGhostOutTWAndEntry',arrTargetsTW)
+            setTimeout( () => {
+
+                EventManager.emit('deleteElement', findTodoTodayAndWeekById(todoId));
+        
+            },200)
+            // EventManager.emit('deleteElement', findTodoTodayAndWeekById(todoId));
             
         }else{
 
-            EventManager.emit('transitionGhostOut',findTodoTodayAndWeekById(todoId))
-            EventManager.emit('deleteElement', findTodoTodayAndWeekById(todoId));
+            let arrTargetsTW = ['.TW'];
+            EventManager.emit('transitionGhostOutTWAndEntry',arrTargetsTW)
+            setTimeout( () => {
+
+                EventManager.emit('deleteElement', findTodoTodayAndWeekById(todoId));
+        
+            },200)
+            // EventManager.emit('deleteElement', findTodoTodayAndWeekById(todoId));
     
         }
     }
@@ -1338,7 +1384,11 @@ function showTodayAndWeek() {
 
 
                 EventManager.emit('renderTodos',arrTodosToday)
-                EventManager.emit('transitionGhostEntry','.TW')
+                // EventManager.emit('transitionGhostEntry','.TW')
+                let arrTagetsTW = ['.TW'];
+                EventManager.emit('transitionGhostOutTWAndEntry',arrTagetsTW)
+                // EventManager.emit('transitionGhostOutTWAndEntry') 
+
             }
             if (target.classList.contains('svgWeek')) {
                 
@@ -1352,7 +1402,11 @@ function showTodayAndWeek() {
 
                 // titleTodayAndWeek.textContent = 'Week';
                 EventManager.emit('renderTodos',arrTodosWeek)
-                EventManager.emit('transitionGhostEntry','.TW')
+                // EventManager.emit('transitionGhostEntry','.TW')
+                let arrTagetsTW = ['.TW'];
+                EventManager.emit('transitionGhostOutTWAndEntry',arrTagetsTW)
+                // EventManager.emit('transitionGhostOutTWAndEntry') 
+
             }
 
 
@@ -1373,8 +1427,10 @@ function showTodayAndWeek() {
 
                 EventManager.emit('renderTodos',arrTodosToday)
 
+                // let arrTagetsTW = ['.TW'];
                 let arrTagetsTW = ['.TW'];
-                EventManager.emit('transitionOrganizeItems2') 
+                EventManager.emit('transitionGhostOutTWAndEntry',arrTagetsTW)
+                // EventManager.emit('transitionGhostOutTWAndEntry') 
     
             }
             if (target.classList.contains('svgWeek')) {
@@ -1383,15 +1439,55 @@ function showTodayAndWeek() {
 
                 EventManager.emit('createElements', arrTodoTodayAndWeek);
 
+                let containerTodosTodayAndWeek = document.querySelector('.containerTodosTodayAndWeek');
+
+                EventManager.emit('animationEntry', containerTodosTodayAndWeek);
+
                 EventManager.emit('renderTodos',arrTodosWeek)
 
+                // let arrTagetsTW = ['.TW'];
                 let arrTagetsTW = ['.TW'];
-                EventManager.emit('transitionOrganizeItems2') 
+                EventManager.emit('transitionGhostOutTWAndEntry',arrTagetsTW)
+                // EventManager.emit('transitionGhostOutTWAndEntry') 
             }
 
         }
 
     })
+
+}
+
+function showTodayMobile() {
+
+    const btnContainerTodayM = document.querySelector('.containerTodayM');
+
+    btnContainerTodayM.addEventListener('click', () => {
+
+        const containerTodosTodayAndWeekM = document.querySelector('.containerTodosTodayAndWeekM');
+
+        if (!containerTodosTodayAndWeekM) {
+            
+            verifyTodoRequirements();
+
+            arrTodoTodayAndWeekMobile[1].innerText = 'Today';
+
+            EventManager.emit('createElements', arrTodoTodayAndWeekMobile);
+                
+            const containerTodosTodayAndWeekM2 = document.querySelector('.containerTodosTodayAndWeekM');
+
+            EventManager.emit('animationEntry', containerTodosTodayAndWeekM2);
+
+            EventManager.emit('renderTodos',arrTodosToday)
+
+            let arrTagetsTW = ['.TW'];
+            EventManager.emit('transitionGhostOutTWAndEntry',arrTagetsTW)
+        }else{
+
+            EventManager.emit('deleteElement', containerTodosTodayAndWeekM)
+        }
+
+    })
+
 
 }
 
@@ -1421,8 +1517,9 @@ function addTodosToCurrentWeekArr(todo) {
         if (todosTodayAndWeek) {
             if (titleTodayAndWeek.textContent == 'Week'){
                 
-                EventManager.emit('renderTodos', arrTodosWeek);    
-                EventManager.emit('transitionOrganizeItems')
+                EventManager.emit('renderTodos', arrTodosWeek);   
+                let arrTagetsTW = ['.TW']; 
+                EventManager.emit('transitionGhostOutTWAndEntry',arrTagetsTW)
             }
         }
         
@@ -1452,7 +1549,8 @@ function addTodosToCurrentDayArr(todo) {
             if (titleTodayAndWeek.textContent == 'Today'){
                 
                 EventManager.emit('renderTodos', arrTodosToday);  
-                EventManager.emit('transitionOrganizeItems2')  
+                let arrTagetsTW = ['.TW'];
+                EventManager.emit('transitionGhostOutTWAndEntry',arrTagetsTW)  
             }
         }
 
@@ -1464,12 +1562,23 @@ function addTodosToCurrentDayArr(todo) {
 
 function verifyTodoRequirements() {
 
-    arrTodos.forEach(todo => {
+    // arrTodos.forEach(todo => {
 
-        verifyAndAddToToday(todo);
-        verifyAndAddToWeek(todo);
-    });
+    //     verifyAndAddToToday(todo);
+    //     verifyAndAddToWeek(todo);
+    // });
 
+    projects.forEach( objP => {
+
+        objP.todo.forEach(todo => {
+
+            verifyAndAddToToday(todo);
+            verifyAndAddToWeek(todo);
+        })
+
+    })
+    // console.log(arrTodosToday);
+    // console.log(arrTodosWeek);
 }
   
 function verifyAndAddToWeek(todo) {
@@ -1615,21 +1724,6 @@ function todoDone() {
 
         }
     })
-
-
-}
-
-function changeTodoDone(todoObj) {
-    
-    
-    if (!todoObj.done) {
-
-        todoObj.done = true;
-            
-    }else{
-        todoObj.done = false;
-    }
-    
 
 
 }
@@ -1965,4 +2059,4 @@ function addOverflow() {
 
 
 saveOnPageReload();
-export {popUpTodo,defaultTodo,arrTodoTemplate,countTodo,restartTodoTipPriority,resetCountTodo,checkTodoDone,checkTodoDoneTW};
+export {popUpTodo,defaultTodo,arrTodoTemplate,countTodo,restartTodoTipPriority,resetCountTodo,checkTodoDone,checkTodoDoneTW,showTodayMobile};
