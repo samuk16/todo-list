@@ -1480,8 +1480,9 @@ function showTodayMobile() {
 
             setTimeout(() => {
                 genTodayAndWeek('Today',arrTodosToday)
-
             }, 121);
+
+
 
         }else{
 
@@ -1494,8 +1495,9 @@ function showTodayMobile() {
 
             setTimeout(() => {
                 genTodayAndWeek('Today',arrTodosToday)
-
             }, 121);
+
+
         }
 
     })
@@ -1531,10 +1533,37 @@ function showWeekMobile() {
             setTimeout(() => {
                 genTodayAndWeek('Week',arrTodosWeek)                        
             }, 121);
+
+
         }
 
     })
 
+
+}
+
+function backToProjects() {
+    
+    const svgBackToProjects  = document.querySelector('.svgBackToProjects ');
+    // const containerTodosTodayAndWeekM = document.querySelector('.containerTodosTodayAndWeekM');
+    const containerCenterRight = document.querySelector('.containerCenterRight');
+
+    svgBackToProjects.addEventListener('click', () => {
+
+        const containerTodosTodayAndWeekM = document.querySelector('.containerTodosTodayAndWeekM');
+        EventManager.emit('fadeOutAndShrink', containerTodosTodayAndWeekM)
+
+        setTimeout(() => {
+            EventManager.emit('deleteElement', containerTodosTodayAndWeekM)
+        }, 120);
+
+        setTimeout(() => {
+            EventManager.emit('fadeInAndGrow', containerCenterRight)
+        }, 121);
+
+        EventManager.emit('deleteElement', svgBackToProjects)
+
+    })
 
 }
 
@@ -1558,7 +1587,14 @@ function genTodayAndWeek(title,arrTodos) {
     const svgBackToProjects = document.querySelector('.svgBackToProjects');
 
     if (!svgBackToProjects) {
-        EventManager.emit('createElements', arrSvgBackToProjects)                
+
+        EventManager.emit('createElements', arrSvgBackToProjects)  
+
+        const svgBackToProjects = document.querySelector('.svgBackToProjects');
+
+        EventManager.emit('animationEntry', svgBackToProjects)
+
+        backToProjects()              
     }
 
 }
