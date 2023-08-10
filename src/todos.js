@@ -542,6 +542,14 @@ const arrSvgNotDoneTW = [
         appendChild: 'body',
     },
 ]
+const arrSvgBackToProjects = [
+    {
+        elementType: 'div',
+        attributes: {class:'svgBackToProjects containerSvgBackToProjects'},
+        innerHTML:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 10H13C17.4183 10 21 13.5817 21 18V20M3 10L9 16M3 10L9 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+        appendChild: 'body',
+    },
+]
 
 const arrTodos= [];
 const arrTodosWeek = [];
@@ -1460,34 +1468,98 @@ function showTodayAndWeek() {
 function showTodayMobile() {
 
     const btnContainerTodayM = document.querySelector('.containerTodayM');
+    const containerCenterRight = document.querySelector('.containerCenterRight');
 
     btnContainerTodayM.addEventListener('click', () => {
 
         const containerTodosTodayAndWeekM = document.querySelector('.containerTodosTodayAndWeekM');
 
         if (!containerTodosTodayAndWeekM) {
-            
-            verifyTodoRequirements();
 
-            arrTodoTodayAndWeekMobile[1].innerText = 'Today';
+            EventManager.emit('fadeOutAndShrink', containerCenterRight)
 
-            EventManager.emit('createElements', arrTodoTodayAndWeekMobile);
-                
-            const containerTodosTodayAndWeekM2 = document.querySelector('.containerTodosTodayAndWeekM');
+            setTimeout(() => {
+                genTodayAndWeek('Today',arrTodosToday)
 
-            EventManager.emit('animationEntry', containerTodosTodayAndWeekM2);
+            }, 121);
 
-            EventManager.emit('renderTodos',arrTodosToday)
-
-            let arrTagetsTW = ['.TW'];
-            EventManager.emit('transitionGhostOutTWAndEntry',arrTagetsTW)
         }else{
 
-            EventManager.emit('deleteElement', containerTodosTodayAndWeekM)
+            EventManager.emit('fadeOutAndShrink', containerTodosTodayAndWeekM)
+
+            setTimeout(() => {
+                EventManager.emit('deleteElement', containerTodosTodayAndWeekM)
+            }, 120);
+            
+
+            setTimeout(() => {
+                genTodayAndWeek('Today',arrTodosToday)
+
+            }, 121);
         }
 
     })
 
+
+}
+
+function showWeekMobile() {
+
+    const btnContainerWeekM = document.querySelector('.containerWeekM');
+    const containerCenterRight = document.querySelector('.containerCenterRight');
+
+    btnContainerWeekM.addEventListener('click', () => {
+
+        const containerTodosTodayAndWeekM = document.querySelector('.containerTodosTodayAndWeekM');
+
+        if (!containerTodosTodayAndWeekM) {
+
+            EventManager.emit('fadeOutAndShrink', containerCenterRight)
+
+            setTimeout(() => {
+                genTodayAndWeek('Week',arrTodosWeek)                        
+            }, 121);
+
+        }else{
+
+            EventManager.emit('fadeOutAndShrink', containerTodosTodayAndWeekM)
+
+            setTimeout(() => {
+                EventManager.emit('deleteElement', containerTodosTodayAndWeekM)
+            }, 120);
+
+            setTimeout(() => {
+                genTodayAndWeek('Week',arrTodosWeek)                        
+            }, 121);
+        }
+
+    })
+
+
+}
+
+function genTodayAndWeek(title,arrTodos) {
+    
+    verifyTodoRequirements();
+
+    arrTodoTodayAndWeekMobile[1].innerText = `${title}`;
+
+    EventManager.emit('createElements', arrTodoTodayAndWeekMobile);
+        
+    const containerTodosTodayAndWeekM2 = document.querySelector('.containerTodosTodayAndWeekM');
+
+    EventManager.emit('animationEntry', containerTodosTodayAndWeekM2);
+
+    EventManager.emit('renderTodos',arrTodos)
+
+    let arrTagetsTW = ['.TW'];
+    EventManager.emit('transitionGhostOutTWAndEntry',arrTagetsTW)
+
+    const svgBackToProjects = document.querySelector('.svgBackToProjects');
+
+    if (!svgBackToProjects) {
+        EventManager.emit('createElements', arrSvgBackToProjects)                
+    }
 
 }
 
@@ -2059,4 +2131,4 @@ function addOverflow() {
 
 
 saveOnPageReload();
-export {popUpTodo,defaultTodo,arrTodoTemplate,countTodo,restartTodoTipPriority,resetCountTodo,checkTodoDone,checkTodoDoneTW,showTodayMobile};
+export {popUpTodo,defaultTodo,arrTodoTemplate,countTodo,restartTodoTipPriority,resetCountTodo,checkTodoDone,checkTodoDoneTW,showTodayMobile,showWeekMobile};
