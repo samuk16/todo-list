@@ -1,6 +1,6 @@
 import {EventManager} from './pubSub.js';
 
-import {itemProject,countChilds,projectIdSelected,findColorProjectById,findProjectById} from './projects.js';
+import {itemProject,countChilds,projectIdSelected,findColorProjectById,findProjectById,itemProjectMobile} from './projects.js';
 
 import {arrTodoTemplate,countTodo,checkTodoDone, checkTodoDoneTW} from './todos.js';
 
@@ -65,6 +65,22 @@ function init() {
 
     EventManager.on('transitionGhostEntryProjects', transitionGhostEntryProjects);
 
+    EventManager.on('transitionProjectSelected', transitionProjectSelected);
+
+    EventManager.on('transitionGhostOutTWAndEntry', transitionGhostOutTW);
+
+    EventManager.on('renderProjects', renderProjects2);
+
+    EventManager.on('renderProjectsMobile', renderProjectsMobile);
+
+    EventManager.on('fadeOutAndShrink', fadeOutAndShrink);
+    
+    EventManager.on('fadeInAndGrow', fadeInAndGrow);
+
+    EventManager.on('fadeInAndSlideUp', fadeInAndSlideUp);
+
+    EventManager.on('fadeOutAndSlideDown', fadeOutAndSlideDown);
+
     
 
 }
@@ -76,7 +92,51 @@ function addProjectDOM(project) {
     itemProject[0].attributes.style = `background-color: ${project.color}`;
 
     domElements(itemProject);
-    // projectTipName();
+
+}
+
+function renderProjects2(arr) {
+
+    console.log('renderPro');
+    let countChildsP = 0;
+    arr.forEach(projectItem => {
+
+        itemProject[0].attributes.class = `itemProject item${projectItem.id}`;
+
+        if (!countChildsP == countChilds) {
+            
+            
+        }
+        itemProject[0].attributes['data-project-id'] = `${projectItem.id}`;
+        itemProject[0].attributes.style = `background-color: ${projectItem.color}`;
+
+        domElements(itemProject);
+        countChildsP++;
+
+    })
+
+}
+
+function renderProjectsMobile(arr) {
+    
+    let countChildsP = 0;
+    arr.forEach(projectItem => {
+
+        itemProjectMobile[0].attributes.class = `containerItemProjectMobile${projectItem.id} itemProjectM`;
+        itemProjectMobile[0].attributes['data-project-id'] = `${projectItem.id}`;
+
+        itemProjectMobile[1].attributes.style = `background-color: ${projectItem.color}`;
+        itemProjectMobile[1].appendChild = `.containerItemProjectMobile${projectItem.id}`;
+
+        
+
+        itemProjectMobile[2].innerText = `${projectItem.name}`
+        itemProjectMobile[2].appendChild = `.containerItemProjectMobile${projectItem.id}`;
+
+
+        domElements(itemProjectMobile);
+        countChildsP++;
+    })
 
 }
 
@@ -96,12 +156,10 @@ function addTodoProjectItemDOM(obj) {
     checkTodoDone(obj);
 
     arrTodoTemplate[1].innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="circlePath${obj.todoId}" cx="10" cy="10" r="9" stroke="${findProjectById(obj.projectId).color}" stroke-width="2"/></svg>`;
-    // arrTodoTemplate[1].attributes['data-todo-id-app'] = `${obj.todoId}`;
     arrTodoTemplate[1].attributes.class = `svgTodo svgTodo${obj.todoId}`;
 
     arrTodoTemplate[3].innerHTML = `<svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="svgPriority" cx="3" cy="3" r="3" fill="${obj.priority[0]}"/></svg>`;
     
-    // console.log('todoagregado');
     
     arrTodoTemplate[2].innerText = `${obj.name}`;
 
@@ -118,7 +176,7 @@ function renderTodo(arrTodos) {
     arrTodos.forEach(todo => {
 
         arrTodoTemplate[0].appendChild = `.containerTodo`;
-        arrTodoTemplate[0].attributes.class = `itemTodo${countClass} todoStyle`;
+        arrTodoTemplate[0].attributes.class = `itemTodo${countClass} todoStyle TP`;
         arrTodoTemplate[0].attributes['data-todo-id'] = `${todo.todoId}`;
 
 
@@ -128,19 +186,16 @@ function renderTodo(arrTodos) {
         arrTodoTemplate[4].appendChild = `.itemTodo${countClass}`;
 
         checkTodoDone(todo);
-        // arrTodoTemplate[1].innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="circlePath" cx="10" cy="10" r="9" stroke="${findProjectById(todo.projectId).color}" stroke-width="2"/></svg>`;
         arrTodoTemplate[1].attributes.class = `svgTodo svgTodo${todo.todoId}`;
         arrTodoTemplate[3].innerHTML = `<svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="svgPriority" cx="3" cy="3" r="3" fill="${todo.priority[0]}"/></svg>`;
 
-        // arrTodoTemplate.forEach(item => item.appendChild = `.itemTodo${countTodo}`)
 
         arrTodoTemplate[2].innerText = `${todo.name}`;
-        // console.log('added todo');
         domElements(arrTodoTemplate);
         countClass++;
+
+        
     })
-    // console.log('hechoRenderTodo');
-    
 
 }
 
@@ -165,13 +220,9 @@ function renderTodosTodayAndWeek(arrTodos) {
 
         checkTodoDoneTW(todo)
         arrTodoTemplate[1].attributes.class = `svgTodo svgTodoTW${todo.todoId}`;
-        // arrTodoTemplate[1].innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="${findProjectById(todo.projectId).color}" stroke-width="2"/></svg>`;
         arrTodoTemplate[3].innerHTML = `<svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="svgPriority" cx="3" cy="3" r="3" fill="${todo.priority[0]}"/></svg>`;
 
-        // arrTodoTemplate.forEach(item => item.appendChild = `.itemTodo${countTodo}`)
-
         arrTodoTemplate[2].innerText = `${todo.name}`;
-        // console.log('added todo');
         domElements(arrTodoTemplate);
         countClass++;
     })
@@ -197,15 +248,8 @@ function delTodos() {
 }
 
 function delTodosTodayAndWeek() {
+
     const containerTodosTodayAndWeek = document.querySelector('.todosTodayAndWeek');
-
-
-    // if (containerTodosTodayAndWeek.children[2]) {
-        
-    // }
-    // while (containerTodosTodayAndWeek.children[2].firstChild) {
-    //     containerTodosTodayAndWeek.removeChild(containerTodosTodayAndWeek.children[2].firstChild);
-    // }
 
     if (containerTodosTodayAndWeek) {
 
@@ -213,9 +257,6 @@ function delTodosTodayAndWeek() {
             containerTodosTodayAndWeek.removeChild(containerTodosTodayAndWeek.firstChild);
         }    
     }
-    // while (containerTodosTodayAndWeek.firstChild) {
-    //     containerTodosTodayAndWeek.removeChild(containerTodosTodayAndWeek.firstChild);
-    // }
     
 }
 
@@ -229,8 +270,6 @@ function delElements(element) {
 function editTodo(arr) {
     
     let instance = arr[3]._tippy;
-    // console.log(pTodo);
-    // console.log(svgPriority);
 
     arr[1].textContent = arr[0].name;
     arr[2].style.fill = arr[0].priority[0];
@@ -259,7 +298,6 @@ function animationOut(target) {
         scale : [1,.8],
         easing: 'easeOutExpo',
         duration: 300,
-        // direction: 'normal',
     })
 
 }
@@ -268,18 +306,17 @@ function transitionBgBtn(arr) {
     
     
 
-    arr[0].addEventListener('mouseover', () => {
+    arr[0].addEventListener('mouseover', (e) => {
 
         anime({
             targets:arr[0],
             backgroundColor: `${arr[2]}`,
             scale: [
                 { value: 1, duration: 0 },
-                { value: 1.1, duration: 500 }
+                { value: 1.1, duration: 300 }
             ],
             easing: 'easeOutExpo',
             duration: 200,
-            // direction: 'normal',
         })
 
     })
@@ -291,17 +328,18 @@ function transitionBgBtn(arr) {
             backgroundColor: `${arr[1]}`,
             scale: [
                 { value: 1.1, duration: 0 },
-                { value: 1, duration: 500 }
+                { value: 1, duration: 300 }
             ],
             easing: 'easeOutExpo',
             duration: 300,
-            // direction: 'normal',
         })
 
     })
 
     
 }
+
+
 
 function transitionBgBtn2(arr) {
     
@@ -311,7 +349,6 @@ function transitionBgBtn2(arr) {
 
         anime({
             targets:arr,
-            // backgroundColor: `${arr[2]}`,
             filter:[{value: 'brightness(1)', duration:0},{value:'brightness(1.5)',duration: 400}],
             scale: [
                 { value: 1, duration: 0 },
@@ -319,7 +356,6 @@ function transitionBgBtn2(arr) {
             ],
             easing: 'easeOutExpo',
             duration: 200,
-            // direction: 'normal',
         })
 
     })
@@ -328,7 +364,6 @@ function transitionBgBtn2(arr) {
 
         anime({
             targets:arr,
-            // backgroundColor: `${arr[1]}`,
             filter:[{value: 'brightness(1.5)', duration:0},{value:'brightness(1)',duration: 400}],
             scale: [
                 { value: 1.08, duration: 0 },
@@ -336,7 +371,6 @@ function transitionBgBtn2(arr) {
             ],
             easing: 'easeOutExpo',
             duration: 200,
-            // direction: 'normal',
         })
 
     })
@@ -351,11 +385,9 @@ function transitionBgInput(arr) {
         e.stopPropagation();
         anime({
             targets:arr,
-            // backgroundColor: `${arr[2]}`,
             filter:[{value: 'brightness(1)', duration:0},{value:'brightness(1.5)',duration: 400}],
             easing: 'easeOutExpo',
             duration: 200,
-            // direction: 'normal',
         })
 
     })
@@ -364,11 +396,9 @@ function transitionBgInput(arr) {
         e.stopPropagation();
         anime({
             targets:arr,
-            // backgroundColor: `${arr[1]}`,
             filter:[{value: 'brightness(1.5)', duration:0},{value:'brightness(1)',duration: 400}],
             easing: 'easeOutExpo',
             duration: 200,
-            // direction: 'normal',
         })
 
     })
@@ -395,7 +425,6 @@ function transitionChangeTitle(target) {
         opacity:[{value: 0,duration:500},{value: 1,duration:200}],
         easing: 'easeOutExpo',
         duration: 200,
-        // direction: 'normal',
     })
 
 }
@@ -408,7 +437,6 @@ function transitionGhostEntry(target) {
         opacity:[{value: 1,duration:0},{value: 0,duration:400},{value: 1,duration:100}],
         easing: 'easeOutExpo',
         duration: 300,
-        // direction: 'normal',
     })
 
 }
@@ -419,9 +447,8 @@ function transitionGhostOut(arr) {
         translateY:[{value: -10,duration: 200}],
         opacity:[{value: 0,duration:200}],
         easing: 'easeOutExpo',
-        duration: 300,
+        duration: 200,
         complete: transitionOrganizeItems(),
-        // direction: 'normal',
     })
 
 }
@@ -429,14 +456,48 @@ function transitionGhostOut(arr) {
 function transitionOrganizeItems() {
     
     
-    const remainingItems = document.querySelectorAll('.todoStyle');
+    const remainingItems = document.querySelectorAll('.TP');
     
     anime({
         targets: remainingItems,
         translateY: [{value: 0,duration: 100}],
         opacity: [{value: 0,duration: 300},{value: 1,duration: 200}],
         easing: 'easeInOutQuad',
-        duration: 300,
+        duration: 200,
+        delay: function(target, index, total) {
+            return index * 50;
+        }
+    });
+        
+        
+        
+   
+}
+
+function transitionGhostOutTW(arr) {
+
+    anime({
+        targets:arr[0],
+        translateY:[{value: -10,duration: 200}],
+        opacity:[{value: 0,duration:200}],
+        easing: 'easeOutExpo',
+        duration: 200,
+        complete: transitionOrganizeItemsTW(),
+    })
+    
+}
+
+function transitionOrganizeItemsTW() {
+    
+    
+    const remainingItems = document.querySelectorAll('.TW');
+    
+    anime({
+        targets: remainingItems,
+        translateY: [{value: 0,duration: 100}],
+        opacity: [{value: 0,duration: 300},{value: 1,duration: 200}],
+        easing: 'easeInOutQuad',
+        duration: 200,
         delay: function(target, index, total) {
             return index * 50;
         }
@@ -459,8 +520,6 @@ function transitionBtnClick(target) {
 
 function transitionHoverScale(target) {
 
-    // let containerTarget = document.querySelector(`${target}`);
-
     target.addEventListener('mouseover', () => {
 
         anime({
@@ -479,7 +538,6 @@ function transitionHoverScale(target) {
             scale: [{value: 1.1,duration: 100},{value: 1,duration: 200}],
             easing: 'easeOutExpo',
             duration: 100,
-            // direction: 'normal',
         })
 
     })
@@ -491,7 +549,7 @@ function transitionHeight(target) {
     let newHeight = height + 37;
     anime({
         targets:target,
-        height: [{value: `${test}px`}],
+        height: [{value: `${newHeight}px`}],
         easing: 'easeOutExpo',
         duration: 200,
     })
@@ -506,7 +564,65 @@ function transitionGhostEntryProjects(target) {
         opacity:[{value: 0,duration:200},{value: 1,duration:100}],
         easing: 'easeOutExpo',
         duration: 300,
-        // direction: 'normal',
+    })
+
+}
+
+function transitionProjectSelected(target) {
+    
+    anime({
+        targets:target,
+        // outline: '3px solid rgba(168, 199, 250, 0.3)',
+        outlineWidth: [{value: '10px',duration:100},{value: '5px',duration:50},{value: '3px',duration:100}],
+        easing: 'easeOutExpo',
+        duration: 250,
+    })
+
+}
+
+function fadeOutAndShrink(target) {
+    
+    anime({
+        targets: target,
+        scale:.8,
+        opacity: 0,
+        easing:'easeOutExpo',
+        duration: 150,
+    })
+
+}
+function fadeInAndGrow(target) {
+    
+    anime({
+        targets: target,
+        scale:1,
+        opacity: 1,
+        easing:'easeOutExpo',
+        duration: 150,
+    })
+
+}
+
+function fadeInAndSlideUp(target) {
+
+    anime({
+        targets: target,
+        translateY: -80,
+        opacity: 1,
+        easing:'easeOutExpo',
+        duration: 180,
+    })
+
+}
+
+function fadeOutAndSlideDown(target) {
+
+    anime({
+        targets: target,
+        translateY: 10,
+        opacity: 0,
+        easing:'easeOutExpo',
+        duration: 180,
     })
 
 }
