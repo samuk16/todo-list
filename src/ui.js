@@ -81,6 +81,8 @@ function init() {
 
     EventManager.on('fadeOutAndSlideDown', fadeOutAndSlideDown);
 
+    EventManager.on('projectAddedFlash', projectAddedFlash);
+
     
 
 }
@@ -625,6 +627,19 @@ function fadeOutAndSlideDown(target) {
         duration: 180,
     })
 
+}
+
+function projectAddedFlash() {
+
+    let pathSvgProjects = document.querySelector('.pathSvgProjects');
+
+    pathSvgProjects.style.transition = 'stroke 0.4s';
+    pathSvgProjects.style.stroke = '#20B793';
+    
+    setTimeout(() => {
+      pathSvgProjects.style.stroke = '#FFFFFF';
+    }, 400);
+    
 }
 
 export {init};
