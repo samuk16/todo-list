@@ -83,6 +83,8 @@ function init() {
 
     EventManager.on('projectAddedFlash', projectAddedFlash);
 
+    EventManager.on('toggleSectionHighlight', toggleSectionHighlight);
+
     
 
 }
@@ -640,6 +642,17 @@ function projectAddedFlash() {
       pathSvgProjects.style.stroke = '#FFFFFF';
     }, 400);
     
+}
+
+function toggleSectionHighlight(arr) {
+    
+    anime({
+        targets: arr[0],
+        backgroundColor: `${arr[1]}5e`,
+        easing:'easeOutExpo',
+        duration: 150,
+    })
+
 }
 
 export {init};
