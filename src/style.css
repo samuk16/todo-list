@@ -638,6 +638,13 @@ circle,svg{
     position: relative;
 
     top: -8px;
+
+}
+
+.ddOp1,.ddOp2,.ddOp3{
+
+    opacity: 0;
+    scale: .8;
 }
 
 .containerMenuTodo{
@@ -1112,6 +1119,192 @@ circle,svg{
 
   /* ----------------------------------------------------------- */
 
+  .containerProjectsMobile{
+
+    position: absolute;
+    /* bottom: 50px; */
+    width: 120px;
+    height: 185px;
+
+    display: grid;
+    grid-template-rows: 80% 20%;
+
+    border-radius: 16px;
+    background-color: var(--backContainerSecond);
+
+    z-index: 2;
+
+    opacity: 0;
+
+  }
+
+  .itemProjectM{
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 0 0 0 12px;
+    height: 30px;
+
+
+
+  }
+
+  .colorItemProject{
+
+    width: 25px;
+    height: 25px;
+
+    border-radius: 50px;
+
+    user-select: none;
+
+  }
+
+  .titleProjectMobile{
+
+    user-select: none;
+  }
+
+  .btnNewProjectM{
+
+    display: grid;
+    place-items: center;
+
+    height: 100%;
+  }
+
+  .containerNewProjectM{
+
+    align-self: center;
+    justify-self: center;
+
+    position: absolute;
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    width: 250px;
+
+    background-color: var(--backContainer);
+
+    border-radius: 16px;
+
+    padding: 12px;
+
+    z-index: 3;
+
+  }
+
+  .containerTodosTodayAndWeekM{
+
+    position: absolute;
+
+    width: 90%;
+    margin: 0 30px 0 30px;
+    
+  }
+
+  .containerProjectsM{
+
+    width: 60px;
+    height: 60px;
+
+  }
+
+  .containerTodayM{
+    
+    width: 60px;
+    height: 60px;
+  }
+
+  .containerWeekM{
+    
+    width: 60px;
+    height: 60px;
+
+  }
+
+  .containerNewProjectM{
+
+    box-shadow: 0px 0px 20px #2b2636;
+
+  }
+
+  .containerSvgToday{
+
+    display: grid;
+    place-content: center;
+    width: 50px;
+    height: 28px;
+    border-radius: 16px;
+
+    transition: all .15s ease-in-out;
+
+  }
+
+  .containerSvgWeek{
+
+    display: grid;
+    place-content: center;
+    width: 50px;
+    height: 28px;
+    border-radius: 16px;
+
+    transition: all .15s ease-in-out;
+
+  }
+
+  .containerSvgFolder{
+    display: grid;
+    place-content: center;
+    height: 28px;
+  }
+
+  .outerM{
+
+    height: 100%;
+    overflow: hidden;
+    /* border-radius: 16px; */
+    border-radius: 0 16px 0 0 ;
+    
+
+  }
+
+  .containerItemsProjects{
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    height: 100%;
+    overflow: auto;
+    padding: 5px 0 0 0;
+  }
+
+  /* ----------------------------------------------------------- */
+
+  .svgBackToProjects{
+
+    position: absolute;
+    bottom: 90px;
+
+    width: 40px;
+    height: 40px;
+    /* background-color: hsla(217, 89%, 82%, 0.205); */
+    background-color: hsla(258, 18%, 22%, 0.70);
+
+
+    padding: 8px;
+    border-radius: 10px;
+
+    justify-self: center;
+
+  }
+
+  /* ----------------------------------------------------------- */
 
   @media screen and (max-width: 648px){
 
@@ -1128,17 +1321,50 @@ circle,svg{
 
     .containerCenterRight{
 
-        margin: 0 30px 0 30px;
-        height: 90%;
+        margin:0px ;
+        height: 80%;
+        width: 90%;
+        justify-self: center;
     }
     
-    .containerTodo{
+    /* .containerTodo{
 
         height: 100%;
+        height: 800px;
 
+    } */
+
+    .containerTodoCenter{
+
+        width: 100%;
+        height: 100%;
+        /* flex: 100%; */
     }
 
     .outer{
-        height: 90%;
+        height: 100%;
+    }
+
+    .containerTodo{
+
+        height: 100%;
+    }
+
+    .containerMenuTodo{
+
+        right: -5px;
+        top: -114px;
+        flex-direction: column;
+
+    }
+
+    .containerTodosTodayAndWeekM{
+
+        margin: 0px;
+        justify-self: center;
+        height: 75%;
+    }
+    .outerTW{
+        height: 88%;
     }
   }
