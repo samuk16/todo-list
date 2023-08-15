@@ -85,6 +85,10 @@ function init() {
 
     EventManager.on('toggleSectionHighlight', toggleSectionHighlight);
 
+    EventManager.on('fadeInDelayedDivs', fadeInDelayedDivs);
+
+    EventManager.on('fadeOutDelayedDivs', fadeOutDelayedDivs);
+
     
 
 }
@@ -631,12 +635,12 @@ function fadeOutAndSlideDown(target) {
 
 }
 
-function projectAddedFlash() {
+function projectAddedFlash(color) {
 
     let pathSvgProjects = document.querySelector('.pathSvgProjects');
 
     pathSvgProjects.style.transition = 'stroke 0.4s';
-    pathSvgProjects.style.stroke = '#20B793';
+    pathSvgProjects.style.stroke = `${color}`;
     
     setTimeout(() => {
       pathSvgProjects.style.stroke = '#FFFFFF';
@@ -655,4 +659,35 @@ function toggleSectionHighlight(arr) {
 
 }
 
+
+function fadeInDelayedDivs() {
+    
+    const remainingItems = document.querySelectorAll('.itemDd');
+
+    anime({
+        targets: remainingItems,
+        scale: 1,
+        opacity: 1,
+        easing: 'easeInOutQuad',
+        duration: 150,
+        delay: function(target, index, total) {
+            return index * 50;
+        }
+    });
+}
+function fadeOutDelayedDivs() {
+    
+    const remainingItems = document.querySelectorAll('.itemDd');
+
+    anime({
+        targets: remainingItems,
+        scale: .8,
+        opacity: 0,
+        easing: 'easeInOutQuad',
+        duration: 150,
+        delay: function(target, index, total) {
+            return index * 50;
+        }
+    });
+}
 export {init};
