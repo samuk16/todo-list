@@ -652,10 +652,19 @@ function toggleSectionHighlight(arr) {
     
     anime({
         targets: arr[0],
-        backgroundColor: `${arr[1]}5e`,
+        backgroundColor: hexToRgba(arr[1],0.3),
         easing:'easeOutExpo',
         duration: 150,
     })
+
+    function hexToRgba(hex, alpha) {
+      const r = parseInt(hex.slice(1, 3), 16);
+      const g = parseInt(hex.slice(3, 5), 16);
+      const b = parseInt(hex.slice(5, 7), 16);
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+
+      
 
 }
 
