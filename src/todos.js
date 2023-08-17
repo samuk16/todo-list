@@ -859,12 +859,18 @@ function findTodoById(todoId) {
 
     let todoFounded = null;
 
-    findProjectById(projectIdSelected).todo.forEach(todo => {
+    projects.forEach(itemP => {
 
-        if (todo.todoId == todoId) {
+        itemP.todo.forEach(todo => {
 
-            todoFounded = todo;
-        }
+            if (todo.todoId == todoId) {
+
+                todoFounded = todo;
+            }
+
+        })
+        
+
     })
 
     return todoFounded;
@@ -966,6 +972,8 @@ function showEditTodo() {
 
         if (target.classList.contains('containerSvgEdit')) {
 
+            console.log(todoId);
+            console.log(findTodoById(todoId));
             fillEditTodo(findTodoById(todoId));
 
             let body = document.querySelector('body')
@@ -1228,6 +1236,8 @@ function fillEditTodoNewInfo(todo,pTodo,svgPriority,typpyInstance) {
 
     containerBtnSave.addEventListener('click', () => {
 
+        console.log(typpyInstance);
+
         todo.name = inputEditName.value;
         todo.description = textAreaDescription.value;
         todo.dueDate = inputEditDate.value;
@@ -1432,6 +1442,7 @@ function showTodayMobile() {
             
 
             setTimeout(() => {
+                containerCenterRight.style.display = 'none';
                 genTodayAndWeek('Today',arrTodosToday)
                 const containerTodosTodayAndWeekM = document.querySelector('.containerTodosTodayAndWeekM');
                 containerTodosTodayAndWeekM.style.position = 'static'
@@ -1459,6 +1470,7 @@ function showWeekMobile() {
             EventManager.emit('fadeOutAndShrink', containerCenterRight)
 
             setTimeout(() => {
+                containerCenterRight.style.display = 'none';
                 genTodayAndWeek('Week',arrTodosWeek)
                 const containerTodosTodayAndWeekM = document.querySelector('.containerTodosTodayAndWeekM');
                 containerTodosTodayAndWeekM.style.position = 'static'                       
@@ -1475,6 +1487,7 @@ function showWeekMobile() {
             }, 120);
 
             setTimeout(() => {
+                containerCenterRight.style.display = 'none';
                 genTodayAndWeek('Week',arrTodosWeek)  
                 const containerTodosTodayAndWeekM = document.querySelector('.containerTodosTodayAndWeekM');
                 containerTodosTodayAndWeekM.style.position = 'static'                      
@@ -1529,7 +1542,7 @@ function backToProjects() {
         }, 120);
 
         setTimeout(() => {
-            containerCenterRight.style.display = 'block';
+            containerCenterRight.style.display = 'flex';
             EventManager.emit('fadeInAndGrow', containerCenterRight)
         }, 121);
 
