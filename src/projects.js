@@ -3,7 +3,7 @@ import createElementsDom from './domCreation.js';
 
 import {EventManager} from './pubSub.js';
 
-import {defaultTodo,restartTodoTipPriority,resetCountTodo} from './todos.js';
+import {defaultTodo,restartTodoTipPriority} from './todos.js';
 
 import tippy from 'tippy.js';
 
@@ -136,7 +136,7 @@ const itemProjectMobile = [
     {
         elementType: 'div',
         attributes: {class:'containerItemProjectMobile'},
-        appendChild: '.containerProjectsMobile',
+        appendChild: '.containerItemsProjects',
 
     },
 
@@ -164,6 +164,20 @@ const arrContainerProjectsMobile = [
         elementType: 'div',
         attributes: {class:'containerProjectsMobile',style:'position:absolute; bottom: 50px;'},
         appendChild: 'body',
+
+    },
+
+
+    {
+        elementType: 'div',
+        attributes: {class:'outerM'},
+        appendChild: '.containerProjectsMobile',
+
+    },
+    {
+        elementType: 'div',
+        attributes: {class:'containerItemsProjects'},
+        appendChild: '.outerM',
 
     },
 
@@ -207,8 +221,6 @@ function createObjProject(projectName,projectColor,projectId) {
 
         this.todo.push(obj);
         EventManager.emit('todoCreated', obj);
-        // populateStorageP();
-        // console.log(projects);
 
     }
 };
@@ -227,7 +239,6 @@ function defaultProject() {
         projects[0].addTodo(defaultTodo())
 
         titleTodoProject.innerText = `To do - ${findProjectById(projects[0].id).name}`;
-        console.log('default');
     }
 
     
@@ -241,10 +252,6 @@ function changeProject() {
     let containerProjects = document.querySelector('.containerProjects');
     let containerProjectsM = document.querySelector('.containerProjectsMobile');
 
-    // if (containerProjectsM) {
-    //     containerProjects = containerProjectsM;
-    // }
-
     containerProjects.addEventListener('click', (e) => {
 
         let projectTarget = e.target;
@@ -254,7 +261,6 @@ function changeProject() {
             let projectId = projectTarget.dataset.projectId;
             projectIdSelected = projectId;
 
-            console.log(projectIdSelected);
 
             EventManager.emit('transitionChangeTitle','.titleTodoProject')
 
@@ -328,7 +334,6 @@ function createPopUpNewProject() {
     EventManager.emit('transitionBgBtn', arrColorAndBtn)
     
     exist();
-    // renderLastProject();
     defaultProject();
     changeProject()
     hoverProject();
@@ -342,6 +347,7 @@ function createPopUpNewProject() {
         let target = e.target;
         if (!target.parentNode.lastChild.classList.contains('containerNewProject')) {
 
+
             domElements(arrNewProject);
             
             let containerNewProject = document.querySelector('.containerNewProject');
@@ -352,9 +358,7 @@ function createPopUpNewProject() {
             addNewProject();
             syncInputColor();
             getColorFromInputColor()
-        }
-        // console.log(target.parentNode.lastChild);
-        
+        }        
 
     });
 
@@ -376,13 +380,29 @@ function addNewProject() {
 
 
     btnAddProject.addEventListener('click', () => {
-
         countChilds++;
 
         EventManager.emit('transitionHeight', containerProjects)
 
         createObjs(inputText.value,colorInputColor,countChilds);
-        EventManager.emit('transitionGhostEntryProjects', containerProjects.lastChild)         
+
+        EventManager.emit('transitionGhostEntryProjects', containerProjects.lastChild)       
+        
+        EventManager.emit('projectAddedFlash', colorInputColor)
+
+        const containerNewProject = document.querySelector('.containerNewProject');
+        const containerNewProjectM = document.querySelector('.containerNewProjectM');
+
+        containerNewProject ? EventManager.emit('animationOut', containerNewProject) : EventManager.emit('animationOut', containerNewProjectM); 
+        setTimeout(() => {
+
+            if (containerNewProject) {
+                EventManager.emit('deleteElement', containerNewProject)                
+            }else{
+                EventManager.emit('deleteElement', containerNewProjectM)
+            }
+
+        },100)
 
     })
 }
@@ -393,17 +413,14 @@ function createObjs(projetName,color,projectId) {
 
         projectItem = new createObjProject(`Project-${countChilds}`,color,projectId);
         EventManager.emit('projectCreated',projectItem)
-        // EventManager.emit('transitionGhostEntry', containerProjects.lastChild)
     }else{
 
         projectItem = new createObjProject(projetName,color,projectId);
         EventManager.emit('projectCreated',projectItem)
-        // EventManager.emit('transitionGhostEntry', containerProjects.lastChild)
       
     }
     projects.push(projectItem);
     populateStorageP();
-    console.log(countChilds);
 
  
 }
@@ -432,7 +449,6 @@ function getColorFromInputColor() {
 
 function closeCreatorProject() {
 
-    // const containerTodoLeft = document.querySelector('.containerTodoLeft');
     const btnClosePopUp = document.querySelector('.btnClosePopUp');
     const containerNewProject = document.querySelector('.containerNewProject');
     const containerNewProjectM = document.querySelector('.containerNewProjectM');
@@ -446,7 +462,6 @@ function closeCreatorProject() {
     btnClosePopUp.addEventListener('click', () => {
 
         containerNewProject ? EventManager.emit('animationOut', containerNewProject) : EventManager.emit('animationOut', containerNewProjectM); 
-        // EventManager.emit('animationOut', containerNewProject)
 
         setTimeout(() => {
 
@@ -465,10 +480,6 @@ function closeCreatorProject() {
 function hoverProject() {
 
     const containerProjects = document.querySelector('.containerProjects');
-    const itemProject = document.querySelector('.itemProject');
-
-    
-    
 
     containerProjects.addEventListener('mouseover', (e) => {
 
@@ -476,9 +487,6 @@ function hoverProject() {
         let hoverProjectId = hoverTarget.dataset.projectId;
         
         if (hoverProjectId) {
-            
-            // let projectTarget = document.querySelector(`.item${hoverProjectId}`);
-            // EventManager.emit('transitionScale', projectTarget);
 
             if (!findProjectById(hoverProjectId).isTipName) {
 
@@ -551,9 +559,6 @@ function projectSelected() {
             projectClicked.classList.add('clicked')
 
             EventManager.emit('transitionProjectSelected', projectClicked)
-            console.log(projectIdSelected);            
-
-
 
         }
 
@@ -573,9 +578,6 @@ function populateStorageP() {
     localStorage.setItem('arrProjects', serializedArray)
     localStorage.setItem('countChilds', countChilds)
 
-
-    // setProjects();
-    // localStorage.clear();
 }
 
 function setProjects() {
@@ -614,7 +616,6 @@ function setProjects() {
     EventManager.emit('renderProjects',projects)
     EventManager.emit('transitionGhostEntryProjects','.itemProject')
 
-    console.log(projects);
     // localStorage.clear();
     renderLastProject();
 }
@@ -633,9 +634,7 @@ function exist() {
 function renderLastProject() {
     
     let lastIdProject = localStorage.getItem('lastProjectIdSelected');
-    console.log(lastIdProject);
     let itemProject = document.querySelector(`.item${lastIdProject}`);
-    console.log(itemProject);
     let titleTodoProject = document.querySelector('.titleTodoProject');
 
     itemProject.classList.add('clicked')
@@ -698,21 +697,27 @@ function menuMobile() {
         const containerProjectsMobile = document.querySelector('.containerProjectsMobile');
         
         if (!containerProjectsMobile) {
-
-            // const test = document.querySelector('.containerProjectsMobile');
-
             
             const coords = btnProjectsM.getBoundingClientRect();
 
-            arrContainerProjectsMobile[0].attributes.style = `bottom:80px; left:${coords.left - 28.9}px;`;
+            arrContainerProjectsMobile[0].attributes.style = `bottom:0px; left:${coords.left - 28.9}px;`;
 
             EventManager.emit('createElements', arrContainerProjectsMobile)
+
+            EventManager.emit('fadeInAndSlideUp', '.containerProjectsMobile')
+
             EventManager.emit('renderProjectsMobile', projects)
             popUpNewProjectMobile();
             changeProjectMobile();
+            
 
         }else{
-            EventManager.emit('deleteElement', containerProjectsMobile)
+
+            EventManager.emit('fadeOutAndSlideDown', '.containerProjectsMobile')
+
+            setTimeout(() => {
+                EventManager.emit('deleteElement', containerProjectsMobile)                
+            }, 175);
         }
 
     })
@@ -726,9 +731,13 @@ function popUpNewProjectMobile() {
 
     btnNewProject.addEventListener('click', () => {
 
+        EventManager.emit('fadeOutAndSlideDown', '.containerProjectsMobile')
+
+        setTimeout(() => {
+            EventManager.emit('deleteElement', containerProjectsMobile)                
+        }, 175);
+
         EventManager.emit('createElements', arrNewProjectMobile)
-        EventManager.emit('deleteElement', containerProjectsMobile)
-        // arrNewProjectMobile[0].attributes.style = `bottom:80px; left:${coords.left - 28.9}px;`;
 
         let containerNewProjectM = document.querySelector('.containerNewProjectM');
 
@@ -751,10 +760,10 @@ function changeProjectMobile() {
     containerProjectsM.addEventListener('click', (e) => {
 
         let projectTarget = e.target;
-        // console.log(projectTarget.parentNode);
+
         if (!projectTarget.classList.contains('containerProjectsMobile')) {
 
-            let projectId 
+            let projectId;
 
             if (!projectTarget.dataset.projectId) {
                 projectId = projectTarget.parentNode.dataset.projectId;
@@ -762,50 +771,58 @@ function changeProjectMobile() {
                 projectId = projectTarget.dataset.projectId;                
             }
             
-            // console.log(projectId);
-            projectIdSelected = projectId;
+            if (projectId){
 
-            console.log(projectIdSelected);
+                projectIdSelected = projectId;
 
-            EventManager.emit('transitionChangeTitle','.titleTodoProject')
+                EventManager.emit('fadeOutAndSlideDown', '.containerProjectsMobile')
 
-            setTimeout(() => {
+                setTimeout(() => {
+                    EventManager.emit('deleteElement', containerProjectsM)                
+                }, 175);
 
-                titleTodoProject.innerText = `To do - ${findProjectById(projectId).name}`;
+                EventManager.emit('transitionChangeTitle','.titleTodoProject')
 
-            },200)
+                 setTimeout(() => {
+
+                    titleTodoProject.innerText = `To do - ${findProjectById(projectId).name}`;
+
+                 },200)
 
 
-            const projectObjSelected = projects.find(project => project.id == projectId);
+                const projectObjSelected = projects.find(project => project.id == projectId);
             
-            EventManager.emit('changeProject',projectObjSelected.todo);
-            let arrTagets = ['.TP'];
-            EventManager.emit('transitionGhostOut',arrTagets)
+                EventManager.emit('changeProject',projectObjSelected.todo);
+                let arrTagets = ['.TP'];
+                EventManager.emit('transitionGhostOut',arrTagets)
 
-            findProjectById(projectId).todo.forEach( todo => {
+                findProjectById(projectId).todo.forEach( todo => {
                 
-                if (todo.isTipPriority == true) {
-                    todo.isTipPriority = false;
-                }
+                    if (todo.isTipPriority == true) {
+                         todo.isTipPriority = false;
+                    }
 
-            } )
+                } )
 
-            let containerTodo = document.querySelector('.containerTodo');
-            let childs = Array.from(containerTodo.children);
+                let containerTodo = document.querySelector('.containerTodo');
+                let childs = Array.from(containerTodo.children);
             
-            childs.forEach((todo) => {
-                if (!todo.classList.contains('btnNewTodo')) {
+                childs.forEach((todo) => {
+                    if (!todo.classList.contains('btnNewTodo')) {
 
-                    let colorBgBtn = getComputedStyle(todo.children[3]).getPropertyValue('--backContainerSecond');
-                    let arrColorAndBtn1 = [todo.children[3],colorBgBtn,'#3f3852'];
+                        let colorBgBtn = getComputedStyle(todo.children[3]).getPropertyValue('--backContainerSecond');
+                        let arrColorAndBtn1 = [todo.children[3],colorBgBtn,'#3f3852'];
 
-                    EventManager.emit('transitionBgBtn',arrColorAndBtn1)
-                }
-            })
+                        EventManager.emit('transitionBgBtn',arrColorAndBtn1)
+                    }
+                })
 
          
 
-            restartTodoTipPriority();
+                restartTodoTipPriority();
+            }
+
+            
         }       
 
     });

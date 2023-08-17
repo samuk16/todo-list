@@ -1,6 +1,6 @@
 import {EventManager} from './pubSub.js';
 
-import {itemProject,countChilds,projectIdSelected,findColorProjectById,findProjectById,itemProjectMobile} from './projects.js';
+import {itemProject,countChilds,findProjectById,itemProjectMobile} from './projects.js';
 
 import {arrTodoTemplate,countTodo,checkTodoDone, checkTodoDoneTW} from './todos.js';
 
@@ -105,16 +105,10 @@ function addProjectDOM(project) {
 
 function renderProjects2(arr) {
 
-    console.log('renderPro');
     let countChildsP = 0;
     arr.forEach(projectItem => {
 
         itemProject[0].attributes.class = `itemProject item${projectItem.id}`;
-
-        if (!countChildsP == countChilds) {
-            
-            
-        }
         itemProject[0].attributes['data-project-id'] = `${projectItem.id}`;
         itemProject[0].attributes.style = `background-color: ${projectItem.color}`;
 
@@ -136,8 +130,6 @@ function renderProjectsMobile(arr) {
         itemProjectMobile[1].attributes.style = `background-color: ${projectItem.color}`;
         itemProjectMobile[1].appendChild = `.containerItemProjectMobile${projectItem.id}`;
 
-        
-
         itemProjectMobile[2].innerText = `${projectItem.name}`
         itemProjectMobile[2].appendChild = `.containerItemProjectMobile${projectItem.id}`;
 
@@ -150,7 +142,6 @@ function renderProjectsMobile(arr) {
 
 function addTodoProjectItemDOM(obj) {
     
-    // console.log(obj);
     arrTodoTemplate[0].appendChild = `.containerTodo`;
     arrTodoTemplate[0].attributes.class = `itemTodo${countTodo} todoStyle`;
     arrTodoTemplate[0].attributes['data-todo-id'] = `${countTodo}`;
@@ -242,9 +233,6 @@ function delTodos() {
     const containerTodo = document.querySelector('.containerTodo');
     const btnNewTodo = document.querySelector('.btnNewTodo');
 
-    // while (containerTodo.firstChild) {
-    //     containerTodo.removeChild(containerTodo.firstChild);
-    //   }
     while (containerTodo.firstChild !== btnNewTodo) {
         containerTodo.removeChild(containerTodo.firstChild);
     }
@@ -271,9 +259,7 @@ function delTodosTodayAndWeek() {
 function delElements(element) {
     
     element.remove();
-
 }
-
 
 function editTodo(arr) {
     
@@ -346,8 +332,6 @@ function transitionBgBtn(arr) {
 
     
 }
-
-
 
 function transitionBgBtn2(arr) {
     
@@ -580,7 +564,6 @@ function transitionProjectSelected(target) {
     
     anime({
         targets:target,
-        // outline: '3px solid rgba(168, 199, 250, 0.3)',
         outlineWidth: [{value: '10px',duration:100},{value: '5px',duration:50},{value: '3px',duration:100}],
         easing: 'easeOutExpo',
         duration: 250,
@@ -638,13 +621,20 @@ function fadeOutAndSlideDown(target) {
 function projectAddedFlash(color) {
 
     let pathSvgProjects = document.querySelector('.pathSvgProjects');
+    let screenWidth;
 
-    pathSvgProjects.style.transition = 'stroke 0.4s';
-    pathSvgProjects.style.stroke = `${color}`;
+    screenWidth = window.screen.availWidth;
+
+    if (screenWidth <= 912) {
+
+        pathSvgProjects.style.transition = 'stroke 0.4s';
+        pathSvgProjects.style.stroke = `${color}`;
     
-    setTimeout(() => {
-      pathSvgProjects.style.stroke = '#FFFFFF';
-    }, 400);
+        setTimeout(() => {
+            pathSvgProjects.style.stroke = '#FFFFFF';
+        }, 400);
+    }
+    
     
 }
 
@@ -667,7 +657,6 @@ function toggleSectionHighlight(arr) {
       
 
 }
-
 
 function fadeInDelayedDivs() {
     

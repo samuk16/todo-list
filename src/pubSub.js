@@ -1,23 +1,5 @@
 
-
-// function Todo(description, dueDate) {
-//     this.description = description;
-//     this.dueDate = dueDate;
-// }
-  
-  // Definimos el objeto Project
-// function Project(name) {
-//     this.name = name;
-//     this.todos = [];
-// }
-  
-//   Project.prototype.addTodo = function(todo) {
-//     this.todos.push(todo);
-//     EventManager.emit('todoAdded', this);
-//   }
-  
-  // Definimos el objeto EventManager
-  var EventManager = {
+  let EventManager = {
 
     events: {},
 
@@ -58,14 +40,5 @@
       }
     }
   };
-  
-  // Creamos un nuevo proyecto
-  var myProject = new Project('Mi proyecto');
-  
-  // Suscribimos una función al evento 'todoAdded'
-  EventManager.on('todoAdded', function(project) {
-    console.log('Se agregó un todo al proyecto ' + project.name);
-  });
-  
-  // Agregamos un todo al proyecto
-  myProject.addTodo(new Todo('Comprar leche', '2022-01-20'));
+
+export {EventManager};

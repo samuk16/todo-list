@@ -1,6 +1,6 @@
 import createElementsDom from './domCreation.js';
 import {EventManager} from './pubSub.js';
-import {countChilds,projects,projectIdSelected,findProjectById,populateStorageP, itemProject} from './projects.js';
+import {projects,projectIdSelected,findProjectById,populateStorageP} from './projects.js';
 import 'tippy.js/animations/scale-subtle.css';
 import tippy from 'tippy.js';
 import { startOfWeek,lastDayOfWeek,isWithinInterval,isSameDay} from 'date-fns'
@@ -78,49 +78,13 @@ const arrPopUpTodo = [
 
     },
 
-    // {
-    //     elementType: 'div',
-    //     attributes: {class:'containerPriority'},
-    //     innerHTML: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 9L12 16L5 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-    //     appendChild: '.containerTextAndPriority',
-
-    // },
     {
         elementType: 'div',
         attributes: {class:'containerPriority'},
         innerHTML: '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="prio" cx="6" cy="6" r="5.5" fill="#3D99DB"/></svg>',
         appendChild: '.containerTextAndPriority',
 
-    },
-
-    //  child containerPriority
-
-    
-
-    // {
-    //     elementType: 'option',
-    //     attributes: {value:"op1"},
-    //     innerHTML: '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="6" r="5.5" fill="#DB3D3D"/></svg>',
-    //     appendChild: '.dropDown',
-
-    // },
-    
-    // {
-    //     elementType: 'option',
-    //     attributes: {value:"op2"},
-    //     innerHTML: '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="6" r="5.5" fill="#DB763D"/></svg>',
-    //     appendChild: '.dropDown',
-
-    // },
-
-    // {
-    //     elementType: 'option',
-    //     attributes: {value:"op3"},
-    //     innerHTML: '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="6" r="5.5" fill="#3D99DB"/></svg>',
-    //     appendChild: '.dropDown',
-
-    // },
-    
+    },  
 
     //  childs containerDescription
 
@@ -132,13 +96,6 @@ const arrPopUpTodo = [
 
     },
 
-    // {
-    //     elementType: 'div',
-    //     attributes: {class:'containerTextTodoDescription'},
-    //     innerHTML: '<input class ="input description" type="text" name="descriptionTodo">',
-    //     appendChild: '.containerDescription',
-
-    // },
     {
         elementType: 'div',
         attributes: {class:'containerTextTodoDescription'},
@@ -158,18 +115,6 @@ const arrPopUpTodo = [
         appendChild: '.containerDate',
 
     },
-    
-    
-
-    // child containerinputText
-
-    // {
-    //     elementType: 'div',
-    //     attributes: {class:'containerInputColor'},
-    //     innerHTML: '<input type="color" class="inputColor">',
-    //     appendChild: '.containerInputText',
-
-    // },
 
 
 ];
@@ -226,13 +171,6 @@ const arrTodoTemplate= [
         innerHTML: '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="#25A7B9" stroke-width="2"/></svg>',
         appendChild: '.itemTodo',
     },
-
-    // {
-    //     elementType: 'div',
-    //     attributes: {class:'containerSvgNotDone'},
-    //     innerHTML: '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="#25A7B9" stroke-width="2"/></svg>',
-    //     appendChild: '.svgTodo',
-    // },
 
     {
         elementType: 'p',
@@ -603,26 +541,21 @@ function domElements(arr) {
 function defaultTodo() {
     
     let todoD = new todos('clean','limpiar loco','2023-03-25','rgb(219,118,61)','Medium',0,0);
-    // console.log(todoD);
-    // EventManager.emit('todoCreated',todoD)
-    arrTodos.push(todoD)
-    // countTodo++;
 
-    // testText();
-    // lineThrough();
+    arrTodos.push(todoD)
+
     return todoD;
 }
 
 function popUpTodo() {
     const btnPopUpTodo = document.querySelector('.btnNewTodo');
     let body  = document.querySelector('body');
-    let colorBgBtn = getComputedStyle(btnPopUpTodo).getPropertyValue('--backContainer');
     
     let arrColorAndBtn1 = [btnPopUpTodo,'#2b2636','#2b2636'];
 
     EventManager.emit('transitionBgBtn', arrColorAndBtn1);
     EventManager.emit('transitionBgBtn2', btnPopUpTodo);
-    // defaultTodo();
+
     exist();
     hoverTodo();
     showMenuTodo();
@@ -680,15 +613,13 @@ function popUpPriority() {
                 arrDropDown[0].attributes.class = 'dropDown';
 
                 domElements(arrDropDown);
+                EventManager.emit('fadeInDelayedDivs')
                 choosePriority(e.target)
-                // console.log(toggle1);
-                // console.log(arrDropDown);
                 
             }else{
     
                 delPopUpPriotity();
                 choosePriority(e.target)
-                // console.log(toggle1);   
             }
         })
     }else{
@@ -703,6 +634,7 @@ function popUpPriority() {
                 arrDropDown[0].attributes.class = 'dropDown editDropDown';
 
                 domElements(arrDropDown);
+                EventManager.emit('fadeInDelayedDivs')
                 choosePriority(e.target)
                 
             }else{
@@ -748,7 +680,11 @@ function delPopUpPriotity() {
     
     const dropDown = document.querySelector('.dropDown');
 
-    dropDown.remove()
+    EventManager.emit('fadeOutDelayedDivs')
+
+    setTimeout(() => {
+        dropDown.remove()        
+    }, 151);
 
 }
 
@@ -770,7 +706,6 @@ function createTodoObj() {
     btnCreateTodo.addEventListener('click', () => {
         
         
-        // countTodo++;
         updateLatestIdFromObjectsArray()
 
         let todo = new todos(inputNameTodo.value,inputDescriptionTodo.value,inputDateTodo.value,colorPrio.style.fill,priorityName,projectIdSelected,countTodo);
@@ -782,7 +717,6 @@ function createTodoObj() {
         if (project) {
 
             project.addTodo(todo);
-            // console.log(project.todo);
             populateStorageP();
         }
         addTodosToCurrentWeekArr(todo);
@@ -856,8 +790,6 @@ function hoverTodo() {
         let hoverTodoId = hoverTarget.dataset.todoId;
         let childPriority = hoverTarget.children[2];
 
-        // console.log('hovertodo');
-
         if (hoverTodoId) {
 
             let todoFounded = null;
@@ -908,7 +840,6 @@ function restartTodoTipPriority() {
 
     })
 
-    // console.log(arrTodos);
 
 }
 
@@ -918,9 +849,6 @@ function resetCountTodo() {
 }
 
 function findTodoById(todoId) {
-    
-    // let hoverTarget = e.target;
-    // let hoverTodoId = hoverTarget.dataset.todoId;
 
     let todoFounded = null;
 
@@ -929,7 +857,6 @@ function findTodoById(todoId) {
         if (todo.todoId == todoId) {
 
             todoFounded = todo;
-            // console.log(todo);
         }
     })
 
@@ -938,7 +865,6 @@ function findTodoById(todoId) {
 
 function showMenuTodo() {
     
-    const body = document.querySelector('body');
     const containerTodo = document.querySelector('.containerTodo');
     const containerSvgTodoMenu = document.querySelector('.svgTodoMenu');
     let colorBgBtn = getComputedStyle(containerSvgTodoMenu).getPropertyValue('--backContainerSecond');
@@ -946,7 +872,6 @@ function showMenuTodo() {
     let arrColorAndBtn1 = [containerSvgTodoMenu,colorBgBtn,'#3f3852'];
 
     EventManager.emit('transitionBgBtn',arrColorAndBtn1)
-    // let toggle = false;
 
     containerTodo.addEventListener('click', (e) => {
         
@@ -962,7 +887,6 @@ function showMenuTodo() {
             let todoId = father.dataset.todoId;
             let divAppendChild = father.classList[0];
 
-            // toggle = !toggle;
             if (!father.lastChild.classList.contains('containerMenuTodo')) {
 
                 arrTodoMenuTemplate[0].appendChild =`.${divAppendChild}`;
@@ -1206,20 +1130,11 @@ function findTodoTodayAndWeekById(todoId) {
 
 function delTodoDOMandArr(todoId,itemDOM) {
     
-    // let todoIndex = arrTodos.findIndex(todo => todo.todoId == todoId);
     let todoArr = findProjectById(findTodoById(todoId).projectId).todo;
     let todoIndex = todoArr.findIndex(todo => todo.todoId == todoId);
     let todoIndexToday = arrTodosToday.findIndex(todo => todo.todoId == todoId);
     let todoIndexWeek = arrTodosWeek.findIndex(todo => todo.todoId == todoId);
     let titleTodayAndWeek = document.querySelector('.titleTodayAndWeek');
-
-
-
-    // if (todoIndex !== -1){
-                        
-    //     arrTodos.splice(todoIndex,1);
-
-    // }
 
     if (todoIndex !== -1){
                         
@@ -1264,7 +1179,6 @@ function delTodoDOMandArr(todoId,itemDOM) {
                 EventManager.emit('deleteElement', findTodoTodayAndWeekById(todoId));
         
             },200)
-            // EventManager.emit('deleteElement', findTodoTodayAndWeekById(todoId));
             
         }else{
 
@@ -1275,7 +1189,6 @@ function delTodoDOMandArr(todoId,itemDOM) {
                 EventManager.emit('deleteElement', findTodoTodayAndWeekById(todoId));
         
             },200)
-            // EventManager.emit('deleteElement', findTodoTodayAndWeekById(todoId));
     
         }
     }
@@ -1289,7 +1202,6 @@ function delTodoDOMandArr(todoId,itemDOM) {
 function fillEditTodo(todoObj) {
 
     arrTodoEditTemplate[7].innerHTML = `<input class ="input editName" type="text" name="editNameTodo" value="${todoObj.name}">`;
-    // arrTodoEditTemplate[9].innerHTML = `<textarea class="editDescription" cols="50" value="${todoObj.description}">`;
     arrTodoEditTemplate[10].innerHTML = `<input class ="input editDate" type="date" name="editDateTodo" value="${todoObj.dueDate}">`;
     arrTodoEditTemplate[11].innerHTML = `<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="prio" cx="6" cy="6" r="5.5" fill="${todoObj.priority[0]}"/></svg>`;
 
@@ -1482,7 +1394,7 @@ function showTodayMobile() {
                 genTodayAndWeek('Today',arrTodosToday)
             }, 121);
 
-
+            toggleBtnToday();
 
         }else{
 
@@ -1497,7 +1409,7 @@ function showTodayMobile() {
                 genTodayAndWeek('Today',arrTodosToday)
             }, 121);
 
-
+            toggleBtnToday()
         }
 
     })
@@ -1522,6 +1434,8 @@ function showWeekMobile() {
                 genTodayAndWeek('Week',arrTodosWeek)                        
             }, 121);
 
+            toggleBtnWeek()
+
         }else{
 
             EventManager.emit('fadeOutAndShrink', containerTodosTodayAndWeekM)
@@ -1534,6 +1448,7 @@ function showWeekMobile() {
                 genTodayAndWeek('Week',arrTodosWeek)                        
             }, 121);
 
+            toggleBtnWeek()
 
         }
 
@@ -1542,10 +1457,34 @@ function showWeekMobile() {
 
 }
 
+function toggleBtnToday() {
+
+    let arrToggleSectionHighlightOff = ['.containerSvgWeek', '#1C1B1F'];
+
+    EventManager.emit('toggleSectionHighlight', arrToggleSectionHighlightOff)            
+
+    let arrToggleSectionHighlightOn = ['.containerSvgToday', findProjectById(projectIdSelected).color];
+    
+    EventManager.emit('toggleSectionHighlight', arrToggleSectionHighlightOn)
+
+
+}
+function toggleBtnWeek() {
+
+    let arrToggleSectionHighlightOff = ['.containerSvgToday', '#1C1B1F'];
+
+    EventManager.emit('toggleSectionHighlight', arrToggleSectionHighlightOff)            
+
+    let arrToggleSectionHighlightOn = ['.containerSvgWeek', findProjectById(projectIdSelected).color];
+
+    EventManager.emit('toggleSectionHighlight', arrToggleSectionHighlightOn)
+
+
+}
+
 function backToProjects() {
     
     const svgBackToProjects  = document.querySelector('.svgBackToProjects ');
-    // const containerTodosTodayAndWeekM = document.querySelector('.containerTodosTodayAndWeekM');
     const containerCenterRight = document.querySelector('.containerCenterRight');
 
     svgBackToProjects.addEventListener('click', () => {
@@ -1562,6 +1501,14 @@ function backToProjects() {
         }, 121);
 
         EventManager.emit('deleteElement', svgBackToProjects)
+
+        let arrToggleSectionHighlightOff1 = ['.containerSvgToday', '#1C1B1F'];
+
+        EventManager.emit('toggleSectionHighlight', arrToggleSectionHighlightOff1) 
+
+        let arrToggleSectionHighlightOff = ['.containerSvgWeek', '#1C1B1F'];
+
+        EventManager.emit('toggleSectionHighlight', arrToggleSectionHighlightOff) 
 
     })
 
@@ -1630,10 +1577,6 @@ function addTodosToCurrentWeekArr(todo) {
                 EventManager.emit('transitionGhostOutTWAndEntry',arrTagetsTW)
             }
         }
-        
-
-        // EventManager.emit('renderTodos',arrTodosWeek)
-
 
     }
 }
@@ -1662,19 +1605,11 @@ function addTodosToCurrentDayArr(todo) {
             }
         }
 
-        
-
     }
 
 }
 
 function verifyTodoRequirements() {
-
-    // arrTodos.forEach(todo => {
-
-    //     verifyAndAddToToday(todo);
-    //     verifyAndAddToWeek(todo);
-    // });
 
     projects.forEach( objP => {
 
@@ -1685,8 +1620,6 @@ function verifyTodoRequirements() {
         })
 
     })
-    // console.log(arrTodosToday);
-    // console.log(arrTodosWeek);
 }
   
 function verifyAndAddToWeek(todo) {
@@ -1724,12 +1657,6 @@ function verifyAndAddToWeek(todo) {
 
             arrTodosWeek.push(todo);
 
-            // if (titleTodayAndWeek.textContent == 'Week'){
-
-            //     EventManager.emit('renderTodos', arrTodosWeek);    
-            // }
-            
-
         }
     }
 }
@@ -1761,10 +1688,6 @@ function verifyAndAddToToday(todo) {
         if (todoTodayIndex === -1) {
 
             arrTodosToday.push(todo);
-
-            // if (titleTodayAndWeek.textContent == 'Today') {
-            //     EventManager.emit('renderTodos', arrTodosToday);    
-            // }
             
         }
 
@@ -1789,43 +1712,29 @@ function todoDone() {
 
             target.parentNode.parentNode.dataset.todoId ? testId = target.parentNode.parentNode.dataset.todoId : testId = target.parentNode.dataset.todoId ;
 
-            // target.setAttributte('disabled', true)
             disableMouseEvents(target);
 
             if (!findTodoById(testId).done){
 
 
 
-                // target.parentNode.parentNode.dataset.todoId ? EventManager.emit('deleteElement',target) : EventManager.emit('deleteElement',target.firstChild);
 
                 editArrSvgDone(testId)
                 editArrSvgDoneTW(testId)
 
-                // EventManager.emit('createElements',arrSvgDone);
 
                 animationSvg(testId,target);
 
                 findTodoById(testId).toggleDone();
-                // changeTodoDone(findTodoById(testId));
-                console.log(projects);
-                // console.log(arrTodos);
-            }else{
 
-                
-                
-                // target.parentNode.parentNode.dataset.todoId ? EventManager.emit('deleteElement',target) : EventManager.emit('deleteElement',target.firstChild);
+            }else{
 
                 editArrSvgNotDone(testId);
                 editArrSvgNotDoneTW(testId);
 
-                // EventManager.emit('createElements',arrSvgNotDone);   
                 animationSvg(testId,target)
 
                 findTodoById(testId).toggleDone();
-                // changeTodoDone(findTodoById(testId));
-                console.log(findTodoById(testId));
-                console.log(projects);
-                console.log(arrTodos);
 
 
             }
@@ -1837,10 +1746,6 @@ function todoDone() {
 }
 
 function animationSvg(todoId,target){
-
-    // let todoTarget = arrTodos.find(todo => todo.todoId == todoId);
-
-    // console.log(todoTarget);
 
     let circlePath = document.querySelector(`.circlePath${todoId}`);
 
@@ -1893,9 +1798,6 @@ function animationSvg(todoId,target){
                     showSvg(circlePathTW);
         
                 }, 500);
-        
-                
-        
         
             }
         }
@@ -2005,7 +1907,6 @@ function hideSvg(target){
         duration: 500,
     });
 
-    // console.log(target);
 }
 
 function showSvg(target) {
@@ -2075,7 +1976,6 @@ function animationOut(target) {
         scale : [1,.8],
         easing: 'easeOutExpo',
         duration: 500,
-        // direction: 'normal',
     })
 
 }
@@ -2116,7 +2016,6 @@ function exist() {
     }else {
         let countTodoSaved = localStorage.getItem('countIdTodo');
         countTodo = countTodoSaved;
-        console.log(countTodo);
 
     }
 }
@@ -2142,12 +2041,19 @@ function removeOverflow() {
     const containerTodo = document.querySelector('.containerTodo')
     const containerTodoCenter = document.querySelector('.containerTodoCenter')
     const outer = document.querySelector('.outer')
-
+    let screenWidth ;
     containerTodo.style.overflowY = 'visible';
     containerTodo.style.overflowX = 'visible';
     outer.style.overflow = 'visible';
 
-    containerTodoCenter.style.overflowY = 'clip';
+    screenWidth = window.screen.availWidth;
+
+    if (screenWidth > 912) {
+        containerTodoCenter.style.overflowY = 'clip';        
+    }else{
+        containerTodoCenter.style.overflowY = 'unset';                
+    }
+
 
 
 }

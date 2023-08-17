@@ -1,10 +1,10 @@
 import './style.css'
 import createElementsDom from './domCreation.js';
 
-import {createPopUpNewProject,menuMobile,projects} from './projects.js';
+import {createPopUpNewProject,menuMobile} from './projects.js';
 
 import {EventManager} from './pubSub.js';
-import {popUpTodo,defaultTodo,showTodayMobile,showWeekMobile} from './todos.js';
+import {popUpTodo,showTodayMobile,showWeekMobile} from './todos.js';
 import {init} from './ui.js';
 
 
@@ -36,13 +36,6 @@ const arrElementsHome = [
         attributes: {class:'containerTodoCenter'},
         appendChild: '.containerCenterRight',
     },
-    // {
-    //     elementType: 'div',
-    //     attributes: {class:'containerTodoRight'},
-    //     appendChild: '.containerCenterRight',
-    // },
-
-
 
     //  childs containerTodoLeft
 
@@ -102,32 +95,6 @@ const arrElementsHome = [
         innerHTML: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 4V20M20 12L4 12" stroke="#E6E1E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
         appendChild: '.containerTodo',
     },
-
-
-
-    //  childs containerTodoRight
-
-    // {
-    //     elementType: 'p',
-    //     attributes: {class:'titleTodoDay'},
-    //     innerText: 'To do - Today',
-    //     appendChild: '.containerTodoRight',
-    // },
-
-    // {
-    //     elementType: 'div',
-    //     attributes: {class:'containerTodoDay'},
-    //     appendChild: '.containerTodoRight',
-    // },
-
-    // childs containerProjects
-
-    
-    // {
-    //     elementType: 'div',
-    //     attributes: {class:'itemProject'},
-    //     appendChild: '.containerProjects',
-    // },
 
     // containerTodayAndWeek
 
@@ -240,15 +207,9 @@ const arrContainerLeftPhone = [
 ]
 
 
-
-
-
-
-
 domElements(arrElementsHome);
 init();
 createPopUpNewProject();
-// onot()
 popUpTodo();
 
 function resizeWindow() {
@@ -269,8 +230,7 @@ function createMobileMenuIfScreenSizeMatches() {
     
     let screenWidthF = window.screen.availWidth;
        
-    if (screenWidthF <= 648) {
-        // console.log('menor a 648px');
+    if (screenWidthF <= 912) {
         let containerLeftMobile = document.querySelector('.containerLeftMobile');
 
         if (!containerLeftMobile) {
@@ -291,8 +251,8 @@ function createMobileMenuIfScreenSizeMatches() {
                 }, 120);   
             }
         }
-    }else if(screenWidthF >= 649){
-        // console.log('mayor a 648');
+    }else if(screenWidthF >= 913){
+
         let containerLeftMobile = document.querySelector('.containerLeftMobile');
 
         if (containerLeftMobile) {
@@ -301,14 +261,10 @@ function createMobileMenuIfScreenSizeMatches() {
 
         }
 
+
         const containerProjects = document.querySelector('.containerProjects');
-        // console.log(containerProjects.firstChild);
-
-        if (!containerProjects.firstChild) {
-            EventManager.emit('renderProjects',projects)
-            EventManager.emit('transitionGhostEntryProjects','.itemProject')
-        }
-
+        containerProjects.style.height = 'auto';
+        
     }
 
 }
