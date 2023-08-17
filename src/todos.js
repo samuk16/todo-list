@@ -411,6 +411,13 @@ const arrTodoTodayAndWeek = [
 
     },
 
+    {
+        elementType: 'div',
+        attributes: {class:'btnCloseTodayAndWeek'},
+        innerHTML: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12L12 4M4 4L12 12" stroke="#E6E1E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+        appendChild: '.containerTodosTodayAndWeek',
+    },
+
 ];
 
 const arrTodoTodayAndWeekMobile = [
@@ -485,7 +492,7 @@ const arrSvgBackToProjects = [
         elementType: 'div',
         attributes: {class:'svgBackToProjects containerSvgBackToProjects'},
         innerHTML:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 10H13C17.4183 10 21 13.5817 21 18V20M3 10L9 16M3 10L9 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-        appendChild: 'body',
+        appendChild: '.containerTodosTodayAndWeekM',
     },
 ]
 
@@ -1304,10 +1311,8 @@ function showTodayAndWeek() {
 
 
                 EventManager.emit('renderTodos',arrTodosToday)
-                // EventManager.emit('transitionGhostEntry','.TW')
                 let arrTagetsTW = ['.TW'];
                 EventManager.emit('transitionGhostOutTWAndEntry',arrTagetsTW)
-                // EventManager.emit('transitionGhostOutTWAndEntry') 
 
             }
             if (target.classList.contains('svgWeek')) {
@@ -1320,12 +1325,9 @@ function showTodayAndWeek() {
 
                 },200)
 
-                // titleTodayAndWeek.textContent = 'Week';
                 EventManager.emit('renderTodos',arrTodosWeek)
-                // EventManager.emit('transitionGhostEntry','.TW')
                 let arrTagetsTW = ['.TW'];
                 EventManager.emit('transitionGhostOutTWAndEntry',arrTagetsTW)
-                // EventManager.emit('transitionGhostOutTWAndEntry') 
 
             }
 
@@ -1347,10 +1349,8 @@ function showTodayAndWeek() {
 
                 EventManager.emit('renderTodos',arrTodosToday)
 
-                // let arrTagetsTW = ['.TW'];
                 let arrTagetsTW = ['.TW'];
                 EventManager.emit('transitionGhostOutTWAndEntry',arrTagetsTW)
-                // EventManager.emit('transitionGhostOutTWAndEntry') 
     
             }
             if (target.classList.contains('svgWeek')) {
@@ -1365,17 +1365,40 @@ function showTodayAndWeek() {
 
                 EventManager.emit('renderTodos',arrTodosWeek)
 
-                // let arrTagetsTW = ['.TW'];
                 let arrTagetsTW = ['.TW'];
                 EventManager.emit('transitionGhostOutTWAndEntry',arrTagetsTW)
-                // EventManager.emit('transitionGhostOutTWAndEntry') 
             }
 
         }
+        
+        delTodayAndWeek()
 
     })
 
 }
+
+function delTodayAndWeek() {
+
+    
+    const btnCloseTodayAndWeek = document.querySelector('.btnCloseTodayAndWeek');
+    const containerTodosTodayAndWeek = document.querySelector('.containerTodosTodayAndWeek')
+
+    let arrColorAndBtn1 = [btnCloseTodayAndWeek,'#1C1B1F','#2b2636'];
+
+    EventManager.emit('transitionBgBtn',arrColorAndBtn1)
+
+    btnCloseTodayAndWeek.addEventListener('click', () => {
+        
+        EventManager.emit('animationOut',containerTodosTodayAndWeek)
+
+        setTimeout(()=>{
+
+            EventManager.emit('deleteElement', containerTodosTodayAndWeek)
+        },100)
+
+    })
+
+};
 
 function showTodayMobile() {
 
@@ -1391,7 +1414,10 @@ function showTodayMobile() {
             EventManager.emit('fadeOutAndShrink', containerCenterRight)
 
             setTimeout(() => {
+                containerCenterRight.style.display = 'none';
                 genTodayAndWeek('Today',arrTodosToday)
+                const containerTodosTodayAndWeekM = document.querySelector('.containerTodosTodayAndWeekM');
+                containerTodosTodayAndWeekM.style.position = 'static'
             }, 121);
 
             toggleBtnToday();
@@ -1407,6 +1433,8 @@ function showTodayMobile() {
 
             setTimeout(() => {
                 genTodayAndWeek('Today',arrTodosToday)
+                const containerTodosTodayAndWeekM = document.querySelector('.containerTodosTodayAndWeekM');
+                containerTodosTodayAndWeekM.style.position = 'static'
             }, 121);
 
             toggleBtnToday()
@@ -1431,7 +1459,9 @@ function showWeekMobile() {
             EventManager.emit('fadeOutAndShrink', containerCenterRight)
 
             setTimeout(() => {
-                genTodayAndWeek('Week',arrTodosWeek)                        
+                genTodayAndWeek('Week',arrTodosWeek)
+                const containerTodosTodayAndWeekM = document.querySelector('.containerTodosTodayAndWeekM');
+                containerTodosTodayAndWeekM.style.position = 'static'                       
             }, 121);
 
             toggleBtnWeek()
@@ -1445,7 +1475,9 @@ function showWeekMobile() {
             }, 120);
 
             setTimeout(() => {
-                genTodayAndWeek('Week',arrTodosWeek)                        
+                genTodayAndWeek('Week',arrTodosWeek)  
+                const containerTodosTodayAndWeekM = document.querySelector('.containerTodosTodayAndWeekM');
+                containerTodosTodayAndWeekM.style.position = 'static'                      
             }, 121);
 
             toggleBtnWeek()
@@ -1497,6 +1529,7 @@ function backToProjects() {
         }, 120);
 
         setTimeout(() => {
+            containerCenterRight.style.display = 'block';
             EventManager.emit('fadeInAndGrow', containerCenterRight)
         }, 121);
 
