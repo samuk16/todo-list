@@ -64,7 +64,6 @@ p{
 
 .containerTodoLeft{
 
-    /* border: solid 2px green; */
     position: relative;
     padding: 0 0 0 30px;
 
@@ -91,9 +90,7 @@ p{
     background-color: var(--backContainer);
     width: 50px;
 
-    /* border: solid 2px green; */
 
-    /* transition: all .5s ease-in-out; */
 }
 
 .itemProject{
@@ -106,8 +103,6 @@ p{
     border-radius: 50px;
     cursor: pointer;
     opacity: 0;
-
-    /* position: relative; */
 
     outline: 0px solid rgba(168, 199, 250, 0.3);
 
@@ -127,7 +122,6 @@ p{
     display: grid;
     place-content: center;
 
-    /* background-color: ; */
 
     border-radius: 16px;
 
@@ -136,11 +130,6 @@ p{
 
     cursor: pointer;
 }
-
-/* .btnNewProject:hover{
-
-    background-color: var(--backContainer);
-} */
 
 .containerTodayAndWeek{
 
@@ -191,9 +180,6 @@ p{
 
     cursor: pointer;
 
-    /* width: 25px; */
-    /* height: 25px; */
-
     padding: 5px;
     border-radius: 5px;
 
@@ -212,7 +198,6 @@ p{
     justify-content: center;
     align-items: center;
 
-    /* background-color: var(--backContainerSecond); */
 
     width: 40px;
     height: 20px;
@@ -232,7 +217,6 @@ p{
     display: flex;
     gap: 12px;
     border-radius: 16px;
-    /* background-color: var(--backContainerSecond); */
 
     height: 30px;
 }
@@ -270,10 +254,6 @@ p{
     border: none;
     opacity: 0;
 }
-/* 
-.item2{
-    outline: solid 3px #fff;
-} */
 
 /* ---------------------------------------------------------------------------------- */
 
@@ -305,10 +285,6 @@ p{
 .containerTodo{
     position: relative;
 
-    /* display: flex; */
-    /* flex-direction: column; */
-    /* gap: 20px; */
-
     display: grid;
     grid-template-columns: 1fr;
     grid-auto-rows: max-content;
@@ -317,7 +293,6 @@ p{
     background-color: var(--backContainer);
     border-radius: 16px;
 
-    /* width: 900px;c */
     height: 700px;
 
     padding: 30px ;
@@ -339,7 +314,6 @@ p{
 
     border-radius: 16px;
     opacity: 0;
-    /* position: relative; */
 }
 
 .svgTodo{
@@ -365,9 +339,6 @@ p{
 
 .svgTodoMenu{
 
-    /* justify-self: flex-end; */
-    /* align-self: flex-end; */
-
     margin-left: auto;
 
     display: grid;
@@ -382,10 +353,6 @@ p{
 .btnNewTodo{
 
     position: fixed;
-
-    /* bottom: 30px; */
-    /* left: 50%; */
-    /* transform: translate(-50%, 0); */
     
     justify-self: center;
     align-self: flex-end;
@@ -409,18 +376,12 @@ p{
 
 }
 
-/* .btnNewTodo:hover{
-
-    background-color: var(--backContainerSecond);
-} */
-
 /* -------------------------------------------------------------- */
 
 .containerCenterRight{
 
     display: flex;
     gap: 30px;
-    /* justify-content: center; */
     margin: 0 30px 0 0;
 }
 
@@ -431,12 +392,6 @@ p{
     font-size: 1.5rem;
     margin: 0 0 12px 0;
 }
-
-/* .containerTodoRight{
-
-
-
-} */
 
 .containerTodoDay{
 
@@ -470,9 +425,6 @@ p{
 .containerPopUpNewTodo{
 
     position: absolute;
-    /* bottom: 50%; */
-    /* left: 50%; */
-    /* transform: translate(-50%, 50%); */
 
     align-self: center;
     justify-self: center;
@@ -630,7 +582,6 @@ p{
 .containerTextTodoName{
 
     flex-grow: 2;
-    /* width: 90%; */
 }
 
 circle,svg{
@@ -655,7 +606,6 @@ circle,svg{
 .containerMenuTodo{
 
     position: absolute;
-    /* right: -90px; */
     right: -120px;
 
     display: flex;
@@ -678,12 +628,6 @@ circle,svg{
     cursor: pointer;
 
 }
-/* .containerSvgEdit:hover{
-    
-    background-color: rgba(168, 199, 250, 0.149);
-
-} */
-
 
 .containerSvgDelete{
 
@@ -696,18 +640,10 @@ circle,svg{
 
 
 }
-/* .containerSvgDelete:hover{
-
-    background-color: rgba(179, 38, 30, 0.4);
-} */
-
 
 .containerTodoEdit{
 
     position: absolute;
-    /* bottom: 50%; */
-    /* left: 50%; */
-    /* transform: translate(-50%, 50%); */
 
     align-self: center;
     justify-self: center;
@@ -716,7 +652,6 @@ circle,svg{
     flex-direction: column;
     gap: 30px;
 
-    /* background-color: var(--backContainerSecond); */
     background-color: var(--backContainer);
     box-shadow: 0px 0px 40px #2b2636;
     padding: 30px;
@@ -736,7 +671,6 @@ circle,svg{
 
 .editName{
 
-    /* background-color: var(--backContainer); */
     background-color: var(--backContainerSecond);
     width: 100%;
 
@@ -744,7 +678,6 @@ circle,svg{
 
 .editDescription{
 
-    /* background-color: var(--backContainer); */
     background-color: var(--backContainerSecond);
     border-radius: 16px;
     outline: none;
@@ -760,7 +693,6 @@ circle,svg{
 
 .editDate{
 
-    /* background-color: var(--backContainer); */
     background-color: var(--backContainerSecond);
 
 }
@@ -771,7 +703,6 @@ circle,svg{
     align-items: center;
     justify-content: center;
 
-    /* background-color: var(--backContainer); */
     background-color: var(--backContainerSecond);
     border-radius: 16px;
 
@@ -794,7 +725,6 @@ circle,svg{
     display: grid;
     place-items: center;
 
-    /* background-color: var(--backContainer); */
     background-color: var(--backContainerSecond);
     padding: 5px 0 ;
     width: 100px;
@@ -811,7 +741,6 @@ circle,svg{
     display: grid;
     place-items: center;
 
-    /* background-color: var(--backContainer); */
     background-color: var(--backContainerSecond);
     padding: 5px 0;
     width: 100px;
@@ -828,7 +757,6 @@ circle,svg{
 
     height: 120px;
 
-    /* background-color: var(--backContainer); */
     background-color: var(--backContainerSecond);
 
     padding: 12px;
@@ -848,21 +776,18 @@ circle,svg{
 
 .editDropDown > :nth-child(1){
 
-    /* background-color: var(--backContainer); */
     background-color: var(--backContainerSecond);
     filter: inherit;
     
 }
 .editDropDown > :nth-child(2){
 
-    /* background-color: var(--backContainer); */
     background-color: var(--backContainerSecond);
     filter: inherit;
     
 }
 .editDropDown > :nth-child(3){
 
-    /* background-color: var(--backContainer); */
     background-color: var(--backContainerSecond);
     filter: inherit;
     
@@ -871,9 +796,6 @@ circle,svg{
 .containerDeleteConfirmation{
 
     position: absolute;
-    /* bottom: 50%; */
-    /* left: 50%; */
-    /* transform: translate(-50%, 50%); */
     
     align-self: center;
     justify-self: center;
@@ -943,7 +865,6 @@ circle,svg{
     flex-direction: column;
     gap: 20px;
 
-    /* width: 400px; */
     height: 700px;
 
     background-color: var(--backContainer);
@@ -959,7 +880,6 @@ circle,svg{
     margin: 0 0 12px 0;
 }
 
-/* 2b2636 */
 /* ----------------------------------------------------------- */
 
 .tippy-box[data-theme~='dark-project'] {
@@ -976,8 +896,6 @@ circle,svg{
     color: #E6E1E5;
     border-radius: 16px;
     padding: 5px 20px;
-    /* margin: 10px; */
-    /* box-shadow: 0 0 4px 3px rgba(0, 0, 0, 0.25); */
     box-shadow: 0 0 5px 5px #2b2636;
 }
 
@@ -1025,8 +943,6 @@ circle,svg{
 .pTodoDone{
 
     opacity: .5;
-    
-
 }
 
 /* ----------------------------------------------------------- */
@@ -1034,14 +950,11 @@ circle,svg{
   /* width */
 ::-webkit-scrollbar {
     width: 10px;
-    /* padding: 0 10px 0 0; */
-    /* border-radius: 16px; */
   }
   
   /* Track */
   ::-webkit-scrollbar-track {
     background: var(--backContainer);
-    /* padding: 10px; */
   }
   
   /* Handle */
@@ -1053,8 +966,6 @@ circle,svg{
   ::-webkit-scrollbar-track-piece{
 
     border-radius: 16px;
-    /* padding: 10px; */
-
   }
   
   /* Handle on hover */
@@ -1298,7 +1209,6 @@ circle,svg{
 
     width: 40px;
     height: 40px;
-    /* background-color: hsla(217, 89%, 82%, 0.205); */
     background-color: hsla(258, 18%, 22%, 0.70);
 
 
@@ -1336,7 +1246,6 @@ circle,svg{
 
         width: 100%;
         height: 100%;
-        /* flex: 100%; */
     }
 
     .outer{
