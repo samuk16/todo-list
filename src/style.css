@@ -171,7 +171,7 @@ p{
     padding: 12px;
 }
 
-.btnClosePopUp,.btnClosePopUpTodo{
+.btnClosePopUp,.btnClosePopUpTodo,.btnCloseTodayAndWeek{
 
     position:absolute;
 
@@ -998,7 +998,7 @@ circle,svg{
     align-items: center;
     gap: 4px;
 
-    cursor: pointer;
+    /* cursor: pointer; */
 
   }
   .containerTodayM{
@@ -1008,7 +1008,7 @@ circle,svg{
     align-items: center;
     gap: 4px;
 
-    cursor: pointer;
+    /* cursor: pointer; */
 
   }
   .containerWeekM{
@@ -1018,7 +1018,7 @@ circle,svg{
     align-items: center;
     gap: 4px;
 
-    cursor: pointer;
+    /* cursor: pointer; */
 
   }
   .titleProjectsM{
@@ -1198,14 +1198,15 @@ circle,svg{
     height: 100%;
     overflow: auto;
     padding: 5px 0 0 0;
+    
   }
 
   /* ----------------------------------------------------------- */
 
   .svgBackToProjects{
 
-    position: absolute;
-    bottom: 90px;
+    /* position: absolute; */
+    /* bottom: 90px; */
 
     width: 40px;
     height: 40px;
@@ -1216,7 +1217,7 @@ circle,svg{
     border-radius: 10px;
 
     justify-self: center;
-
+    margin: auto;
   }
 
   /* ----------------------------------------------------------- */
@@ -1230,6 +1231,7 @@ circle,svg{
 
     body{
         grid-template-columns: 100%;
+        grid-template-rows: 90% 10%;
         height: 100vh;
     }
 
@@ -1237,15 +1239,19 @@ circle,svg{
     .containerCenterRight{
 
         margin:0px ;
-        height: 80%;
+        height: 100%;
         width: 90%;
         justify-self: center;
     }
 
     .containerTodoCenter{
 
+        display: flex;
+        flex-direction: column;
+
         width: 100%;
         height: 100%;
+
     }
 
     .outer{
@@ -1266,19 +1272,17 @@ circle,svg{
     }
 
     .containerTodosTodayAndWeekM{
-
+        display: flex;
+        flex-direction: column; 
+        gap: 12px;
         margin: 0px;
         justify-self: center;
-        height: 75%;
     }
     .outerTW{
         height: 100%;
     }
 
-    .containerPopUpNewTodo{
-
-        width: 95%;
-    }
+    
 
     .titleProjectMobile{ 
 
@@ -1296,6 +1300,18 @@ circle,svg{
 
         height: 100%;
     }
+
+    .titleTodayAndWeek{
+        margin: 0;
+    }
+
+    .svgTodoPriority{
+
+        cursor:none;
+        width: 20px;
+        height: 20px;
+    }
+
   }
 
   @media screen and (max-width: 648px){
@@ -1304,4 +1320,18 @@ circle,svg{
         height: 88%;
     }
 
+    .containerPopUpNewTodo{
+
+        width: 95%;
+    }
+
+    .containerTodoEdit{
+        width: 95%;
+
+    }
+
+    .editDescription{
+
+        width: 100%;
+    }
   }
