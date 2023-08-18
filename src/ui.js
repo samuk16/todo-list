@@ -598,7 +598,7 @@ function fadeInAndSlideUp(target) {
 
     anime({
         targets: target,
-        translateY: -80,
+        translateY: 30,
         opacity: 1,
         easing:'easeOutExpo',
         duration: 180,
