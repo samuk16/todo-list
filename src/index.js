@@ -261,6 +261,13 @@ function createMobileMenuIfScreenSizeMatches() {
 
         }
 
+        let containerProjectsMobile = document.querySelector('.containerProjectsMobile');
+
+        if (containerProjectsMobile) {
+    
+            EventManager.emit('deleteElement',containerProjectsMobile );
+
+        }
 
         const containerProjects = document.querySelector('.containerProjects');
         containerProjects.style.height = 'auto';
