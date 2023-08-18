@@ -838,8 +838,12 @@ function todoTipNamePriority(div,todo) {
 }
 
 function restartTodoTipPriority() {
+
+    const containerTodo = document.querySelector('.containerTodo');
+
+    let todoId = containerTodo.lastChild.dataset.todoId;
     
-    arrTodos.forEach(todo => {
+    findProjectById(findTodoById(todoId).projectId).todo.forEach(todo => {
 
         if (todo.isTipPriority) {
             todo.isTipPriority = false;
@@ -972,8 +976,6 @@ function showEditTodo() {
 
         if (target.classList.contains('containerSvgEdit')) {
 
-            console.log(todoId);
-            console.log(findTodoById(todoId));
             fillEditTodo(findTodoById(todoId));
 
             let body = document.querySelector('body')
